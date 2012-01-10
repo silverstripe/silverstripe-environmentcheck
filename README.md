@@ -18,10 +18,11 @@ Almost, but not really. Environment checks differ from unit tests in two importa
 
 To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this mode for examples.
 
-	:::php
-	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
-	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("imagecreatetruecolor")', "Does PHP have GD2 support?");
-	
+```php
+EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
+EnvironmentCheckSuite::register('check', 'HasFunctionCheck("imagecreatetruecolor")', "Does PHP have GD2 support?");
+```
+
 The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `dev/health` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs.
 
 The module comes bundled with a few checks in `DefaultHealthChecks.php`.  However, to test your own application, you probably want to write custom checks.
@@ -33,30 +34,31 @@ The module comes bundled with a few checks in `DefaultHealthChecks.php`.  Howeve
 
 Here is a simple example of how you might create a check to test your own code.  In this example, we are checking that an instance of the `MyGateway` class will return "foo" when `call()` is called on it.  Testing interfaces with 3rd party systems is a common use case for custom environment checks.
 
-	:::php
-	class MyGatewayCheck implements EnvironmentCheck {
-		protected $checkTable;
+```php
+class MyGatewayCheck implements EnvironmentCheck {
+	protected $checkTable;
 
-		function check() {
-			$g = new MyGateway;
+	function check() {
+		$g = new MyGateway;
 			
-			$response = $g->call();
-			$expectedResponse = "foo";
+		$response = $g->call();
+		$expectedResponse = "foo";
 			
-			if($response == null) {
-				return array(EnvironmentCheck::ERROR, "MyGateway didn't return a response");
-			} else if($response != $expectedResponse) {
-				return array(EnvironmentCheck::WARNING, "MyGateway returned unexpected response $response");
-			} else {
-				return array(EnvironmentCheck::OK, "");
-			}
+		if($response == null) {
+			return array(EnvironmentCheck::ERROR, "MyGateway didn't return a response");
+		} else if($response != $expectedResponse) {
+			return array(EnvironmentCheck::WARNING, "MyGateway returned unexpected response $response");
+		} else {
+			return array(EnvironmentCheck::OK, "");
 		}
 	}
-	
+}
+```	
 Once you have created your custom check class, don't forget to register it in a check suite
 	
-	:::php
-	EnvironmentCheckSuite::register('check', 'MyGatewayCheck', "Can I connect to the gateway?");
+```php
+EnvironmentCheckSuite::register('check', 'MyGatewayCheck', "Can I connect to the gateway?");
+```
 
 ### Using other environment check suites
 
@@ -64,17 +66,20 @@ Once you have created your custom check class, don't forget to register it in a 
 
 If you want to use the same UI as dev/health and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
 
-	class DevHealth extends Controller {
-		function index() {
-			$e = new EnvironmentChecker('health', 'Site health');
-			return $e;
-		}
+```php
+class DevHealth extends Controller {
+	function index() {
+		$e = new EnvironmentChecker('health', 'Site health');
+		return $e;
 	}
-	
+}
+```	
 If you wish to embed an environment check suite in another, you can use the following call.
 
-	$result = EnvironmentCheckSuite::inst("health")->run();
-	
+```php
+$result = EnvironmentCheckSuite::inst("health")->run();
+```
+
 `$result` will contain a `EnvironmentCheckSuiteResult` object
 
  * `$result->ShouldPass()`: Return a boolean of whether or not the tests passed.
