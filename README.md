@@ -4,7 +4,7 @@ Developed by Sam Minnée, thanks to Will Rossiter.
 
 This module adds an API for running environment checks to your API.
 
- * `dev/health`` - A public URL that performs a quick check that this environment is functioning.  This could be tied to a load balancer, for example.
+ * `dev/health` - A public URL that performs a quick check that this environment is functioning.  This could be tied to a load balancer, for example.
  * `dev/check` - An admin-only URL that performs a more comprehensive set of checks.  This could be tied to a deployment system, for example.
 
 ## Aren't these just unit tests?
@@ -24,10 +24,10 @@ To add more checks, you should put additional `EnvironmentCheckSuite::register` 
 	
 The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `dev/health` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs.
 
-The module comes bundled with a few checks in DefaultHealthChecks.php.  However, to test your own application, you probably want to write custom checks.
+The module comes bundled with a few checks in `DefaultHealthChecks.php`.  However, to test your own application, you probably want to write custom checks.
 
- * Implement the EnvironmentCheck interface
- * Define the check() function, which returns a 2 element array:
+ * Implement the `EnvironmentCheck` interface
+ * Define the `check()` function, which returns a 2 element array:
    * The first element is one of `EnvironmentCheck::OK`, `EnvironmentCheck::WARNING`, `EnvironmentCheck::ERROR`, depending on the status of the check
    * The second element is a string describing the response.
 
@@ -77,8 +77,8 @@ If you wish to embed an environment check suite in another, you can use the foll
 	
 `$result` will contain a `EnvironmentCheckSuiteResult` object
 
- * **`$result->ShouldPass()`:** Return a boolean of whether or not the tests passed.
- * **`$result->Status()`:** The string "OK", "WARNING", or "ERROR", depending on the worst failure.
- * **`$result->Details()`:** A `DataObjectSet` of details about the result of each check in the suite.
+ * `$result->ShouldPass()`: Return a boolean of whether or not the tests passed.
+ * `$result->Status()`: The string "OK", "WARNING", or "ERROR", depending on the worst failure.
+ * `$result->Details()`: A `DataObjectSet` of details about the result of each check in the suite.
 
 See `EnvironmentChecker.ss` to see how these can be used to build a UI.
