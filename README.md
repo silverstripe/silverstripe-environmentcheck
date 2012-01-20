@@ -14,6 +14,23 @@ Almost, but not really. Environment checks differ from unit tests in two importa
  * **They test environment specific settings.** Unit tests are designed to use dummy data and mock interfaces to external system.  Environment checks check the real systems and data that the given environment is actually connected to.
  * **They can't modify data.** Because these checks will run using production databases, they can't go modifying the data in there. This is the biggest reason why we haven't used the same base class as a unit test for writing environment checks - we wanted to make it impossible to accidentally plug the a unit test into the environment checker!
 
+## Installation
+
+Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults.
+
+	:::php
+	EnvironmentCheckSuite::register('health', 'DatabaseCheck', "Can we connect to the database?");
+	EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage accessible?");
+
+## Available checks
+
+ * `DatabaseCheck`: Check that the connection to the database is working, by looking for records in some table. By default, Member will be checked.
+ * `URLCheck`: Check that a given URL is functioning, by default, the homepage.
+ * `HasFunctionCheck`: Check that the given function exists.
+    This can be used to check that PHP modules or features are installed.
+ * `HasClassCheck`: Check that the given class exists.
+    This can be used to check that PHP modules or features are installed.
+ * `FileWriteableCheck`: Check that the given file is writeable.
 ## Adding more checks
 
 To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this mode for examples.
