@@ -111,10 +111,13 @@ class EnvironmentCheckSuite {
 	}
 
 	/**
-	 * Register a check against the named check suite
+	 * Register a check against the named check suite.
+	 * 
+	 * @param String|Array
 	 */
-	static function register($name, $check, $title = null) {
-		self::inst($name)->push($check, $title);
+	static function register($names, $check, $title = null) {
+		if(!is_array($names)) $names = array($names);
+		foreach($names as $name) self::inst($name)->push($check, $title);
 	}
 }
 
