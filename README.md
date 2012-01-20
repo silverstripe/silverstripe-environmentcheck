@@ -12,11 +12,11 @@ This module adds an API for running environment checks to your API.
 Almost, but not really. Environment checks differ from unit tests in two important ways:
 
  * **They test environment specific settings.** Unit tests are designed to use dummy data and mock interfaces to external system.  Environment checks check the real systems and data that the given environment is actually connected to.
- * **They can't modify data.** Because these checks will run using production databases, they can't go modifying the data in there. This is the biggest reason why we haven't used the same base class as a unit test for writing environment checks - we wanted to make it impossible to accidentally plug the a unit test into the environment checker!
+ * **They can't modify data.** Because these checks will run using production databases, they can't go modifying the data in there. This is the biggest reason why we haven't used the same base class as a unit test for writing environment checks - we wanted to make it impossible to accidentally plug a unit test into the environment checker!
 
 ## Adding more checks
 
-To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this mode for examples.
+To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this module for examples.
 
 	:::php
 	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
@@ -59,8 +59,6 @@ Once you have created your custom check class, don't forget to register it in a 
 	EnvironmentCheckSuite::register('check', 'MyGatewayCheck', "Can I connect to the gateway?");
 
 ### Using other environment check suites
-
-"health" and "check" are the only environment check suites that we use because they aren
 
 If you want to use the same UI as dev/health and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
 
