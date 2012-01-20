@@ -51,13 +51,22 @@ class URLCheck implements EnvironmentCheck {
 		$response = Director::test($this->url);
 
 		if($response->getStatusCode() != 200) {
-			return array(EnvironmentCheck::ERROR, "Homepage requested and returned HTTP " . $response->getStatusCode() . " response");
+			return array(
+				EnvironmentCheck::ERROR, 
+				sprintf('Error retrieving "%s" (Code: %d)', $this->url, $response->getStatusCode())
+			);
 
 		} else if($this->testString && (strpos($response->getBody(), $this->testString) === false)) {
-			return array(EnvironmentCheck::WARNING, "Homepage requested ok but '$testString' not found.");
+			return array(
+				EnvironmentCheck::WARNING, 
+				sprintf('Success retrieving "%s", but string "%s" not found', $this->url, $testString)
+			);
 
 		} else {
-			return array(EnvironmentCheck::OK, "");
+			return array(
+				EnvironmentCheck::OK, 
+				sprintf('Success retrieving "%s"', $this->url)
+			);
 		}
 	}
 }
