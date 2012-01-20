@@ -60,8 +60,6 @@ Once you have created your custom check class, don't forget to register it in a 
 
 ### Using other environment check suites
 
-"health" and "check" are the only environment check suites that we use because they aren
-
 If you want to use the same UI as dev/health and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
 
 	class DevHealth extends Controller {
