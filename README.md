@@ -16,7 +16,7 @@ Almost, but not really. Environment checks differ from unit tests in two importa
 
 ## Adding more checks
 
-To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this mode for examples.
+To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this module for examples.
 
 	:::php
 	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
