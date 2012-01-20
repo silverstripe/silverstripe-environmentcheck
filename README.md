@@ -31,6 +31,12 @@ Register checks in your own `_config.php` - see the `_config.php` in this module
  * `HasClassCheck`: Check that the given class exists.
     This can be used to check that PHP modules or features are installed.
  * `FileWriteableCheck`: Check that the given file is writeable.
+ * `FileAgeCheck`: Checks for the maximum age of one or more files or folders.
+    Useful for files which should be frequently auto-generated, 
+    like static caches, as well as for backup files and folders.
+ * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
+ * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
+
 ## Adding more checks
 
 To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this mode for examples.
