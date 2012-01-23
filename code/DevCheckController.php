@@ -1,6 +1,6 @@
 <?php
 
-class DevCheck extends Controller {
+class DevCheckController extends Controller {
 	function index() {
 		if(!Permission::check("ADMIN")) return Security::permissionFailure();
 		
