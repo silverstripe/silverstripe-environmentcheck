@@ -1,0 +1,16 @@
+{
+	"name": "silverstripe-labs/environmentcheck",
+	"description": "This module adds an API for running environment checks to your API.",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe-labs", "environmentcheck"],
+	"authors": [
+	{
+		"name": "Sam Minnée",
+		"email": "sam@silverstripe.com"
+	}
+	],
+	"require":
+	{
+		"silverstripe/framework": "2.4.*"
+	}
+}
