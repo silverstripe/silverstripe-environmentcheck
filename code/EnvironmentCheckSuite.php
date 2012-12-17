@@ -99,7 +99,7 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 	
 	function __construct() {
 		parent::__construct();
-		$this->details = new DataObjectSet();
+		$this->details = new ArrayList();
 	}
 	
 	function addResult($status, $message, $checkIdentifier) {
