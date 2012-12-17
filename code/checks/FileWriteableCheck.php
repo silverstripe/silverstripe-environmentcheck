@@ -47,7 +47,7 @@ class FileWriteableCheck implements EnvironmentCheck {
 				}
 
 			} else {
-				$message .= "The webserver user needs to be able to write to this file:\n$filename";
+				$message = "The webserver user needs to be able to write to this file:\n$filename";
 			}
 			
 			return array(EnvironmentCheck::ERROR, $message);

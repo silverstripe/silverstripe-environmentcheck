@@ -29,7 +29,7 @@ class URLCheck implements EnvironmentCheck {
 		} else if($this->testString && (strpos($response->getBody(), $this->testString) === false)) {
 			return array(
 				EnvironmentCheck::WARNING, 
-				sprintf('Success retrieving "%s", but string "%s" not found', $this->url, $testString)
+				sprintf('Success retrieving "%s", but string "%s" not found', $this->url, $this->testString)
 			);
 
 		} else {
