@@ -88,7 +88,8 @@ class FileAgeCheck implements EnvironmentCheck {
 		if($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
 			return array(EnvironmentCheck::OK, '');
 		} else {
-			return array(
+	       if (count($invalidFiles) == 0) return array(EnvironmentCheck::OK, '');
+	       else return array(
 				EnvironmentCheck::ERROR,
 				sprintf('No files matched criteria (%s %s)', $this->compareOperand, date('c', $cutoffTime))
 			);
