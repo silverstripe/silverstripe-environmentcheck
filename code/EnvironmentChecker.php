@@ -51,6 +51,7 @@ class EnvironmentChecker extends RequestHandler {
 		
 		$resultText = $result->customise(array(
 			"Title" => $this->title,
+			"Name" => $this->checkSuiteName,
 			"ErrorCode" => $this->errorCode,
 		))->renderWith("EnvironmentChecker");
 

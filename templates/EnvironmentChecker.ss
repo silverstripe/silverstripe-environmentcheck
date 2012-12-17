@@ -69,7 +69,11 @@
         <p>Site is available</p>
         <p class="subtext">(you may check for the presence of the text 'Site is available' rather than an HTTP $ErrorCode error on this page, if you prefer.)</p>
         <% else %>
-        <p><b>Site is not available</b></p>
+            <% if Name == check %>
+                <p><b>A subsystem of the site is unavailable, but the site remains operational</b></p>
+            <% else %>
+                <p><b>Site is not available</b></p>
+            <% end_if %>
         <% end_if %>
     </body>
 </html>
