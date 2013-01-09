@@ -31,14 +31,32 @@ class EnvironmentChecker extends RequestHandler {
 	function init() {
 		parent::init();
 		
+		if(!$this->canAccess()) return Security::permissionFailure($this);
+	}
+
+	function canAccess($member = null) {
+		if(!$member) $member = Member::currentUser();
+
 		// We allow access to this controller regardless of live-status or ADMIN permission only
 		// if on CLI.  Access to this controller is always allowed in "dev-mode", or of the user is ADMIN.
-		$canAccess = (Director::isDev() 
+		if(
+			Director::isDev() 
 			|| Director::is_cli() 
-			// Its important that we don't run this check if dev/build was requested
-			|| Permission::check("ADMIN")
-		);
-		if(!$canAccess) return Security::permissionFailure($this);
+			|| Permission::checkMember($member, "ADMIN")
+		) {
+			return true;
+		}
+
+		// Extended access checks.
+		// "Veto" style, return NULL to abstain vote.
+		$canExtended = null;
+		$results = $this->extend('canAccess', $member);
+		if($results && is_array($results)) {
+			if(!min($results)) return false;
+			else return true;
+		}
+
+		return false;
 	}
 	
 	function index() {
