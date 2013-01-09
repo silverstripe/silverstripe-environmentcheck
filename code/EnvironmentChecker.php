@@ -31,7 +31,7 @@ class EnvironmentChecker extends RequestHandler {
 	function init() {
 		parent::init();
 		
-		if(!$this->canAccess()) return Security::permissionFailure($this);
+		if(!$this->canAccess()) return $this->httpError(403);
 	}
 
 	function canAccess($member = null) {
