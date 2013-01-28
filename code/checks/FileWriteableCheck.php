@@ -12,7 +12,8 @@ class FileWriteableCheck implements EnvironmentCheck {
 	}
 	
 	function check() {
-		if($this->path[0] == '/') $filename = $this->path;
+		// Check for absolute paths (either by leading slash, or by directory existence for Win compat)
+		if($this->path[0] == '/' || file_exists($this->path)) $filename = $this->path;
 		else $filename = BASE_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->path);
 		
 		if(file_exists($filename)) $isWriteable = is_writeable($filename);
