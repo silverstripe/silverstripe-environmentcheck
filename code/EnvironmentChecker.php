@@ -29,8 +29,6 @@ class EnvironmentChecker extends RequestHandler {
 	}
 	
 	function init() {
-		parent::init();
-		
 		if(!$this->canAccess()) return $this->httpError(403);
 	}
 
