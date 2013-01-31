@@ -28,21 +28,22 @@ class EnvironmentChecker extends RequestHandler {
 		$this->title = $title;
 	}
 	
-	function init() {
+	function init($permission = 'ADMIN') {
 		parent::init();
 		
-		if(!$this->canAccess()) return $this->httpError(403);
+		if(!$this->canAccess(null, $permission)) return $this->httpError(403);
 	}
 
-	function canAccess($member = null) {
+	function canAccess($member = null, $permission = "ADMIN") {
 		if(!$member) $member = Member::currentUser();
 
 		// We allow access to this controller regardless of live-status or ADMIN permission only
 		// if on CLI.  Access to this controller is always allowed in "dev-mode", or of the user is ADMIN.
 		if(
 			Director::isDev() 
-			|| Director::is_cli() 
-			|| Permission::checkMember($member, "ADMIN")
+			|| Director::is_cli()
+			|| empty($permission)
+			|| Permission::checkMember($member, $permission)
 		) {
 			return true;
 		}
