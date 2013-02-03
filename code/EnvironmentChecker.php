@@ -69,6 +69,7 @@ class EnvironmentChecker extends RequestHandler {
 		}
 		
 		$resultText = $result->customise(array(
+			"URL" => Director::absoluteBaseURL(),
 			"Title" => $this->title,
 			"Name" => $this->checkSuiteName,
 			"ErrorCode" => $this->errorCode,

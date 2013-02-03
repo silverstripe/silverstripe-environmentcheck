@@ -13,8 +13,13 @@
             
             h1 {
                 font-size: 30px;
-                margin-bottom: 10px;
+                margin-bottom: 3px;
                 margin-left: 8px;
+            }
+
+            h2 {
+                font-size: 16px;
+                margin: 2px 0 10px 8px;
             }
             
             p {
@@ -57,6 +62,7 @@
     
     <body>
         <h1 class="$Status">$Title: $Status</h1>
+        <h2 class="website">Site: $URL</h2>
         
         <table>
             <tr><th>Check</th> <th>Status</th> <th>Message</th></tr>
