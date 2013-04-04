@@ -24,7 +24,7 @@ Register checks in your own `_config.php` - see the `_config.php` in this module
 
 ## Available checks
 
- * `DatabaseCheck`: Check that the connection to the database is working, by looking for records in some table. By default, Member will be checked.
+ * `DatabaseCheck`: Check that the connection to the database is working, by ensuring that the table exists and that the table contain some records.
  * `URLCheck`: Check that a given URL is functioning, by default, the homepage.
  * `HasFunctionCheck`: Check that the given function exists.
     This can be used to check that PHP modules or features are installed.
