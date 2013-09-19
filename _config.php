@@ -19,7 +19,3 @@
 // EnvironmentCheckSuite::register('check', 'FileWriteableCheck("assets")', "Is assets/ writeable?");
 // EnvironmentCheckSuite::register('check', 'FileWriteableCheck("' . TEMP_FOLDER . '")', "Is the temp folder writeable?");
 
-Director::addRules(100, array(
-	'dev/health' => 'DevHealthController',
-	'dev/check' => 'DevCheckController',
-));
