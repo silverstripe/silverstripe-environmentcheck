@@ -66,9 +66,9 @@
         
         <table>
             <tr><th>Check</th> <th>Status</th> <th>Message</th></tr>
-            <% control Details %>
+            <% loop Details %>
             <tr><td>$Check</td> <td class="$Status">$Status</td> <td>$Message.XML</td></tr>
-            <% end_control %>
+            <% end_loop %>
         </table>
 
         <% if ShouldPass %>
