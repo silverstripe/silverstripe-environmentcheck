@@ -29,7 +29,34 @@ class EnvironmentChecker extends RequestHandler {
 	}
 	
 	function init($permission = 'ADMIN') {
-		if(!$this->canAccess(null, $permission)) return $this->httpError(403);
+		// if the environment supports it, provide a basic auth challenge and see if it matches configured credentials
+		if(defined('ENVCHECK_BASICAUTH_USERNAME') && defined('ENVCHECK_BASICAUTH_PASSWORD')) {
+			if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+				// authenticate the input user/pass with the configured credentials
+				if(
+					!(
+						$_SERVER['PHP_AUTH_USER'] == ENVCHECK_BASICAUTH_USERNAME
+						&& $_SERVER['PHP_AUTH_PW'] == ENVCHECK_BASICAUTH_PASSWORD
+					)
+				) {
+					$response = new SS_HTTPResponse(null, 401);
+					$response->addHeader('WWW-Authenticate', "Basic realm=\"Environment check\"");
+					// Exception is caught by RequestHandler->handleRequest() and will halt further execution
+					$e = new SS_HTTPResponse_Exception(null, 401);
+					$e->setResponse($response);
+					throw $e;
+				}
+			} else {
+				$response = new SS_HTTPResponse(null, 401);
+				$response->addHeader('WWW-Authenticate', "Basic realm=\"Environment check\"");
+				// Exception is caught by RequestHandler->handleRequest() and will halt further execution
+				$e = new SS_HTTPResponse_Exception(null, 401);
+				$e->setResponse($response);
+				throw $e;
+			}
+		} else {
+			if(!$this->canAccess(null, $permission)) return $this->httpError(403);
+		}
 	}
 
 	function canAccess($member = null, $permission = "ADMIN") {

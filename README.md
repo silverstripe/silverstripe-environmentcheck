@@ -37,6 +37,21 @@ Register checks in your own `_config.php` - see the `_config.php` in this module
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
 
+## Authentication
+
+By default, accessing the `dev/check` URL will not require authentication on CLI and dev environments, but if you're
+trying to access it on a live or test environment, it will respond with a 403 HTTP status unless you're logged in as
+an administrator on the site.
+
+You may wish to have an automated service check `dev/check` periodically, but not want to open it up for public access.
+You can enable basic authentication by defining the following in your environment:
+
+	define('ENVCHECK_BASICAUTH_USERNAME', 'test');
+	define('ENVCHECK_BASICAUTH_PASSWORD', 'password');
+
+Now if you access `dev/check` in a browser it will pop up a basic auth popup, and if the submitted username and password
+match the ones defined the username and password defined in the environment, access will be granted to the page.
+
 ## Adding more checks
 
 To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this module for examples.
