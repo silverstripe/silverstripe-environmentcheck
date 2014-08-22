@@ -6,6 +6,7 @@ This module adds an API for running environment checks to your API.
 
  * `dev/health` - A public URL that performs a quick check that this environment is functioning.  This could be tied to a load balancer, for example.
  * `dev/check` - An admin-only URL that performs a more comprehensive set of checks.  This could be tied to a deployment system, for example.
+ * `dev/check/<suite>` - Check a specific suite (admin only)
 
 ## Aren't these just unit tests?
 
@@ -60,7 +61,7 @@ To add more checks, you should put additional `EnvironmentCheckSuite::register` 
 	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
 	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("imagecreatetruecolor")', "Does PHP have GD2 support?");
 	
-The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `dev/health` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs.
+The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `dev/health` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs. You can also add a check to more than one suite by passing the first argument as an array.
 
 The module comes bundled with a few checks in `DefaultHealthChecks.php`.  However, to test your own application, you probably want to write custom checks.
 
