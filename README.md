@@ -1,6 +1,6 @@
 # SilverStripe Environment Checker Module
 
-Developed by Sam Minnée, thanks to Will Rossiter.
+Initially developed by Sam Minnée, thanks to Will Rossiter.
 
 This module adds an API for running environment checks to your API.
 
@@ -17,11 +17,47 @@ Almost, but not really. Environment checks differ from unit tests in two importa
 
 ## Installation
 
+There are two ways to register your checks, both can be used at the same time. The checks will be appended to the suite.
+
+### Direct method
+
 Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults.
 
-	:::php
-	EnvironmentCheckSuite::register('health', 'DatabaseCheck', "Can we connect to the database?");
-	EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage accessible?");
+```php
+EnvironmentCheckSuite::register('health', 'DatabaseCheck', "Can we connect to the database?");
+EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage accessible?");
+```
+
+### Config system method
+
+Register your checks on the `EnvironmentCheckSuite`. The same named check may be used multiple times.
+
+```yaml
+EnvironmentCheckSuite:
+  registered_checks:
+    db:
+      definition: 'DatabaseCheck("Page")'
+      title: 'Is the database accessible?'
+    url:
+      definition: 'URLCheck()'
+      title: 'Is the homepage accessible?'
+  registered_suites:
+    check:
+      - db
+    health:
+      - db
+      - url
+```
+
+You can also disable checks configured this way. This is handy if you want to override a check imposed on your project
+by some other module. Just set the "state" property of the check to "disabled" like this:
+
+```yaml
+EnvironmentCheckSuite:
+  registered_checks:
+    db:
+      state: disabled
+```
 
 ## Available checks
 
@@ -37,6 +73,7 @@ Register checks in your own `_config.php` - see the `_config.php` in this module
     like static caches, as well as for backup files and folders.
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
+ * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
 
 ## Authentication
 

@@ -1,24 +1,84 @@
 <?php
 /**
  * Represents a suite of environment checks.
- * Also has a register for assigning environment checks to named instances of EnvironmentCheckSuite
- * 
- * Usage:
- * EnvironmentCheckSuite::register('health', 'MyHealthCheck');
- * 
+ * Specific checks can be registered against a named instance of EnvironmentCheckSuite.
+ *
+ * Usage #1 - _config.php
+ * EnvironmentCheckSuite::register('health', 'MyHealthCheck("my param")', 'Title of my health check');
+ *
+ * Usage #2 - config.yml
+ * EnvironmentCheckSuite:
+ *   registered_checks:
+ *     mycheck:
+ *       definition: 'MyHealthCheck("my param")'
+ *       title: 'Title of my health check'
+ *   registered_suites:
+ *     health:
+ *       - mycheck
+ *
  * $result = EnvironmentCheckSuite::inst('health')->run();
  */
-class EnvironmentCheckSuite {
+class EnvironmentCheckSuite extends Object {
+
+	/**
+	 * Name of this suite.
+	 */
+	protected $name;
+
 	protected $checks = array();
-	
+
+	/**
+	 * Associative array of named checks registered via the config system. Each check should specify:
+	 * - definition (e.g. 'MyHealthCheck("my param")')
+	 * - title (e.g. 'Is my feature working?')
+	 * - state (setting this to 'disabled' will cause suites to skip this check entirely.
+	 */
+	private static $registered_checks;
+
+	/**
+	 * Associative array of named suites registered via the config system. Each suite should enumerate
+	 * named checks that have been configured in 'registered_checks'.
+	 */
+	private static $registered_suites;
+
+	/**
+	 * Load checks for this suite from the configuration system. This is an alternative to the
+	 * EnvironmentCheckSuite::register - both can be used, checks will be appended to the suite.
+	 *
+	 * @param string $suiteName The name of this suite.
+	 */
+	public function __construct($suiteName) {
+		if (empty($this->config()->registered_suites[$suiteName])) {
+			// Not registered via config system, but it still may be configured later via self::register.
+			return;
+		}
+
+		foreach ($this->config()->registered_suites[$suiteName] as $checkName) {
+			if (empty($this->config()->registered_checks[$checkName])) {
+				throw new InvalidArgumentException(
+					"Bad EnvironmentCheck: '$checkName' - the named check has not been registered."
+				);
+			}
+
+			$check = $this->config()->registered_checks[$checkName];
+
+			// Existing named checks can be disabled by setting their 'state' to 'disabled'.
+			// This is handy for disabling checks mandated by modules.
+			if (!empty($check['state']) && $check['state']==='disabled') continue;
+			
+			// Add the check to this suite.
+			$this->push($check['definition'], $check['title']);
+		}
+	}
+
 	/**
 	 * Run this test suite
 	 * @return The result code of the worst result.
 	 */
 	public function run() {
 		$worstResult = 0;
-		
-		$result = new EnvironmentCheckSuiteResult;
+
+		$result = new EnvironmentCheckSuiteResult();
 		foreach($this->checkInstances() as $check) {
 			list($checkClass, $checkTitle) = $check;
 			try {
@@ -30,10 +90,10 @@ class EnvironmentCheckSuite {
 			}
 			$result->addResult($status, $message, $checkTitle);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Get instances of all the environment checks
 	 */
@@ -56,10 +116,9 @@ class EnvironmentCheckSuite {
 		}
 		return $output;
 	}
-	
+
 	/**
 	 * Add a check to this suite.
-	 * 
 	 */
 	public function push($check, $title = null) {
 		if(!$title) {
@@ -67,22 +126,22 @@ class EnvironmentCheckSuite {
 		}
 		$this->checks[] = array($check, $title);
 	}
-	
+
 	/////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	protected static $instances = array();
-	
+
 	/**
 	 * Return a named instance of EnvironmentCheckSuite.
 	 */
 	static function inst($name) {
-		if(!isset(self::$instances[$name])) self::$instances[$name] = new EnvironmentCheckSuite();
+		if(!isset(self::$instances[$name])) self::$instances[$name] = new EnvironmentCheckSuite($name);
 		return self::$instances[$name];
 	}
 
 	/**
 	 * Register a check against the named check suite.
-	 * 
+	 *
 	 * @param String|Array
 	 */
 	static function register($names, $check, $title = null) {
@@ -101,38 +160,38 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 		parent::__construct();
 		$this->details = new ArrayList();
 	}
-	
+
 	function addResult($status, $message, $checkIdentifier) {
 		$this->details->push(new ArrayData(array(
 			'Check' => $checkIdentifier,
 			'Status' => $this->statusText($status),
 			'Message' => $message,
 		)));
-		
+
 		$this->worst = max($this->worst, $status);
 	}
-	
+
 	/**
 	 * Returns true if there are no ERRORs, only WARNINGs or OK
 	 */
 	function ShouldPass() {
 		return $this->worst <= EnvironmentCheck::WARNING;
 	}
-	
+
 	/**
 	 * Returns overall (i.e. worst) status as a string.
 	 */
 	function Status() {
 		return $this->statusText($this->worst);
 	}
-	
+
 	/**
 	 * Returns detailed status information about each check
 	 */
 	function Details() {
 		return $this->details;
 	}
-		
+
 	/**
 	 * Return a text version of a status code
 	 */
