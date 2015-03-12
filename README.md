@@ -37,6 +37,7 @@ Register checks in your own `_config.php` - see the `_config.php` in this module
     like static caches, as well as for backup files and folders.
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
+ * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
 
 ## Authentication
 
