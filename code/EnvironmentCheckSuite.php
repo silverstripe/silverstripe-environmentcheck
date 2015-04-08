@@ -193,6 +193,22 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 	}
 
 	/**
+	 * Convert the final result status and details to JSON.
+	 * @return string
+	 */
+	function toJSON() {
+		$result = array(
+			'Status' => $this->Status(),
+			'ShouldPass' => $this->ShouldPass(),
+			'Checks' => array()
+		);
+		foreach($this->details as $detail) {
+			$result['Checks'][] = $detail->toMap();
+		}
+		return json_encode($result);
+	}
+
+	/**
 	 * Return a text version of a status code
 	 */
 	protected function statusText($status) {
