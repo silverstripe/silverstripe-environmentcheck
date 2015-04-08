@@ -88,11 +88,11 @@ class EnvironmentChecker extends RequestHandler {
 	function index() {
 		$response = new SS_HTTPResponse;
 		$result = EnvironmentCheckSuite::inst($this->checkSuiteName)->run();
-		
+
 		if(!$result->ShouldPass()) {
 			$response->setStatusCode($this->errorCode);
 		}
-		
+
 		$resultText = $result->customise(array(
 			"URL" => Director::absoluteBaseURL(),
 			"Title" => $this->title,
@@ -103,6 +103,16 @@ class EnvironmentChecker extends RequestHandler {
 		if (self::$email_results && !$result->ShouldPass()) {
 			$email = new Email(self::$from_email_address, self::$to_email_address, $this->title, $resultText);
 			$email->send();
+		}
+
+		// output the result as JSON if requested
+		if(
+			$this->getRequest()->getExtension() == 'json'
+			|| strpos($this->getRequest()->getHeader('Accept'), 'application/json') !== false
+		) {
+			$response->setBody($result->toJSON());
+			$response->addHeader('Content-Type', 'application/json');
+			return $response;
 		}
 
 		$response->setBody($resultText);
