@@ -60,7 +60,13 @@ class EnvironmentChecker extends RequestHandler {
 	}
 
 	function canAccess($member = null, $permission = "ADMIN") {
-		if(!$member) $member = Member::currentUser();
+		if(!$member) {
+			$member = Member::currentUser();
+		}
+
+		if(!$member) {
+			$member = BasicAuth::requireLogin('Environment Checker', $permission, false);
+		}
 
 		// We allow access to this controller regardless of live-status or ADMIN permission only
 		// if on CLI.  Access to this controller is always allowed in "dev-mode", or of the user is ADMIN.
