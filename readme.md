@@ -81,19 +81,20 @@ EnvironmentCheckSuite:
 
 ## Available checks
 
- * `DatabaseCheck`: Check that the connection to the database is working, by ensuring that the table exists and that the table contain some records.
+ * `DatabaseCheck`: Check that the connection to the database is working, by ensuring that the table exists and that
+ the table contain some records.
  * `URLCheck`: Check that a given URL is functioning, by default, the homepage.
- * `HasFunctionCheck`: Check that the given function exists.
-    This can be used to check that PHP modules or features are installed.
- * `HasClassCheck`: Check that the given class exists.
-    This can be used to check that PHP modules or features are installed.
- * `FileWriteableCheck`: Check that the given file is writeable.
- * `FileAgeCheck`: Checks for the maximum age of one or more files or folders.
-    Useful for files which should be frequently auto-generated, 
-    like static caches, as well as for backup files and folders.
+ * `HasFunctionCheck`: Check that the given function exists. This can be used to check that PHP modules or features
+ are installed.
+ * `HasClassCheck`: Check that the given class exists. This can be used to check that PHP modules or features are
+ installed.
+ * `FileWriteableCheck`: Check that the given file is writable.
+ * `FileAgeCheck`: Checks for the maximum age of one or more files or folders. Useful for files which should be
+ frequently auto-generated, like static caches, as well as for backup files and folders.
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
  * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
+ * `BinaryExistsCheck`: Checks if a binary is available on the server
 
 ## Authentication
 
