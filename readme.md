@@ -1,6 +1,10 @@
 # SilverStripe Environment Checker Module
 
-Initially developed by Sam Minnée, thanks to Will Rossiter.
+[![Build Status](http://img.shields.io/travis/silverstripe-labs/silverstripe-environmentalcheck.svg?style=flat-square)](https://travis-ci.org/silverstripe-labs/silverstripe-environmentalcheck)
+[![Code Quality](http://img.shields.io/scrutinizer/g/silverstripe-labs/silverstripe-environmentalcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentalcheck)
+[![Code Coverage](http://img.shields.io/scrutinizer/coverage/g/silverstripe-labs/silverstripe-environmentalcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentalcheck)
+[![Version](http://img.shields.io/packagist/v/silverstripe/environmentalcheck.svg?style=flat-square)](https://packagist.org/packages/silverstripe/silverstripe-environmentalcheck)
+[![License](http://img.shields.io/packagist/l/silverstripe/environmentalcheck.svg?style=flat-square)](LICENSE.md)
 
 This module adds an API for running environment checks to your API.
 
@@ -17,9 +21,13 @@ Almost, but not really. Environment checks differ from unit tests in two importa
 
 ## Installation
 
-There are two ways to register your checks, both can be used at the same time. The checks will be appended to the suite.
+```sh
+$ composer require silverstripe/environmentalcheck
+```
 
-### Direct method
+You'll also need to run `/dev/build`.
+
+### Activating Directly
 
 Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults.
 
@@ -28,7 +36,7 @@ EnvironmentCheckSuite::register('health', 'DatabaseCheck', "Can we connect to th
 EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage accessible?");
 ```
 
-### Config system method
+### Activating Via Config
 
 Register your checks on the `EnvironmentCheckSuite`. The same named check may be used multiple times.
 
@@ -156,3 +164,13 @@ If you wish to embed an environment check suite in another, you can use the foll
  * `$result->Details()`: A `DataObjectSet` of details about the result of each check in the suite.
 
 See `EnvironmentChecker.ss` to see how these can be used to build a UI.
+
+## Versioning
+
+This library follows [Semver](http://semver.org). According to Semver, you will be able to upgrade to any minor or patch version of this library without any breaking changes to the public API. Semver also requires that we clearly define the public API for this library.
+
+All methods, with `public` visibility, are part of the public API. All other methods are not part of the public API. Where possible, we'll try to keep `protected` methods backwards-compatible in minor/patch versions, but if you're overriding methods then please test your work before upgrading.
+
+## Reporting Issues
+
+Please [create an issue](http://github.com/silverstripe-labs/silverstripe-environmentalcheck/issues) for any bugs you've found, or features you're missing.

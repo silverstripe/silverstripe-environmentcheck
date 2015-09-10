@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Checks that one or more URLs are reachable via HTTP.
  * Note that the HTTP connectivity can just be verified from the server to the remote URL,
@@ -8,7 +9,6 @@
  * <code>EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");</code>
  */
 class ExternalURLCheck implements EnvironmentCheck {
-
 	/**
 	 * @var array
 	 */
@@ -20,14 +20,19 @@ class ExternalURLCheck implements EnvironmentCheck {
 	protected $timeout;
 
 	/**
-	 * @param String Space separated list of absolute URLs 
-	 *  (can't be an array as we're using Object::create() with strings for the constructor signature)
+	 * @param string $urls Space-separated list of absolute URLs.
+	 * @param int $timeout
 	 */
 	function __construct($urls, $timeout = 15) {
 		if($urls) $this->urls = explode(' ', $urls);
 		$this->timeout = $timeout;
 	}
 
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		$urls = $this->getURLs();
 
@@ -90,7 +95,7 @@ class ExternalURLCheck implements EnvironmentCheck {
 	}
 
 	/**
-	 * @return Array
+	 * @return array
 	 */
 	protected function getCurlOpts($url) {
 		return array(
@@ -103,7 +108,7 @@ class ExternalURLCheck implements EnvironmentCheck {
 	}
 
 	/**
-	 * @return Array
+	 * @return array
 	 */
 	protected function getURLs() {
 		return $this->urls;

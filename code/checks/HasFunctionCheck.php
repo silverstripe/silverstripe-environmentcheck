@@ -1,16 +1,26 @@
 <?php
+
 /**
  * Check that the given function exists.
- * This can be used to check that PHP modules or features are installed.
- * @param $functionName The name of the function to look for.
  */
 class HasFunctionCheck implements EnvironmentCheck {
+	/**
+	 * @var string
+	 */
 	protected $functionName;
-	
+
+	/**
+	 * @param string $functionName The name of the function to look for.
+	 */
 	function __construct($functionName) {
 		$this->functionName = $functionName;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		if(function_exists($this->functionName)) return array(EnvironmentCheck::OK, $this->functionName.'() exists');
 		else return array(EnvironmentCheck::ERROR, $this->functionName.'() doesn\'t exist');

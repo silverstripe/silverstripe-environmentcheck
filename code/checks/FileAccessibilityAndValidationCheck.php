@@ -1,50 +1,72 @@
 <?php
+
 /**
- * Checks for the accessiblility and tiletype validation of one or more files or folders.
+ * Checks for the accessibility and file type validation of one or more files or folders.
  *
  * Examples:
- * // Checks /assets/caluclator_files has .json files and all files are valid json files.
-	* EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/caluclator_files/*.json",
+ * // Checks /assets/calculator_files has .json files and all files are valid json files.
+ * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/*.json",
  *  "jsonValidate", '.FileAccessibilityAndValidationCheck::CHECK_ALL.')', 'Check a json file exist and are all valid json files'
  * );
  * 
- * // Checks /assets/caluclator_files/calculator.json exists and is valid json file.
- * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/caluclator_files/calculator.json",
+ * // Checks /assets/calculator_files/calculator.json exists and is valid json file.
+ * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json",
  *  "jsonValidate", '.FileAccessibilityAndValidationCheck::CHECK_SINGLE.')', 'Check a calculator.json exists and is valid json file'
  * );
  *
  * // Check only existence 
- * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/caluclator_files/calculator.json")', 
+ * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json")',
  * 'Check a calculator.json exists only'
  * );
  */
 class FileAccessibilityAndValidationCheck implements EnvironmentCheck {
-
+	/**
+	 * @var int
+	 */
 	const CHECK_SINGLE = 1;
 
+	/**
+	 * @var int
+	 */
 	const CHECK_ALL = 2;
 
 	/**
-	 * @var String Absolute path to a file or folder, compatible with glob().
+	 * Absolute path to a file or folder, compatible with glob().
+	 *
+	 * @var string
 	 */
 	protected $path;
 
 	/**
-	 * @var Int Constant, check for a single file to match age criteria, or all of them.
+	 * Constant, check for a single file to match age criteria, or all of them.
+	 *
+	 * @var int
 	 */
 	protected $fileTypeValidateFunc;
 
-		/**
-	 * @var Int Constant, check for a single file to match age criteria, or all of them.
+	/**
+	 * Constant, check for a single file to match age criteria, or all of them.
+	 *
+	 * @var int
 	 */
 	protected $checkType;
 
+	/**
+	 * @param string $path
+	 * @param string $fileTypeValidateFunc
+	 * @param null|int $checkType
+	 */
 	function __construct($path, $fileTypeValidateFunc = 'noVidation', $checkType = null) {
 		$this->path = $path;
 		$this->fileTypeValidateFunc = ($fileTypeValidateFunc)? $fileTypeValidateFunc:'noVidation';
 		$this->checkType = ($checkType) ? $checkType : self::CHECK_SINGLE;
 	}
 
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		$origStage = Versioned::get_reading_mode();
 		Versioned::set_reading_mode('Live');
@@ -122,6 +144,11 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck {
 		return $checkReturn;
 	}
 
+	/**
+	 * @param string $file
+	 *
+	 * @return bool
+	 */
 	private function jsonValidate($file){
 		$json = json_decode(file_get_contents($file));
 		if(!$json) {
@@ -131,15 +158,21 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck {
 		}
 	}
 
+	/**
+	 * @param string $file
+	 *
+	 * @return bool
+	 */
 	protected function noVidation($file) {
 		return true;
 	}
 
 	/**
-	 * @return Array Of absolute file paths
+	 * Gets a list of absolute file paths.
+	 *
+	 * @return array
 	 */
 	protected function getFiles() {
 		return glob($this->path);
 	}
-
 }

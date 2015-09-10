@@ -1,16 +1,26 @@
 <?php
+
 /**
- * Check that the given file is writeable.
- * This can be used to check that the environment doesn't have permission set-up errors.
- * @param $path The full path.  If a relative path, it will relative to the BASE_PATH
+ * Check that the given file is writable.
  */
 class FileWriteableCheck implements EnvironmentCheck {
+	/**
+	 * @var string
+	 */
 	protected $path;
-	
+
+	/**
+	 * @param string $path The full path. If a relative path, it will relative to the BASE_PATH.
+	 */
 	function __construct($path) {
 		$this->path = $path;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		if($this->path[0] == '/') $filename = $this->path;
 		else $filename = BASE_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->path);
