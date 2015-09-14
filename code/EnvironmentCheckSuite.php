@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Represents a suite of environment checks.
  * Specific checks can be registered against a named instance of EnvironmentCheckSuite.
@@ -19,12 +20,16 @@
  * $result = EnvironmentCheckSuite::inst('health')->run();
  */
 class EnvironmentCheckSuite extends Object {
-
 	/**
 	 * Name of this suite.
+	 *
+	 * @var string
 	 */
 	protected $name;
 
+	/**
+	 * @var array
+	 */
 	protected $checks = array();
 
 	/**
@@ -32,14 +37,18 @@ class EnvironmentCheckSuite extends Object {
 	 * - definition (e.g. 'MyHealthCheck("my param")')
 	 * - title (e.g. 'Is my feature working?')
 	 * - state (setting this to 'disabled' will cause suites to skip this check entirely.
+	 *
+	 * @var array
 	 */
-	private static $registered_checks;
+	private static $registered_checks = array();
 
 	/**
 	 * Associative array of named suites registered via the config system. Each suite should enumerate
 	 * named checks that have been configured in 'registered_checks'.
+	 *
+	 * @var array
 	 */
-	private static $registered_suites;
+	private static $registered_suites = array();
 
 	/**
 	 * Load checks for this suite from the configuration system. This is an alternative to the
@@ -48,6 +57,8 @@ class EnvironmentCheckSuite extends Object {
 	 * @param string $suiteName The name of this suite.
 	 */
 	public function __construct($suiteName) {
+		parent::__construct();
+
 		if (empty($this->config()->registered_suites[$suiteName])) {
 			// Not registered via config system, but it still may be configured later via self::register.
 			return;
@@ -72,13 +83,13 @@ class EnvironmentCheckSuite extends Object {
 	}
 
 	/**
-	 * Run this test suite
-	 * @return The result code of the worst result.
+	 * Run this test suite and return the result code of the worst result.
+	 *
+	 * @return int
 	 */
 	public function run() {
-		$worstResult = 0;
-
 		$result = new EnvironmentCheckSuiteResult();
+
 		foreach($this->checkInstances() as $check) {
 			list($checkClass, $checkTitle) = $check;
 			try {
@@ -95,7 +106,9 @@ class EnvironmentCheckSuite extends Object {
 	}
 
 	/**
-	 * Get instances of all the environment checks
+	 * Get instances of all the environment checks.
+	 *
+	 * @return array
 	 */
 	protected function checkInstances() {
 		$output = array();
@@ -119,6 +132,9 @@ class EnvironmentCheckSuite extends Object {
 
 	/**
 	 * Add a check to this suite.
+	 *
+	 * @param mixed $check
+	 * @param string $title
 	 */
 	public function push($check, $title = null) {
 		if(!$title) {
@@ -129,10 +145,17 @@ class EnvironmentCheckSuite extends Object {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * @var array
+	 */
 	protected static $instances = array();
 
 	/**
 	 * Return a named instance of EnvironmentCheckSuite.
+	 *
+	 * @param string $name
+	 *
+	 * @return EnvironmentCheckSuite
 	 */
 	static function inst($name) {
 		if(!isset(self::$instances[$name])) self::$instances[$name] = new EnvironmentCheckSuite($name);
@@ -142,7 +165,9 @@ class EnvironmentCheckSuite extends Object {
 	/**
 	 * Register a check against the named check suite.
 	 *
-	 * @param String|Array
+	 * @param string|array $names
+	 * @param EnvironmentCheck $check
+	 * @param string|array
 	 */
 	static function register($names, $check, $title = null) {
 		if(!is_array($names)) $names = array($names);
@@ -154,13 +179,26 @@ class EnvironmentCheckSuite extends Object {
  * A single set of results from running an EnvironmentCheckSuite
  */
 class EnvironmentCheckSuiteResult extends ViewableData {
-	protected $details, $worst = 0;
-	
+	/**
+	 * @var ArrayList
+	 */
+	protected $details;
+
+	/**
+	 * @var int
+	 */
+	protected $worst = 0;
+
 	function __construct() {
 		parent::__construct();
 		$this->details = new ArrayList();
 	}
 
+	/**
+	 * @param int $status
+	 * @param string $message
+	 * @param string $checkIdentifier
+	 */
 	function addResult($status, $message, $checkIdentifier) {
 		$this->details->push(new ArrayData(array(
 			'Check' => $checkIdentifier,
@@ -172,21 +210,27 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 	}
 
 	/**
-	 * Returns true if there are no ERRORs, only WARNINGs or OK
+	 * Returns true if there are no errors.
+	 *
+	 * @return bool
 	 */
-	function ShouldPass() {
+	public function ShouldPass() {
 		return $this->worst <= EnvironmentCheck::WARNING;
 	}
 
 	/**
 	 * Returns overall (i.e. worst) status as a string.
+	 *
+	 * @return string
 	 */
 	function Status() {
 		return $this->statusText($this->worst);
 	}
 
 	/**
-	 * Returns detailed status information about each check
+	 * Returns detailed status information about each check.
+	 *
+	 * @return ArrayList
 	 */
 	function Details() {
 		return $this->details;
@@ -194,6 +238,7 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 
 	/**
 	 * Convert the final result status and details to JSON.
+	 *
 	 * @return string
 	 */
 	function toJSON() {
@@ -209,7 +254,9 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 	}
 
 	/**
-	 * Return a text version of a status code
+	 * Return a text version of a status code.
+	 *
+	 * @return string
 	 */
 	protected function statusText($status) {
 		switch($status) {

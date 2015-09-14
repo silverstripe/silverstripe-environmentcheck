@@ -1,15 +1,25 @@
 <?php
 
 class DevHealthController extends Controller {
-
+	/**
+	 * @var array
+	 */
 	public static $allowed_actions = array(
 		'index'
 	);
 
+	/**
+	 * @return EnvironmentChecker
+	 *
+	 * @throws SS_HTTPResponse_Exception
+	 */
 	function index() {
-		$e = new EnvironmentChecker('health', 'Site health');
-		$e->init('');   //empty permission check, the "health" check does not require a permission check to run
-		$e->setErrorCode(404);
-		return $e;
+		// health check does not require permission to run
+
+		$checker = new EnvironmentChecker('health', 'Site health');
+		$checker->init('');
+		$checker->setErrorCode(404);
+
+		return $checker;
 	}
 }

@@ -1,0 +1,35 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - 7.0
+
+sudo: false
+
+env:
+  - DB=MYSQL CORE_RELEASE=3.1
+
+before_script:
+  - composer self-update || true
+  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
+  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
+  - cd ~/builds/ss
+  - composer install
+
+script:
+    - vendor/bin/phpunit --coverage-clover coverage.clover environmentcheck/tests
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - git remote rm origin
+    - git remote add origin git@github.com:silverstripe-labs/silverstripe-environmentcheck.git
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+branches:
+    only:
+        - master
+
+matrix:
+    allow_failures:
+        - php: 7.0

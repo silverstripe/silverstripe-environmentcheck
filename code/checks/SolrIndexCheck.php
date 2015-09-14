@@ -1,18 +1,28 @@
 <?php
+
 /**
  * Check the availability of all Solr indexes of given class.
- * If there are no indexes of given class found, the returned status will still be "OK".
  *
- * @param $indexClass Limit the index checks to the specified class and all its subclasses.
+ * If there are no indexes of given class found, the returned status will still be "OK".
  */
 class SolrIndexCheck implements EnvironmentCheck {
-
+	/**
+	 * @var null|string
+	 */
 	protected $indexClass;
-	
+
+	/**
+	 * @param string $indexClass Limit the index checks to the specified class and all its subclasses.
+	 */
 	function __construct($indexClass = null) {
 		$this->indexClass = $indexClass;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		$brokenCores = array();
 
@@ -40,5 +50,4 @@ class SolrIndexCheck implements EnvironmentCheck {
 
 		return array(EnvironmentCheck::OK, 'Expected indexes are available.');
 	}
-
 }

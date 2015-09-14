@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Checks for the maximum age of one or more files or folders.
  * Useful for files which should be frequently auto-generated, 
@@ -19,37 +20,58 @@
  * );
  */
 class FileAgeCheck implements EnvironmentCheck {
-
+	/**
+	 * @var int
+	 */
 	const CHECK_SINGLE = 1;
 
+	/**
+	 * @var int
+	 */
 	const CHECK_ALL = 2;
 	
 	/**
-	 * @var String Absolute path to a file or folder, compatible with glob().
+	 * Absolute path to a file or folder, compatible with glob().
+	 *
+	 * @var string
 	 */
 	protected $path;
 
 	/**
-	 * @var String strtotime() compatible relative date specification.
+	 * Relative date specification, compatible with strtotime().
+	 *
+	 * @var string
 	 */
 	protected $relativeAge;
 
 	/**
-	 * @var String The function to use for checking file age,
-	 * so filemtime(), filectime() or fileatime().
+	 * The function to use for checking file age: so filemtime(), filectime(), or fileatime().
+	 *
+	 * @var string
 	 */
 	protected $checkFn;
 
 	/**
-	 * @var Int Constant, check for a single file to match age criteria, or all of them.
+	 * Constant, check for a single file to match age criteria, or all of them.
+	 *
+	 * @var int
 	 */
 	protected $checkType;
 
 	/**
-	 * @var String Either '>' or '<'.
+	 * Type of comparison (either > or <).
+	 *
+	 * @var string
 	 */
 	protected $compareOperand;
 
+	/**
+	 * @param string $path
+	 * @param string $relativeAge
+	 * @param string $compareOperand
+	 * @param null|int $checkType
+	 * @param string $checkFn
+	 */
 	function __construct($path, $relativeAge, $compareOperand = '>', $checkType = null, $checkFn = 'filemtime') {
 		$this->path = $path;
 		$this->relativeAge = $relativeAge;
@@ -58,6 +80,11 @@ class FileAgeCheck implements EnvironmentCheck {
 		$this->compareOperand = $compareOperand;
 	}
 
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		$cutoffTime =  strtotime($this->relativeAge, SS_Datetime::now()->Format('U'));
 		$files = $this->getFiles();
@@ -98,10 +125,11 @@ class FileAgeCheck implements EnvironmentCheck {
 	}
 
 	/**
-	 * @return Array Of absolute file paths
+	 * Gets a list of absolute file paths.
+	 *
+	 * @return array
 	 */
 	protected function getFiles() {
 		return glob($this->path);
 	}
-
 }

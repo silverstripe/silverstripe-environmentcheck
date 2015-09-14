@@ -1,28 +1,32 @@
 <?php
+
 /**
  * Checks if the SMTP connection configured through PHP.ini works as expected.
+ *
  * Only checks socket connection with HELO command, not actually sending the email.
  */
 class SMTPConnectCheck implements EnvironmentCheck {
-
 	/**
-	 * @var String
+	 * @var string
 	 */
 	protected $host;
 
 	/**
-	 * @var Int
+	 * @var int
 	 */
 	protected $port;
 
 	/**
-	 * @var Int In seconds
+	 * Timeout (in seconds).
+	 *
+	 * @var int
 	 */
 	protected $timeout;
 
 	/**
-	 * @param String
-	 * @param Int
+	 * @param null|string $host
+	 * @param null|int $port
+	 * @param int $timeout
 	 */
 	function __construct($host = null, $port = null, $timeout = 15) {
 		$this->host = ($host) ? $host : ini_get('SMTP');
@@ -34,6 +38,11 @@ class SMTPConnectCheck implements EnvironmentCheck {
 		$this->timeout = $timeout;
 	}
 
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 */
 	function check() {
 		$f = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);
 		if(!$f) {
@@ -53,6 +62,5 @@ class SMTPConnectCheck implements EnvironmentCheck {
 		}
 
 		return array(EnvironmentCheck::OK, '');
-
 	}
 }

@@ -1,22 +1,37 @@
 <?php
+
 /**
  * Check that a given URL is functioning, by default, the homepage.
  * 
  * Note that Director::test() will be used rather than a CURL check.
  */
 class URLCheck implements EnvironmentCheck {
+	/**
+	 * @var string
+	 */
 	protected $url;
+
+	/**
+	 * @var string
+	 */
 	protected $testString;
 	
 	/*
-	 * @param $url The URL to check, relative to the site.  "" is the homepage.
-	 * @param $testString A piece of text to optionally search for in the homepage HTML.  If omitted, no such check is made.
+	 * @param string $url The URL to check, relative to the site (homepage is '').
+	 * @param string $testString An optional piece of text to search for on the homepage.
 	 */
-	function __construct($url = "", $testString = "") {
+	function __construct($url = '', $testString = '') {
 		$this->url = $url;
 		$this->testString = $testString;
 	}
-	
+
+	/**
+	 * @inheritdoc
+	 *
+	 * @return array
+	 *
+	 * @throws SS_HTTPResponse_Exception
+	 */
 	function check() {
 		$response = Director::test($this->url);
 
