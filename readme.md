@@ -83,6 +83,30 @@ EnvironmentCheckSuite:
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
  * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
 
+## Monitoring Checks
+
+Checks will return an appropriate HTTP status code, so are easy to hook into common uptime montoring
+solutions like pingdom.com. 
+
+You can also have the environment checker email results with the following configuration:
+
+```yml
+EnvironmentChecker:
+  email_results: true
+  to_email_address: support@test.com
+  from_email_address: admin@test.com
+```
+
+Errors can be logged via the standard SilverStripe logging. Each check will cause an individual log entry.
+You can choose to enable logging separately for warnings and errors,
+identified through the result of `EnvironmentCheck->check()`.
+
+```yml
+EnvironmentChecker:
+  log_results_warning: true
+  log_results_error: true
+```
+
 ## Authentication
 
 By default, accessing the `dev/check` URL will not require authentication on CLI and dev environments, but if you're

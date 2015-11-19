@@ -42,6 +42,26 @@ class EnvironmentChecker extends RequestHandler {
 	public static $email_results = false;
 
 	/**
+	 * @var bool Log results via {@link SS_Log}
+	 */
+	private static $log_results_warning = false;
+
+	/**
+	 * @var int Maps to {@link Zend_Log} levels. Defaults to Zend_Log::WARN
+	 */
+	private static $log_results_warning_level = 4;
+
+	/**
+	 * @var bool Log results via {@link SS_Log}
+	 */
+	private static $log_results_error = false;
+
+	/**
+	 * @var int Maps to {@link Zend_Log} levels. Defaults to Zend_Log::ALERT
+	 */
+	private static $log_results_error_level = 1;
+
+	/**
 	 * @param string $checkSuiteName
 	 * @param string $title
 	 */
@@ -151,6 +171,21 @@ class EnvironmentChecker extends RequestHandler {
 			$email->send();
 		}
 
+		// Optionally log errors and warnings individually
+		foreach($result->Details() as $detail) {
+			if($this->config()->log_results_warning && $detail->StatusCode == EnvironmentCheck::WARNING) {
+				$this->log(
+					sprintf('EnvironmentChecker warning at "%s" check. Message: %s', $detail->Check, $detail->Message),
+					$this->config()->log_results_warning_level
+				);
+			} elseif($this->config()->log_results_error && $detail->StatusCode == EnvironmentCheck::ERROR) {
+				$this->log(
+					sprintf('EnvironmentChecker error at "%s" check. Message: %s', $detail->Check, $detail->Message),
+					$this->config()->log_results_error_level
+				);
+			}
+		}
+
 		// output the result as JSON if requested
 		if(
 			$this->getRequest()->getExtension() == 'json'
@@ -164,6 +199,14 @@ class EnvironmentChecker extends RequestHandler {
 		$response->setBody($resultText);
 		
 		return $response;
+	}
+
+	/**
+	 * @param string $message
+	 * @param int $level
+	 */
+	public function log($message, $level) {
+		SS_Log::log($message, $level);
 	}
 
 	/**
