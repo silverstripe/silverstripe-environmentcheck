@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * @package environmentcheck
+ */
+
 class DevCheckController extends Controller {
-	/**
-	 * @var array
-	 */
-	public static $allowed_actions = array(
+
+	private static $allowed_actions = array(
 		'index'
 	);
 
@@ -22,7 +24,7 @@ class DevCheckController extends Controller {
 	 *
 	 * @throws SS_HTTPResponse_Exception
 	 */
-	function index($request) {
+	public function index($request) {
 		$suite = 'check';
 
 		if ($name = $request->param('Suite')) {

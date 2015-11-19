@@ -45,6 +45,8 @@ class EnvironmentChecker extends RequestHandler {
 	 * @param string $checkSuiteName
 	 * @param string $title
 	 */
+	private static $template = 'EnvironmentChecker';
+
 	function __construct($checkSuiteName, $title) {
 		parent::__construct();
 		
@@ -56,8 +58,8 @@ class EnvironmentChecker extends RequestHandler {
 	 * @param string $permission
 	 *
 	 * @throws SS_HTTPResponse_Exception
-	 */
-	function init($permission = 'ADMIN') {
+	 */	
+	public function init($permission = 'ADMIN') {
 		// if the environment supports it, provide a basic auth challenge and see if it matches configured credentials
 		if(defined('ENVCHECK_BASICAUTH_USERNAME') && defined('ENVCHECK_BASICAUTH_PASSWORD')) {
 			if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
@@ -101,7 +103,7 @@ class EnvironmentChecker extends RequestHandler {
 			$member = Member::currentUser();
 		}
 
-		if(!$member) {
+		if(!$member && $permission) {
 			$member = BasicAuth::requireLogin('Environment Checker', $permission, false);
 		}
 
@@ -132,7 +134,7 @@ class EnvironmentChecker extends RequestHandler {
 	 * @return SS_HTTPResponse
 	 */
 	function index() {
-		$response = new SS_HTTPResponse;
+		$response = new SS_HTTPResponse();
 		$result = EnvironmentCheckSuite::inst($this->checkSuiteName)->run();
 
 		if(!$result->ShouldPass()) {
@@ -144,10 +146,15 @@ class EnvironmentChecker extends RequestHandler {
 			"Title" => $this->title,
 			"Name" => $this->checkSuiteName,
 			"ErrorCode" => $this->errorCode,
-		))->renderWith("EnvironmentChecker");
+		))->renderWith($this->config()->template);
 
 		if (self::$email_results && !$result->ShouldPass()) {
-			$email = new Email(self::$from_email_address, self::$to_email_address, $this->title, $resultText);
+			$email = new Email(
+				self::$from_email_address, 
+				self::$to_email_address, 
+				$this->title, 
+				$resultText
+			);
 			$email->send();
 		}
 
