@@ -1,16 +1,29 @@
-language: php
-
-php:
-    - 5.3
-    - 5.4
-    - 5.5
-    - 5.6
-    - 7.0
+# See https://github.com/silverstripe-labs/silverstripe-travis-support for setup details
 
 sudo: false
 
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+
 env:
-  - DB=MYSQL CORE_RELEASE=3.1
+  - DB=MYSQL CORE_RELEASE=3.2
+
+matrix:
+  include:
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3
+    - php: 5.6
+      env: DB=MYSQL CORE_RELEASE=3.1
+    - php: 5.6
+      env: DB=PGSQL CORE_RELEASE=3.2
+  allow_failures:
+    - php: 7.0
 
 before_script:
   - composer self-update || true
@@ -20,16 +33,4 @@ before_script:
   - composer install
 
 script:
-    - vendor/bin/phpunit --coverage-clover coverage.clover environmentcheck/tests
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - git remote rm origin
-    - git remote add origin git@github.com:silverstripe-labs/silverstripe-environmentcheck.git
-    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-
-branches:
-    only:
-        - master
-
-matrix:
-    allow_failures:
-        - php: 7.0
+  - vendor/bin/phpunit environmentcheck/tests
