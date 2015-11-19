@@ -29,17 +29,17 @@ class EnvironmentChecker extends RequestHandler {
 	/**
 	 * @var null|string
 	 */
-	public static $to_email_address = null;
+	private static $to_email_address = null;
 
 	/**
 	 * @var null|string
 	 */
-	public static $from_email_address = null;
+	private static $from_email_address = null;
 
 	/**
 	 * @var bool
 	 */
-	public static $email_results = false;
+	private static $email_results = false;
 
 	/**
 	 * @var bool Log results via {@link SS_Log}
@@ -166,8 +166,8 @@ class EnvironmentChecker extends RequestHandler {
 			"ErrorCode" => $this->errorCode,
 		))->renderWith("EnvironmentChecker");
 
-		if (self::$email_results && !$result->ShouldPass()) {
-			$email = new Email(self::$from_email_address, self::$to_email_address, $this->title, $resultText);
+		if ($this->config()->email_results && !$result->ShouldPass()) {
+			$email = new Email($this->config()->from_email_address, $this->config()->to_email_address, $this->title, $resultText);
 			$email->send();
 		}
 
@@ -219,44 +219,56 @@ class EnvironmentChecker extends RequestHandler {
 	}
 
 	/**
+	 * @deprecated
 	 * @param string $from
 	 */
 	public static function set_from_email_address($from) {
-		self::$from_email_address = $from;
+		Deprecation::notice('2.0', 'Use config API instead');
+		Config::inst()->update('EnvironmentChecker', 'from_email_address', $from);
 	}
 
 	/**
+	 * @deprecated
 	 * @return null|string
 	 */
 	public static function get_from_email_address() {
-		return self::$from_email_address;
+		Deprecation::notice('2.0', 'Use config API instead');
+		return Config::inst()->get('EnvironmentChecker', 'from_email_address');
 	}
 
 	/**
+	 * @deprecated
 	 * @param string $to
 	 */
 	public static function set_to_email_address($to) {
-		self::$to_email_address = $to;
+		Deprecation::notice('2.0', 'Use config API instead');
+		Config::inst()->update('EnvironmentChecker', 'to_email_address',  $to);
 	}
 
 	/**
+	 * @deprecated
 	 * @return null|string
 	 */
 	public static function get_to_email_address() {
-		return self::$to_email_address;
+		Deprecation::notice('2.0', 'Use config API instead');
+		return Config::inst()->get('EnvironmentChecker', 'to_email_address');
 	}
 
 	/**
+	 * @deprecated
 	 * @param bool $results
 	 */
 	public static function set_email_results($results) {
-		self::$email_results = $results;
+		Deprecation::notice('2.0', 'Use config API instead');
+		Config::inst()->update('EnvironmentChecker', 'email_results', $results);
 	}
 
 	/**
+	 * @deprecated
 	 * @return bool
 	 */
 	public static function get_email_results() {
-		return self::$email_results;
+		Deprecation::notice('2.0', 'Use config API instead');
+		return Config::inst()->get('EnvironmentChecker', 'email_results');
 	}
 }
