@@ -29,17 +29,37 @@ class EnvironmentChecker extends RequestHandler {
 	/**
 	 * @var null|string
 	 */
-	public static $to_email_address = null;
+	private static $to_email_address = null;
 
 	/**
 	 * @var null|string
 	 */
-	public static $from_email_address = null;
+	private static $from_email_address = null;
 
 	/**
 	 * @var bool
 	 */
-	public static $email_results = false;
+	private static $email_results = false;
+
+	/**
+	 * @var bool Log results via {@link SS_Log}
+	 */
+	private static $log_results_warning = false;
+
+	/**
+	 * @var int Maps to {@link Zend_Log} levels. Defaults to Zend_Log::WARN
+	 */
+	private static $log_results_warning_level = 4;
+
+	/**
+	 * @var bool Log results via {@link SS_Log}
+	 */
+	private static $log_results_error = false;
+
+	/**
+	 * @var int Maps to {@link Zend_Log} levels. Defaults to Zend_Log::ALERT
+	 */
+	private static $log_results_error_level = 1;
 
 	/**
 	 * @param string $checkSuiteName
@@ -146,9 +166,24 @@ class EnvironmentChecker extends RequestHandler {
 			"ErrorCode" => $this->errorCode,
 		))->renderWith("EnvironmentChecker");
 
-		if (self::$email_results && !$result->ShouldPass()) {
-			$email = new Email(self::$from_email_address, self::$to_email_address, $this->title, $resultText);
+		if ($this->config()->email_results && !$result->ShouldPass()) {
+			$email = new Email($this->config()->from_email_address, $this->config()->to_email_address, $this->title, $resultText);
 			$email->send();
+		}
+
+		// Optionally log errors and warnings individually
+		foreach($result->Details() as $detail) {
+			if($this->config()->log_results_warning && $detail->StatusCode == EnvironmentCheck::WARNING) {
+				$this->log(
+					sprintf('EnvironmentChecker warning at "%s" check. Message: %s', $detail->Check, $detail->Message),
+					$this->config()->log_results_warning_level
+				);
+			} elseif($this->config()->log_results_error && $detail->StatusCode == EnvironmentCheck::ERROR) {
+				$this->log(
+					sprintf('EnvironmentChecker error at "%s" check. Message: %s', $detail->Check, $detail->Message),
+					$this->config()->log_results_error_level
+				);
+			}
 		}
 
 		// output the result as JSON if requested
@@ -167,6 +202,14 @@ class EnvironmentChecker extends RequestHandler {
 	}
 
 	/**
+	 * @param string $message
+	 * @param int $level
+	 */
+	public function log($message, $level) {
+		SS_Log::log($message, $level);
+	}
+
+	/**
 	 * Set the HTTP status code that should be returned when there's an error.
 	 *
 	 * @param int $errorCode
@@ -176,44 +219,56 @@ class EnvironmentChecker extends RequestHandler {
 	}
 
 	/**
+	 * @deprecated
 	 * @param string $from
 	 */
 	public static function set_from_email_address($from) {
-		self::$from_email_address = $from;
+		Deprecation::notice('2.0', 'Use config API instead');
+		Config::inst()->update('EnvironmentChecker', 'from_email_address', $from);
 	}
 
 	/**
+	 * @deprecated
 	 * @return null|string
 	 */
 	public static function get_from_email_address() {
-		return self::$from_email_address;
+		Deprecation::notice('2.0', 'Use config API instead');
+		return Config::inst()->get('EnvironmentChecker', 'from_email_address');
 	}
 
 	/**
+	 * @deprecated
 	 * @param string $to
 	 */
 	public static function set_to_email_address($to) {
-		self::$to_email_address = $to;
+		Deprecation::notice('2.0', 'Use config API instead');
+		Config::inst()->update('EnvironmentChecker', 'to_email_address',  $to);
 	}
 
 	/**
+	 * @deprecated
 	 * @return null|string
 	 */
 	public static function get_to_email_address() {
-		return self::$to_email_address;
+		Deprecation::notice('2.0', 'Use config API instead');
+		return Config::inst()->get('EnvironmentChecker', 'to_email_address');
 	}
 
 	/**
+	 * @deprecated
 	 * @param bool $results
 	 */
 	public static function set_email_results($results) {
-		self::$email_results = $results;
+		Deprecation::notice('2.0', 'Use config API instead');
+		Config::inst()->update('EnvironmentChecker', 'email_results', $results);
 	}
 
 	/**
+	 * @deprecated
 	 * @return bool
 	 */
 	public static function get_email_results() {
-		return self::$email_results;
+		Deprecation::notice('2.0', 'Use config API instead');
+		return Config::inst()->get('EnvironmentChecker', 'email_results');
 	}
 }

@@ -173,6 +173,13 @@ class EnvironmentCheckSuite extends Object {
 		if(!is_array($names)) $names = array($names);
 		foreach($names as $name) self::inst($name)->push($check, $title);
 	}
+
+	/**
+	 * Unregisters all checks.
+	 */
+	static function reset() {
+		self::$instances = array();
+	}
 }
 
 /**
@@ -203,6 +210,7 @@ class EnvironmentCheckSuiteResult extends ViewableData {
 		$this->details->push(new ArrayData(array(
 			'Check' => $checkIdentifier,
 			'Status' => $this->statusText($status),
+			'StatusCode' => $status,
 			'Message' => $message,
 		)));
 
