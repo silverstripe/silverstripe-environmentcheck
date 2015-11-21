@@ -14,26 +14,27 @@
  *  - Are the right PHP modules installed?
  *  - Are the file permissions correct?
  */
-interface EnvironmentCheck {
-	/**
-	 * @var int
-	 */
-	const ERROR = 3;
+interface EnvironmentCheck
+{
+    /**
+     * @var int
+     */
+    const ERROR = 3;
 
-	/**
-	 * @var int
-	 */
-	const WARNING = 2;
+    /**
+     * @var int
+     */
+    const WARNING = 2;
 
-	/**
-	 * @var int
-	 */
-	const OK = 1;
+    /**
+     * @var int
+     */
+    const OK = 1;
 
-	/**
-	 * @return array Result with 'status' and 'message' keys.
-	 *
-	 * Status is EnvironmentCheck::ERROR, EnvironmentCheck::WARNING, or EnvironmentCheck::OK.
-	 */
-	function check();
+    /**
+     * @return array Result with 'status' and 'message' keys.
+     *
+     * Status is EnvironmentCheck::ERROR, EnvironmentCheck::WARNING, or EnvironmentCheck::OK.
+     */
+    public function check();
 }

@@ -19,117 +19,125 @@
  * 	'FileAgeCheck("' . BASE_PATH . '/../backups/*' . '", "-1 day", '>', " . FileAgeCheck::CHECK_SINGLE) . "'
  * );
  */
-class FileAgeCheck implements EnvironmentCheck {
-	/**
-	 * @var int
-	 */
-	const CHECK_SINGLE = 1;
+class FileAgeCheck implements EnvironmentCheck
+{
+    /**
+     * @var int
+     */
+    const CHECK_SINGLE = 1;
 
-	/**
-	 * @var int
-	 */
-	const CHECK_ALL = 2;
-	
-	/**
-	 * Absolute path to a file or folder, compatible with glob().
-	 *
-	 * @var string
-	 */
-	protected $path;
+    /**
+     * @var int
+     */
+    const CHECK_ALL = 2;
+    
+    /**
+     * Absolute path to a file or folder, compatible with glob().
+     *
+     * @var string
+     */
+    protected $path;
 
-	/**
-	 * Relative date specification, compatible with strtotime().
-	 *
-	 * @var string
-	 */
-	protected $relativeAge;
+    /**
+     * Relative date specification, compatible with strtotime().
+     *
+     * @var string
+     */
+    protected $relativeAge;
 
-	/**
-	 * The function to use for checking file age: so filemtime(), filectime(), or fileatime().
-	 *
-	 * @var string
-	 */
-	protected $checkFn;
+    /**
+     * The function to use for checking file age: so filemtime(), filectime(), or fileatime().
+     *
+     * @var string
+     */
+    protected $checkFn;
 
-	/**
-	 * Constant, check for a single file to match age criteria, or all of them.
-	 *
-	 * @var int
-	 */
-	protected $checkType;
+    /**
+     * Constant, check for a single file to match age criteria, or all of them.
+     *
+     * @var int
+     */
+    protected $checkType;
 
-	/**
-	 * Type of comparison (either > or <).
-	 *
-	 * @var string
-	 */
-	protected $compareOperand;
+    /**
+     * Type of comparison (either > or <).
+     *
+     * @var string
+     */
+    protected $compareOperand;
 
-	/**
-	 * @param string $path
-	 * @param string $relativeAge
-	 * @param string $compareOperand
-	 * @param null|int $checkType
-	 * @param string $checkFn
-	 */
-	function __construct($path, $relativeAge, $compareOperand = '>', $checkType = null, $checkFn = 'filemtime') {
-		$this->path = $path;
-		$this->relativeAge = $relativeAge;
-		$this->checkFn = $checkFn;
-		$this->checkType = ($checkType) ? $checkType : self::CHECK_SINGLE;
-		$this->compareOperand = $compareOperand;
-	}
+    /**
+     * @param string $path
+     * @param string $relativeAge
+     * @param string $compareOperand
+     * @param null|int $checkType
+     * @param string $checkFn
+     */
+    public function __construct($path, $relativeAge, $compareOperand = '>', $checkType = null, $checkFn = 'filemtime')
+    {
+        $this->path = $path;
+        $this->relativeAge = $relativeAge;
+        $this->checkFn = $checkFn;
+        $this->checkType = ($checkType) ? $checkType : self::CHECK_SINGLE;
+        $this->compareOperand = $compareOperand;
+    }
 
-	/**
-	 * @inheritdoc
-	 *
-	 * @return array
-	 */
-	function check() {
-		$cutoffTime =  strtotime($this->relativeAge, SS_Datetime::now()->Format('U'));
-		$files = $this->getFiles();
-		$invalidFiles = array();
-		$validFiles = array();
-		$checkFn = $this->checkFn;
-		$allValid = true;
-		if($files) foreach($files as $file) {
-			$fileTime = $checkFn($file);
-			$valid = ($this->compareOperand == '>') ? ($fileTime >= $cutoffTime) : ($fileTime <= $cutoffTime);
-			if($valid) {
-				$validFiles[] = $file;
-			} else {
-				$invalidFiles[] = $file;
-				if($this->checkType == self::CHECK_ALL) {
-					return array(
-						EnvironmentCheck::ERROR,
-						sprintf(
-							'File "%s" doesn\'t match age check (compare %s: %s, actual: %s)', 
-							$file, $this->compareOperand, date('c', $cutoffTime), date('c', $fileTime)
-						)
-					);	
-				}
-			}
-		}
+    /**
+     * @inheritdoc
+     *
+     * @return array
+     */
+    public function check()
+    {
+        $cutoffTime =  strtotime($this->relativeAge, SS_Datetime::now()->Format('U'));
+        $files = $this->getFiles();
+        $invalidFiles = array();
+        $validFiles = array();
+        $checkFn = $this->checkFn;
+        $allValid = true;
+        if ($files) {
+            foreach ($files as $file) {
+                $fileTime = $checkFn($file);
+                $valid = ($this->compareOperand == '>') ? ($fileTime >= $cutoffTime) : ($fileTime <= $cutoffTime);
+                if ($valid) {
+                    $validFiles[] = $file;
+                } else {
+                    $invalidFiles[] = $file;
+                    if ($this->checkType == self::CHECK_ALL) {
+                        return array(
+                        EnvironmentCheck::ERROR,
+                        sprintf(
+                            'File "%s" doesn\'t match age check (compare %s: %s, actual: %s)',
+                            $file, $this->compareOperand, date('c', $cutoffTime), date('c', $fileTime)
+                        )
+                    );
+                    }
+                }
+            }
+        }
 
-		// If at least one file was valid, count as passed
-		if($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
-			return array(EnvironmentCheck::OK, '');
-		} else {
-	       if (count($invalidFiles) == 0) return array(EnvironmentCheck::OK, '');
-	       else return array(
-				EnvironmentCheck::ERROR,
-				sprintf('No files matched criteria (%s %s)', $this->compareOperand, date('c', $cutoffTime))
-			);
-		}
-			
-	}
+        // If at least one file was valid, count as passed
+        if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
+            return array(EnvironmentCheck::OK, '');
+        } else {
+            if (count($invalidFiles) == 0) {
+                return array(EnvironmentCheck::OK, '');
+            } else {
+                return array(
+                EnvironmentCheck::ERROR,
+                sprintf('No files matched criteria (%s %s)', $this->compareOperand, date('c', $cutoffTime))
+            );
+            }
+        }
+    }
 
-	/**
-	 * Gets a list of absolute file paths.
-	 *
-	 * @return array
-	 */
-	protected function getFiles() {
-		return glob($this->path);
-	}
+    /**
+     * Gets a list of absolute file paths.
+     *
+     * @return array
+     */
+    protected function getFiles()
+    {
+        return glob($this->path);
+    }
 }

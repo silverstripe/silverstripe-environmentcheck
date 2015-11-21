@@ -3,23 +3,26 @@
 /**
  * @mixin PHPUnit_Framework_TestCase
  */
-class FileWritableCheckTest extends SapphireTest {
-	public function testCheckReportsWritablePaths() {
-		$check = new FileWriteableCheck(TEMP_FOLDER);
+class FileWritableCheckTest extends SapphireTest
+{
+    public function testCheckReportsWritablePaths()
+    {
+        $check = new FileWriteableCheck(TEMP_FOLDER);
 
-		$expected = array(
-			EnvironmentCheck::OK,
-			'',
-		);
+        $expected = array(
+            EnvironmentCheck::OK,
+            '',
+        );
 
-		$this->assertEquals($expected, $check->check());
-	}
+        $this->assertEquals($expected, $check->check());
+    }
 
-	public function testCheckReportsNonWritablePaths() {
-		$check = new FileWriteableCheck('/var');
+    public function testCheckReportsNonWritablePaths()
+    {
+        $check = new FileWriteableCheck('/var');
 
-		$result = $check->check();
+        $result = $check->check();
 
-		$this->assertEquals(EnvironmentCheck::ERROR, $result[0]);
-	}
+        $this->assertEquals(EnvironmentCheck::ERROR, $result[0]);
+    }
 }
