@@ -5,62 +5,69 @@
  *
  * Only checks socket connection with HELO command, not actually sending the email.
  */
-class SMTPConnectCheck implements EnvironmentCheck {
-	/**
-	 * @var string
-	 */
-	protected $host;
+class SMTPConnectCheck implements EnvironmentCheck
+{
+    /**
+     * @var string
+     */
+    protected $host;
 
-	/**
-	 * @var int
-	 */
-	protected $port;
+    /**
+     * @var int
+     */
+    protected $port;
 
-	/**
-	 * Timeout (in seconds).
-	 *
-	 * @var int
-	 */
-	protected $timeout;
+    /**
+     * Timeout (in seconds).
+     *
+     * @var int
+     */
+    protected $timeout;
 
-	/**
-	 * @param null|string $host
-	 * @param null|int $port
-	 * @param int $timeout
-	 */
-	function __construct($host = null, $port = null, $timeout = 15) {
-		$this->host = ($host) ? $host : ini_get('SMTP');
-		if(!$this->host) $this->host = 'localhost';
-		
-		$this->port = ($port) ? $port : ini_get('smtp_port');
-		if(!$this->port) $this->port = 25;
+    /**
+     * @param null|string $host
+     * @param null|int $port
+     * @param int $timeout
+     */
+    public function __construct($host = null, $port = null, $timeout = 15)
+    {
+        $this->host = ($host) ? $host : ini_get('SMTP');
+        if (!$this->host) {
+            $this->host = 'localhost';
+        }
+        
+        $this->port = ($port) ? $port : ini_get('smtp_port');
+        if (!$this->port) {
+            $this->port = 25;
+        }
 
-		$this->timeout = $timeout;
-	}
+        $this->timeout = $timeout;
+    }
 
-	/**
-	 * @inheritdoc
-	 *
-	 * @return array
-	 */
-	function check() {
-		$f = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);
-		if(!$f) {
-			return array(
-				EnvironmentCheck::ERROR, 
-				sprintf("Couldn't connect to SMTP on %s:%s (Error: %s %s)", $this->host, $this->port, $errno, $errstr)
-			);
-		}
+    /**
+     * @inheritdoc
+     *
+     * @return array
+     */
+    public function check()
+    {
+        $f = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);
+        if (!$f) {
+            return array(
+                EnvironmentCheck::ERROR,
+                sprintf("Couldn't connect to SMTP on %s:%s (Error: %s %s)", $this->host, $this->port, $errno, $errstr)
+            );
+        }
 
-		fwrite($f, "HELO its_me\r\n");
-		$response = fread($f, 26);
-		if(substr($response, 0, 3) != '220') {
-			return array(
-				EnvironmentCheck::ERROR,
-				sprintf("Invalid mail server response: %s", $response)
-			);
-		}
+        fwrite($f, "HELO its_me\r\n");
+        $response = fread($f, 26);
+        if (substr($response, 0, 3) != '220') {
+            return array(
+                EnvironmentCheck::ERROR,
+                sprintf("Invalid mail server response: %s", $response)
+            );
+        }
 
-		return array(EnvironmentCheck::OK, '');
-	}
+        return array(EnvironmentCheck::OK, '');
+    }
 }
