@@ -4,6 +4,6 @@ After: 'framework/*','cms/*'
 ---
 Director:
   rules:
-    'dev/health': 'DevHealthController'
+    'health/check': 'DevHealthController'
     'dev/check/$Suite': 'DevCheckController'
 
