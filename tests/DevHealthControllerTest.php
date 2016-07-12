@@ -5,6 +5,8 @@
  */
 class DevHealthControllerTest extends SapphireTest
 {
+    protected $usesDatabase = true;
+    
     public function testIndexCreatesChecker()
     {
         $controller = new DevHealthController();

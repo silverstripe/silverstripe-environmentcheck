@@ -1,6 +1,8 @@
 <?php
 class EnvironmentCheckerTest extends SapphireTest
 {
+    protected $usesDatabase = true;
+
     public function setUpOnce()
     {
         parent::setUpOnce();
