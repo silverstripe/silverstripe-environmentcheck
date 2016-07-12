@@ -5,6 +5,8 @@
  */
 class DevCheckControllerTest extends SapphireTest
 {
+    protected $usesDatabase = true;
+    
     public function testIndexCreatesChecker()
     {
         $controller = new DevCheckController();
