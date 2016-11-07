@@ -8,7 +8,7 @@
 
 This module adds an API for running environment checks to your API.
 
- * `dev/health` - A public URL that performs a quick check that this environment is functioning.  This could be tied to a load balancer, for example.
+ * `health/check` - A public URL that performs a quick check that this environment is functioning.  This could be tied to a load balancer, for example.
  * `dev/check` - An admin-only URL that performs a more comprehensive set of checks.  This could be tied to a deployment system, for example.
  * `dev/check/<suite>` - Check a specific suite (admin only)
 
@@ -130,7 +130,7 @@ To add more checks, you should put additional `EnvironmentCheckSuite::register` 
 	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
 	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("imagecreatetruecolor")', "Does PHP have GD2 support?");
 	
-The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `dev/health` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs. You can also add a check to more than one suite by passing the first argument as an array.
+The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `health/check` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs. You can also add a check to more than one suite by passing the first argument as an array.
 
 The module comes bundled with a few checks in `DefaultHealthChecks.php`.  However, to test your own application, you probably want to write custom checks.
 
@@ -168,7 +168,7 @@ Once you have created your custom check class, don't forget to register it in a 
 
 ### Using other environment check suites
 
-If you want to use the same UI as dev/health and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
+If you want to use the same UI as `health/check` and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
 
 	class DevHealth extends Controller {
 		function index() {
