@@ -1,30 +1,34 @@
 {
-	"name": "silverstripe/environmentcheck",
-	"description": "Provides an API for building environment tests",
-	"license": "BSD-3-Clause",
-	"type": "silverstripe-module",
-	"keywords": ["silverstripe", "testing", "environment", "check"],
-	"authors": [
-		{
-			"name": "Will Rossiter",
-			"email": "will@fullscreen.io"
-		},
-		{
-			"name": "Sam Minnee",
-			"email": "sam@silverstripe.com"
-		}
-	],
-	"require":
-	{
-		"silverstripe/framework": "^4.0@dev"
-	},
-	"require-dev":
-	{
-		"hafriedlander/phockito": "dev-master"
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.x-dev"
-		}
-	}
+    "name": "silverstripe/environmentcheck",
+    "description": "Provides an API for building environment tests",
+    "license": "BSD-3-Clause",
+    "type": "silverstripe-module",
+    "keywords": ["silverstripe", "testing", "environment", "check"],
+    "authors": [
+        {
+            "name": "Will Rossiter",
+            "email": "will@fullscreen.io"
+        },
+        {
+            "name": "Sam Minnee",
+            "email": "sam@silverstripe.com"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^4.0@dev"
+    },
+    "require-dev": {
+        "hafriedlander/phockito": "dev-master"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "SilverStripe\\EnvironmentCheck\\": "src/",
+            "SilverStripe\\EnvironmentCheck\\Tests\\": "tests/"
+        }
+    }
 }
