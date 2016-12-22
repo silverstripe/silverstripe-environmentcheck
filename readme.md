@@ -36,12 +36,21 @@ You'll also need to run `/dev/build`.
 
 ### Activating Directly
 
-Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults. Don't for get to
-either use a fully-qualified (namespaced) class name, or `use` (import) the namespaced class first.
+Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults. Don't forget to
+either use a fully-qualified (namespaced) class name for `EnvironmentCheckSuite`, or `use` (import) the namespaced class
+first.
+
+You can omit the namespace for the actual check class name so long as the check is one that ships with this module. If
+you are referencing a check from a module other than this, you must ensure you add a namespace (even a `\` root namespace).
 
 ```php
-EnvironmentCheckSuite::register('health', 'DatabaseCheck', "Can we connect to the database?");
-EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage accessible?");
+EnvironmentCheckSuite::register('health', 'DatabaseCheck', 'Can we connect to the database?');
+EnvironmentCheckSuite::register('check', 'URLCheck(')', 'Is the homepage accessible?');
+
+// Add your own check (with no namespace)
+EnvironmentCheckSuite::register('check', '\\MyCustomCheck', 'No namespace in this check.');
+// Add your own check (with a specific namespace)
+EnvironmentCheckSuite::register('check', 'Your\\Module\\MyCustomCheck', 'Fully qualified to check things.');
 ```
 
 ### Activating Via Config

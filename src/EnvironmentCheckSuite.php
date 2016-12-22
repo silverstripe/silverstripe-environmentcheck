@@ -200,7 +200,10 @@ class EnvironmentCheckSuite extends Object
             $names = array($names);
         }
 
-        // Support for omitted namespaces
+        /**
+         * Support for omitted namespaces - this will fall back to adding the SilverStripe\EnvironmentCheck\Checks
+         * namespace if one isn't provided. If you are using custom checks, make sure you include a namespace (or "\")
+         */
         if (is_string($check) && strpos($check, '\\') === false) {
             $check = __NAMESPACE__ . '\\Checks\\' . $check;
         }
