@@ -40,17 +40,9 @@ Register checks in your own `_config.php` - see the `_config.php` in this module
 either use a fully-qualified (namespaced) class name for `EnvironmentCheckSuite`, or `use` (import) the namespaced class
 first.
 
-You can omit the namespace for the actual check class name so long as the check is one that ships with this module. If
-you are referencing a check from a module other than this, you must ensure you add a namespace (even a `\` root namespace).
-
 ```php
 EnvironmentCheckSuite::register('health', 'DatabaseCheck', 'Can we connect to the database?');
-EnvironmentCheckSuite::register('check', 'URLCheck(')', 'Is the homepage accessible?');
-
-// Add your own check (with no namespace)
-EnvironmentCheckSuite::register('check', '\\MyCustomCheck', 'No namespace in this check.');
-// Add your own check (with a specific namespace)
-EnvironmentCheckSuite::register('check', 'Your\\Module\\MyCustomCheck', 'Fully qualified to check things.');
+EnvironmentCheckSuite::register('check', 'URLCheck("")', 'Is the homepage accessible?');
 ```
 
 ### Activating Via Config
@@ -180,9 +172,8 @@ class MyGatewayCheck implements EnvironmentCheck
             return array(EnvironmentCheck::ERROR, "MyGateway didn't return a response");
         } else if($response != $expectedResponse) {
             return array(EnvironmentCheck::WARNING, "MyGateway returned unexpected response $response");
-        } else {
-            return array(EnvironmentCheck::OK, '');
         }
+        return array(EnvironmentCheck::OK, '');
     }
 }
 ```
@@ -195,7 +186,7 @@ EnvironmentCheckSuite::register('check', 'MyGatewayCheck', 'Can I connect to the
 
 ### Using other environment check suites
 
-If you want to use the same UI as `health/check` and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
+If you want to use the same UI as `health/check` and `dev/check`, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
 
 ```php
 use SilverStripe\Control\Controller;
@@ -208,6 +199,7 @@ class DevHealth extends Controller
         return $e;
     }
 }
+```
 
 If you wish to embed an environment check suite in another, you can use the following call:
 
