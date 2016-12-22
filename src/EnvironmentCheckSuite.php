@@ -201,7 +201,7 @@ class EnvironmentCheckSuite extends Object
         }
 
         // Support for omitted namespaces
-        if (strpos($check, '\\') === false) {
+        if (is_string($check) && strpos($check, '\\') === false) {
             $check = __NAMESPACE__ . '\\Checks\\' . $check;
         }
 

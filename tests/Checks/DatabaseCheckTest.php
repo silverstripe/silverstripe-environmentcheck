@@ -16,8 +16,18 @@ use SilverStripe\Security\Member;
  */
 class DatabaseCheckTest extends SapphireTest
 {
+    /**
+     * {@inheritDoc}
+     * @var bool
+     */
+    protected $usesDatabase = true;
+
     public function testCheckReportsValidConnection()
     {
+        $member = new Member;
+        $member->FirstName = 'Bob';
+        $member->write();
+
         $check = new DatabaseCheck();
 
         $expected = array(
