@@ -2,17 +2,15 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-
-
 use SilverStripe\Control\Director;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 
-
-
 /**
  * Check that a given URL is functioning, by default, the homepage.
- * 
+ *
  * Note that Director::test() will be used rather than a CURL check.
+ *
+ * @package environmentcheck
  */
 class URLCheck implements EnvironmentCheck
 {
@@ -25,7 +23,7 @@ class URLCheck implements EnvironmentCheck
      * @var string
      */
     protected $testString;
-    
+
     /*
      * @param string $url The URL to check, relative to the site (homepage is '').
      * @param string $testString An optional piece of text to search for on the homepage.
@@ -37,11 +35,10 @@ class URLCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
-     *
-     * @throws SS_HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function check()
     {
@@ -57,11 +54,10 @@ class URLCheck implements EnvironmentCheck
                 EnvironmentCheck::WARNING,
                 sprintf('Success retrieving "%s", but string "%s" not found', $this->url, $this->testString)
             );
-        } else {
-            return array(
-                EnvironmentCheck::OK,
-                sprintf('Success retrieving "%s"', $this->url)
-            );
         }
+        return array(
+            EnvironmentCheck::OK,
+            sprintf('Success retrieving "%s"', $this->url)
+        );
     }
 }

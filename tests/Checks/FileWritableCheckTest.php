@@ -2,17 +2,16 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
-
-
-
 use SilverStripe\EnvironmentCheck\Checks\FileWriteableCheck;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\Dev\SapphireTest;
 
-
-
 /**
+ * Class FileWritableCheckTest
+ *
  * @mixin PHPUnit_Framework_TestCase
+ *
+ * @package environmentcheck
  */
 class FileWritableCheckTest extends SapphireTest
 {
@@ -22,7 +21,7 @@ class FileWritableCheckTest extends SapphireTest
 
         $expected = array(
             EnvironmentCheck::OK,
-            '',
+            ''
         );
 
         $this->assertEquals($expected, $check->check());

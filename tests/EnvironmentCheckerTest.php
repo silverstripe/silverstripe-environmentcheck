@@ -2,30 +2,46 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests;
 
-
 use Phockito;
-
-
-
-
 use SilverStripe\Core\Config\Config;
-use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\Dev\TestOnly;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
 
-
+/**
+ * Class EnvironmentCheckerTest
+ *
+ * @package environmentcheck
+ */
 class EnvironmentCheckerTest extends SapphireTest
 {
+    /**
+     * {@inheritDoc}
+     * @var bool
+     */
     protected $usesDatabase = true;
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUpOnce()
     {
         parent::setUpOnce();
 
         Phockito::include_hamcrest();
+
+        $logger = Injector::inst()->get('Logger');
+        if ($logger instanceof \Monolog\Logger) {
+            // It logs to stderr by default - disable
+            $logger->pushHandler(new \Monolog\Handler\NullHandler);
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp()
     {
         parent::setUp();
@@ -33,6 +49,9 @@ class EnvironmentCheckerTest extends SapphireTest
         Config::nest();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown()
     {
         Config::unnest();
@@ -105,7 +124,7 @@ class EnvironmentCheckerTest_CheckWarnings implements EnvironmentCheck, TestOnly
 {
     public function check()
     {
-        return array(EnvironmentCheck::WARNING, "test warning");
+        return array(EnvironmentCheck::WARNING, 'test warning');
     }
 }
 
@@ -113,6 +132,6 @@ class EnvironmentCheckerTest_CheckErrors implements EnvironmentCheck, TestOnly
 {
     public function check()
     {
-        return array(EnvironmentCheck::ERROR, "test error");
+        return array(EnvironmentCheck::ERROR, 'test error');
     }
 }

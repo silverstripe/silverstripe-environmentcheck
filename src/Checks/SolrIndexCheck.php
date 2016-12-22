@@ -2,16 +2,14 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-
-use Solr;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-
-
 
 /**
  * Check the availability of all Solr indexes of given class.
  *
  * If there are no indexes of given class found, the returned status will still be "OK".
+ *
+ * @package environmentcheck
  */
 class SolrIndexCheck implements EnvironmentCheck
 {
@@ -29,7 +27,7 @@ class SolrIndexCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
@@ -37,15 +35,18 @@ class SolrIndexCheck implements EnvironmentCheck
     {
         $brokenCores = array();
 
-        if (!class_exists('Solr')) {
+        /**
+         * @todo Revisit this when silverstripe/fulltextsearch has 4.x compat
+         */
+        if (!class_exists('\\Solr')) {
             return array(
                 EnvironmentCheck::ERROR,
                 'Class `Solr` not found. Is the fulltextsearch module installed?'
             );
         }
 
-        $service = Solr::service();
-        foreach (Solr::get_indexes($this->indexClass) as $index) {
+        $service = \Solr::service();
+        foreach (\Solr::get_indexes($this->indexClass) as $index) {
             $core = $index->getIndexName();
             if (!$service->coreIsActive($core)) {
                 $brokenCores[] = $core;

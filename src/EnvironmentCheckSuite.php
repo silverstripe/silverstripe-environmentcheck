@@ -2,20 +2,13 @@
 
 namespace SilverStripe\EnvironmentCheck;
 
-
-use InvalidArgumentException;
 use Exception;
-
-
-
-
-use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use InvalidArgumentException;
 use SilverStripe\Core\Object;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
-
-
 
 /**
  * Represents a suite of environment checks.
@@ -35,6 +28,8 @@ use SilverStripe\View\ViewableData;
  *       - mycheck
  *
  * $result = EnvironmentCheckSuite::inst('health')->run();
+ *
+ * @package environmentcheck
  */
 class EnvironmentCheckSuite extends Object
 {
@@ -94,10 +89,10 @@ class EnvironmentCheckSuite extends Object
 
             // Existing named checks can be disabled by setting their 'state' to 'disabled'.
             // This is handy for disabling checks mandated by modules.
-            if (!empty($check['state']) && $check['state']==='disabled') {
+            if (!empty($check['state']) && $check['state'] === 'disabled') {
                 continue;
             }
-            
+
             // Add the check to this suite.
             $this->push($check['definition'], $check['title']);
         }
@@ -131,6 +126,7 @@ class EnvironmentCheckSuite extends Object
      * Get instances of all the environment checks.
      *
      * @return array
+     * @throws InvalidArgumentException
      */
     protected function checkInstances()
     {
@@ -142,7 +138,9 @@ class EnvironmentCheckSuite extends Object
                 if ($checkInst instanceof EnvironmentCheck) {
                     $output[] = array($checkInst, $checkTitle);
                 } else {
-                    throw new InvalidArgumentException("Bad EnvironmentCheck: '$checkClass' - the named class doesn't implement EnvironmentCheck");
+                    throw new InvalidArgumentException(
+                        "Bad EnvironmentCheck: '$checkClass' - the named class doesn't implement EnvironmentCheck"
+                    );
                 }
             } elseif ($checkClass instanceof EnvironmentCheck) {
                 $output[] = array($checkClass, $checkTitle);
@@ -212,108 +210,5 @@ class EnvironmentCheckSuite extends Object
     public static function reset()
     {
         self::$instances = array();
-    }
-}
-
-/**
- * A single set of results from running an EnvironmentCheckSuite
- */
-class EnvironmentCheckSuiteResult extends ViewableData
-{
-    /**
-     * @var ArrayList
-     */
-    protected $details;
-
-    /**
-     * @var int
-     */
-    protected $worst = 0;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->details = new ArrayList();
-    }
-
-    /**
-     * @param int $status
-     * @param string $message
-     * @param string $checkIdentifier
-     */
-    public function addResult($status, $message, $checkIdentifier)
-    {
-        $this->details->push(new ArrayData(array(
-            'Check' => $checkIdentifier,
-            'Status' => $this->statusText($status),
-            'StatusCode' => $status,
-            'Message' => $message,
-        )));
-
-        $this->worst = max($this->worst, $status);
-    }
-
-    /**
-     * Returns true if there are no errors.
-     *
-     * @return bool
-     */
-    public function ShouldPass()
-    {
-        return $this->worst <= EnvironmentCheck::WARNING;
-    }
-
-    /**
-     * Returns overall (i.e. worst) status as a string.
-     *
-     * @return string
-     */
-    public function Status()
-    {
-        return $this->statusText($this->worst);
-    }
-
-    /**
-     * Returns detailed status information about each check.
-     *
-     * @return ArrayList
-     */
-    public function Details()
-    {
-        return $this->details;
-    }
-
-    /**
-     * Convert the final result status and details to JSON.
-     *
-     * @return string
-     */
-    public function toJSON()
-    {
-        $result = array(
-            'Status' => $this->Status(),
-            'ShouldPass' => $this->ShouldPass(),
-            'Checks' => array()
-        );
-        foreach ($this->details as $detail) {
-            $result['Checks'][] = $detail->toMap();
-        }
-        return json_encode($result);
-    }
-
-    /**
-     * Return a text version of a status code.
-     *
-     * @return string
-     */
-    protected function statusText($status)
-    {
-        switch ($status) {
-            case EnvironmentCheck::ERROR: return "ERROR";
-            case EnvironmentCheck::WARNING: return "WARNING";
-            case EnvironmentCheck::OK: return "OK";
-            case 0: return "NO CHECKS";
-            default: throw new InvalidArgumentException("Bad environment check status '$status'");
-        }
     }
 }

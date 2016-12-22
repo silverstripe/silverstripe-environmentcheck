@@ -2,17 +2,17 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
-
-
-
+use SilverStripe\Dev\SapphireTest;
 use SilverStripe\EnvironmentCheck\Checks\DatabaseCheck;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-use SilverStripe\Dev\SapphireTest;
-
-
+use SilverStripe\Security\Member;
 
 /**
+ * Class DatabaseCheckTest
+ *
  * @mixin PHPUnit_Framework_TestCase
+ *
+ * @package environmentcheck
  */
 class DatabaseCheckTest extends SapphireTest
 {
@@ -22,7 +22,7 @@ class DatabaseCheckTest extends SapphireTest
 
         $expected = array(
             EnvironmentCheck::OK,
-            '',
+            ''
         );
 
         $this->assertEquals($expected, $check->check());

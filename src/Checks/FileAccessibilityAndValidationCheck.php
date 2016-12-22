@@ -2,12 +2,8 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-
-
-use SilverStripe\ORM\Versioning\Versioned;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-
-
+use SilverStripe\ORM\Versioning\Versioned;
 
 /**
  * Checks for the accessibility and file type validation of one or more files or folders.
@@ -17,16 +13,18 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
  * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/*.json",
  *  "jsonValidate", '.FileAccessibilityAndValidationCheck::CHECK_ALL.')', 'Check a json file exist and are all valid json files'
  * );
- * 
+ *
  * // Checks /assets/calculator_files/calculator.json exists and is valid json file.
  * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json",
  *  "jsonValidate", '.FileAccessibilityAndValidationCheck::CHECK_SINGLE.')', 'Check a calculator.json exists and is valid json file'
  * );
  *
- * // Check only existence 
+ * // Check only existence
  * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json")',
  * 'Check a calculator.json exists only'
  * );
+ *
+ * @package environmentcheck
  */
 class FileAccessibilityAndValidationCheck implements EnvironmentCheck
 {
@@ -69,12 +67,12 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
     public function __construct($path, $fileTypeValidateFunc = 'noVidation', $checkType = null)
     {
         $this->path = $path;
-        $this->fileTypeValidateFunc = ($fileTypeValidateFunc)? $fileTypeValidateFunc:'noVidation';
+        $this->fileTypeValidateFunc = ($fileTypeValidateFunc)? $fileTypeValidateFunc : 'noVidation';
         $this->checkType = ($checkType) ? $checkType : self::CHECK_SINGLE;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
@@ -100,9 +98,9 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
 
                 // If at least one file was valid, count as passed
                 if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
-                    $validFileList = "\n";
+                    $validFileList = PHP_EOL;
                     foreach ($validFiles as $vf) {
-                        $validFileList .= $vf."\n";
+                        $validFileList .= $vf . PHP_EOL;
                     }
                     if ($fileTypeValidateFunc == 'noVidation') {
                         $checkReturn = array(
@@ -112,16 +110,20 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
                     } else {
                         $checkReturn = array(
                             EnvironmentCheck::OK,
-                            sprintf('At least these file(s) passed file type validate function "%s": %s', $fileTypeValidateFunc, $validFileList)
+                            sprintf(
+                                'At least these file(s) passed file type validate function "%s": %s',
+                                $fileTypeValidateFunc,
+                                $validFileList
+                            )
                         );
                     }
                 } else {
                     if (count($invalidFiles) == 0) {
                         $checkReturn = array(EnvironmentCheck::OK, 'All files valideted');
                     } else {
-                        $invalidFileList = "\n";
+                        $invalidFileList = PHP_EOL;
                         foreach ($invalidFiles as $vf) {
-                            $invalidFileList .= $vf."\n";
+                            $invalidFileList .= $vf . PHP_EOL;
                         }
 
                         if ($fileTypeValidateFunc == 'noVidation') {
@@ -132,7 +134,11 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
                         } else {
                             $checkReturn = array(
                                 EnvironmentCheck::ERROR,
-                                sprintf('File(s) not passing the file type validate function "%s": %s', $fileTypeValidateFunc, $invalidFileList)
+                                sprintf(
+                                    'File(s) not passing the file type validate function "%s": %s',
+                                    $fileTypeValidateFunc,
+                                    $invalidFileList
+                                )
                             );
                         }
                     }
@@ -165,9 +171,8 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
         $json = json_decode(file_get_contents($file));
         if (!$json) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**

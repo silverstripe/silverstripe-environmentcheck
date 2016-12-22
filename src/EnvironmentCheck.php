@@ -2,22 +2,21 @@
 
 namespace SilverStripe\EnvironmentCheck;
 
-
-
-
 /**
  * Interface for environment checks
- * 
+ *
  * An environment check is a test that can be performed on a live environment. They differ from
  * unit tests in that they are designed to check the state of the environment/server, rather than
  * the code.
- * 
+ *
  * Environment checks should *never* alter production data.
- * 
+ *
  * Some things you might make environment checks for:
  *  - Can I access the database?
  *  - Are the right PHP modules installed?
  *  - Are the file permissions correct?
+ *
+ * @package environmentcheck
  */
 interface EnvironmentCheck
 {

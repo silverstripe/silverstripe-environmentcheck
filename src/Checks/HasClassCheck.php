@@ -2,13 +2,12 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-
-
 
 /**
  * Check that the given class exists.
+ *
+ * @package environmentcheck
  */
 class HasClassCheck implements EnvironmentCheck
 {
@@ -26,7 +25,7 @@ class HasClassCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
@@ -34,8 +33,7 @@ class HasClassCheck implements EnvironmentCheck
     {
         if (class_exists($this->className)) {
             return array(EnvironmentCheck::OK, 'Class ' . $this->className.' exists');
-        } else {
-            return array(EnvironmentCheck::ERROR, 'Class ' . $this->className.' doesn\'t exist');
         }
+        return array(EnvironmentCheck::ERROR, 'Class ' . $this->className.' doesn\'t exist');
     }
 }

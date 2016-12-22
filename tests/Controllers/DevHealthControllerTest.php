@@ -2,22 +2,25 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Controllers;
 
-
-
-
-use SilverStripe\EnvironmentCheck\Controllers\DevHealthController;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Dev\SapphireTest;
-
-
+use SilverStripe\EnvironmentCheck\Controllers\DevHealthController;
 
 /**
+ * Class DevHealthControllerTest
+ *
  * @mixin PHPUnit_Framework_TestCase
+ *
+ * @package environmentcheck
  */
 class DevHealthControllerTest extends SapphireTest
 {
+    /**
+     * {@inheritDoc}
+     * @var array
+     */
     protected $usesDatabase = true;
-    
+
     public function testIndexCreatesChecker()
     {
         $controller = new DevHealthController();

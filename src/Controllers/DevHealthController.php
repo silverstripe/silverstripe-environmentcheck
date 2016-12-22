@@ -2,13 +2,14 @@
 
 namespace SilverStripe\EnvironmentCheck\Controllers;
 
-
-
-use SilverStripe\EnvironmentCheck\EnvironmentChecker;
 use SilverStripe\Control\Controller;
+use SilverStripe\EnvironmentCheck\EnvironmentChecker;
 
-
-
+/**
+ * Class DevHealthController
+ *
+ * @package environmentcheck
+ */
 class DevHealthController extends Controller
 {
     /**
@@ -21,7 +22,7 @@ class DevHealthController extends Controller
     /**
      * @return EnvironmentChecker
      *
-     * @throws SS_HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function index()
     {

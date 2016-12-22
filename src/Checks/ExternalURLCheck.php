@@ -2,18 +2,17 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-
-
 
 /**
  * Checks that one or more URLs are reachable via HTTP.
  * Note that the HTTP connectivity can just be verified from the server to the remote URL,
  * it can still fail if the URL in question is requested by the client, e.g. through an iframe.
- * 
+ *
  * Requires curl to present, so ensure to check it before with the following:
  * <code>EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");</code>
+ *
+ * @package environmentcheck
  */
 class ExternalURLCheck implements EnvironmentCheck
 {
@@ -40,7 +39,7 @@ class ExternalURLCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
@@ -59,7 +58,7 @@ class ExternalURLCheck implements EnvironmentCheck
         foreach ($chs as $ch) {
             curl_multi_add_handle($mh, $ch);
         }
-        
+
         $active = null;
         // Execute the handles
         do {
@@ -102,12 +101,12 @@ class ExternalURLCheck implements EnvironmentCheck
             curl_multi_remove_handle($mh, $ch);
         }
         curl_multi_close($mh);
-        
+
         if ($hasError) {
             return array(EnvironmentCheck::ERROR, implode(', ', $msgs));
-        } else {
-            return array(EnvironmentCheck::OK, implode(', ', $msgs));
         }
+
+        return array(EnvironmentCheck::OK, implode(', ', $msgs));
     }
 
     /**
