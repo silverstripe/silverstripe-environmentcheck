@@ -10,7 +10,7 @@
                 margin-top: -10px;
                 font-size: 10px;
             }
-            
+
             h1 {
                 font-size: 30px;
                 margin-bottom: 3px;
@@ -21,11 +21,11 @@
                 font-size: 16px;
                 margin: 2px 0 10px 8px;
             }
-            
+
             p {
                 margin-left: 10px;
             }
-            
+
             table {
                 border-collapse: collapse;
             }
@@ -44,7 +44,7 @@
                 table tr:nth-child(odd) td {
                     background-color: #ddd;
                 }
-                
+
             .OK {
                 color: green;
             }
@@ -59,23 +59,23 @@
         </style>
     </head>
 
-    
+
     <body>
         <h1 class="$Status">$Title: $Status</h1>
         <h2 class="website">Site: $URL</h2>
-        
+
         <table>
             <tr><th>Check</th> <th>Status</th> <th>Message</th></tr>
-            <% loop Details %>
+            <% loop $Details %>
             <tr><td>$Check</td> <td class="$Status">$Status</td> <td>$Message.XML</td></tr>
             <% end_loop %>
         </table>
 
-        <% if ShouldPass %>
+        <% if $ShouldPass %>
         <p>Site is available</p>
         <p class="subtext">(you may check for the presence of the text 'Site is available' rather than an HTTP $ErrorCode error on this page, if you prefer.)</p>
         <% else %>
-            <% if Name == check %>
+            <% if $Name == "check" %>
                 <p><b>A subsystem of the site is unavailable, but the site remains operational</b></p>
             <% else %>
                 <p><b>Site is not available</b></p>
