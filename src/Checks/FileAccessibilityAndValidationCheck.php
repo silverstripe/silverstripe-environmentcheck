@@ -2,8 +2,11 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use EnvironmentCheck;
-use Versioned;
+
+
+use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 
 
 /**

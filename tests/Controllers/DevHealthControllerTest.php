@@ -2,9 +2,13 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Controllers;
 
-use SapphireTest;
-use DevHealthController;
-use SS_HTTPRequest;
+
+
+
+use SilverStripe\EnvironmentCheck\Controllers\DevHealthController;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Dev\SapphireTest;
+
 
 
 /**
@@ -18,7 +22,7 @@ class DevHealthControllerTest extends SapphireTest
     {
         $controller = new DevHealthController();
 
-        $request = new SS_HTTPRequest('GET', 'example.com');
+        $request = new HTTPRequest('GET', 'example.com');
 
         // we need to fake authenticated access as BasicAuth::requireLogin doesn't like empty
         // permission type strings, which is what health check uses.
@@ -29,6 +33,6 @@ class DevHealthControllerTest extends SapphireTest
         $_SERVER['PHP_AUTH_USER'] = 'foo';
         $_SERVER['PHP_AUTH_PW'] = 'bar';
 
-        $this->assertInstanceOf('EnvironmentChecker', $controller->index($request));
+        $this->assertInstanceOf('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', $controller->index($request));
     }
 }

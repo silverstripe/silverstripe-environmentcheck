@@ -2,8 +2,11 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use EnvironmentCheck;
-use SS_Datetime;
+
+
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 
 
 /**
@@ -95,7 +98,7 @@ class FileAgeCheck implements EnvironmentCheck
      */
     public function check()
     {
-        $cutoffTime =  strtotime($this->relativeAge, SS_Datetime::now()->Format('U'));
+        $cutoffTime =  strtotime($this->relativeAge, DBDatetime::now()->Format('U'));
         $files = $this->getFiles();
         $invalidFiles = array();
         $validFiles = array();

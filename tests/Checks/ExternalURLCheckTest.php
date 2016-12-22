@@ -2,9 +2,13 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
-use SapphireTest;
-use ExternalURLCheck;
-use EnvironmentCheck;
+
+
+
+use SilverStripe\EnvironmentCheck\Checks\ExternalURLCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\Dev\SapphireTest;
+
 
 
 /**

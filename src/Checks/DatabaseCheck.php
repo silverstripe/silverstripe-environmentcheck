@@ -2,8 +2,11 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use EnvironmentCheck;
-use DB;
+
+
+use SilverStripe\ORM\DB;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 
 
 /**
@@ -19,7 +22,7 @@ class DatabaseCheck implements EnvironmentCheck
      *
      * @param string $checkTable
      */
-    public function __construct($checkTable = "Member")
+    public function __construct($checkTable = "SilverStripe\\Security\\Member")
     {
         $this->checkTable = $checkTable;
     }

@@ -2,13 +2,19 @@
 
 namespace SilverStripe\EnvironmentCheck;
 
-use Object;
+
 use InvalidArgumentException;
 use Exception;
-use EnvironmentCheck;
-use ViewableData;
-use ArrayList;
-use ArrayData;
+
+
+
+
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\Core\Object;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\ViewableData;
+
 
 
 /**

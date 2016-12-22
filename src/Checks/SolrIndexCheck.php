@@ -2,8 +2,10 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use EnvironmentCheck;
+
 use Solr;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 
 
 /**

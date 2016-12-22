@@ -2,12 +2,18 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests;
 
-use SapphireTest;
+
 use Phockito;
-use Config;
-use EnvironmentCheckSuite;
-use EnvironmentCheck;
-use TestOnly;
+
+
+
+
+use SilverStripe\Core\Config\Config;
+use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\Dev\TestOnly;
+
 
 class EnvironmentCheckerTest extends SapphireTest
 {
@@ -36,11 +42,11 @@ class EnvironmentCheckerTest extends SapphireTest
 
     public function testOnlyLogsWithErrors()
     {
-        Config::inst()->update('EnvironmentChecker', 'log_results_warning', true);
-        Config::inst()->update('EnvironmentChecker', 'log_results_error', true);
+        Config::inst()->update('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', 'log_results_warning', true);
+        Config::inst()->update('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', 'log_results_error', true);
         EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckNoErrors());
         $checker = Phockito::spy(
-            'EnvironmentChecker',
+            'SilverStripe\\EnvironmentCheck\\EnvironmentChecker',
             'test suite',
             'test'
         );
@@ -52,12 +58,12 @@ class EnvironmentCheckerTest extends SapphireTest
 
     public function testLogsWithWarnings()
     {
-        Config::inst()->update('EnvironmentChecker', 'log_results_warning', true);
-        Config::inst()->update('EnvironmentChecker', 'log_results_error', false);
+        Config::inst()->update('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', 'log_results_warning', true);
+        Config::inst()->update('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', 'log_results_error', false);
         EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckWarnings());
         EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckErrors());
         $checker = Phockito::spy(
-            'EnvironmentChecker',
+            'SilverStripe\\EnvironmentCheck\\EnvironmentChecker',
             'test suite',
             'test'
         );
@@ -70,12 +76,12 @@ class EnvironmentCheckerTest extends SapphireTest
 
     public function testLogsWithErrors()
     {
-        Config::inst()->update('EnvironmentChecker', 'log_results_error', false);
-        Config::inst()->update('EnvironmentChecker', 'log_results_error', true);
+        Config::inst()->update('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', 'log_results_error', false);
+        Config::inst()->update('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', 'log_results_error', true);
         EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckWarnings());
         EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckErrors());
         $checker = Phockito::spy(
-            'EnvironmentChecker',
+            'SilverStripe\\EnvironmentCheck\\EnvironmentChecker',
             'test suite',
             'test'
         );

@@ -2,9 +2,13 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
-use SapphireTest;
-use DatabaseCheck;
-use EnvironmentCheck;
+
+
+
+use SilverStripe\EnvironmentCheck\Checks\DatabaseCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\Dev\SapphireTest;
+
 
 
 /**

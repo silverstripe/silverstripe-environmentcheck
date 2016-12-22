@@ -2,8 +2,11 @@
 
 namespace SilverStripe\EnvironmentCheck\Controllers;
 
-use Controller;
-use EnvironmentChecker;
+
+
+use SilverStripe\EnvironmentCheck\EnvironmentChecker;
+use SilverStripe\Control\Controller;
+
 
 
 class DevHealthController extends Controller

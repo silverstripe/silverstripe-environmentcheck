@@ -2,9 +2,13 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
-use SapphireTest;
-use HasClassCheck;
-use EnvironmentCheck;
+
+
+
+use SilverStripe\EnvironmentCheck\Checks\HasClassCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\Dev\SapphireTest;
+
 
 
 /**

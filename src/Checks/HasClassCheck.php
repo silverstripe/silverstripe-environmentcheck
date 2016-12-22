@@ -2,7 +2,9 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use EnvironmentCheck;
+
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 
 
 /**

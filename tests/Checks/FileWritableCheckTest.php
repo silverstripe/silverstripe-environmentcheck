@@ -2,9 +2,13 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
-use SapphireTest;
-use FileWriteableCheck;
-use EnvironmentCheck;
+
+
+
+use SilverStripe\EnvironmentCheck\Checks\FileWriteableCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\Dev\SapphireTest;
+
 
 
 /**

@@ -2,8 +2,11 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use EnvironmentCheck;
-use Director;
+
+
+use SilverStripe\Control\Director;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 
 
 /**
