@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+use Director;
+
+
 /**
  * Check that a given URL is functioning, by default, the homepage.
  * 

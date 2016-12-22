@@ -1,5 +1,16 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck;
+
+use Object;
+use InvalidArgumentException;
+use Exception;
+use EnvironmentCheck;
+use ViewableData;
+use ArrayList;
+use ArrayData;
+
+
 /**
  * Represents a suite of environment checks.
  * Specific checks can be registered against a named instance of EnvironmentCheckSuite.

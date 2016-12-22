@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Controllers;
+
+use Controller;
+use EnvironmentChecker;
+
+
 class DevCheckController extends Controller
 {
     /**

@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Tests\Checks;
+
+use SapphireTest;
+use HasFunctionCheck;
+use EnvironmentCheck;
+
+
 /**
  * @mixin PHPUnit_Framework_TestCase
  */

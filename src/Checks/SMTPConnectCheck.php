@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+
+
 /**
  * Checks if the SMTP connection configured through PHP.ini works as expected.
  *

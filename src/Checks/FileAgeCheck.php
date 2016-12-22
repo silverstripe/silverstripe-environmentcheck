@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+use SS_Datetime;
+
+
 /**
  * Checks for the maximum age of one or more files or folders.
  * Useful for files which should be frequently auto-generated, 

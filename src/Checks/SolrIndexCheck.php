@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+use Solr;
+
+
 /**
  * Check the availability of all Solr indexes of given class.
  *

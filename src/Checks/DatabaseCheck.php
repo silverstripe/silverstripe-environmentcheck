@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+use DB;
+
+
 /**
  * Check that the connection to the database is working, by ensuring that the table exists and that
  * the table contains some records.

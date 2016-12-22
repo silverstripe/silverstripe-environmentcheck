@@ -1,5 +1,22 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck;
+
+use RequestHandler;
+use SS_HTTPResponse;
+use SS_HTTPResponse_Exception;
+use Member;
+use BasicAuth;
+use Director;
+use Permission;
+use EnvironmentCheckSuite;
+use Email;
+use EnvironmentCheck;
+use SS_Log;
+use Deprecation;
+use Config;
+
+
 /**
  * Provides an interface for checking the given EnvironmentCheckSuite.
  */

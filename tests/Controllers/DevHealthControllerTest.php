@@ -1,5 +1,12 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Tests\Controllers;
+
+use SapphireTest;
+use DevHealthController;
+use SS_HTTPRequest;
+
+
 /**
  * @mixin PHPUnit_Framework_TestCase
  */

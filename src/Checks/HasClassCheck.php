@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+
+
 /**
  * Check that the given class exists.
  */

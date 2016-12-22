@@ -1,5 +1,11 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+use Versioned;
+
+
 /**
  * Checks for the accessibility and file type validation of one or more files or folders.
  *

@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck;
+
+
+
+
 /**
  * Interface for environment checks
  * 

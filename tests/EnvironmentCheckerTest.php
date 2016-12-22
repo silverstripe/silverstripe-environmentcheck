@@ -1,4 +1,14 @@
 <?php
+
+namespace SilverStripe\EnvironmentCheck\Tests;
+
+use SapphireTest;
+use Phockito;
+use Config;
+use EnvironmentCheckSuite;
+use EnvironmentCheck;
+use TestOnly;
+
 class EnvironmentCheckerTest extends SapphireTest
 {
     protected $usesDatabase = true;

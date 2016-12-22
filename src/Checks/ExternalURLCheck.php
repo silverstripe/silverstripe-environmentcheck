@@ -1,5 +1,10 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use EnvironmentCheck;
+
+
 /**
  * Checks that one or more URLs are reachable via HTTP.
  * Note that the HTTP connectivity can just be verified from the server to the remote URL,
