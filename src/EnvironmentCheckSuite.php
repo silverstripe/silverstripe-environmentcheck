@@ -199,6 +199,12 @@ class EnvironmentCheckSuite extends Object
         if (!is_array($names)) {
             $names = array($names);
         }
+
+        // Support for omitted namespaces
+        if (strpos($check, '\\') === false) {
+            $check = __NAMESPACE__ . '\\Checks\\' . $check;
+        }
+
         foreach ($names as $name) {
             self::inst($name)->push($check, $title);
         }
