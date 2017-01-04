@@ -1,7 +1,17 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Tests\Checks;
+
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\EnvironmentCheck\Checks\ExternalURLCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 /**
+ * Class ExternalURLCheckTest
+ *
  * @mixin PHPUnit_Framework_TestCase
+ *
+ * @package environmentcheck
  */
 class ExternalURLCheckTest extends SapphireTest
 {
@@ -13,7 +23,7 @@ class ExternalURLCheckTest extends SapphireTest
 
         $expected = array(
             EnvironmentCheck::ERROR,
-            'Success retrieving "http://missing-site/" (Code: 404)',
+            'Success retrieving "http://missing-site/" (Code: 404)'
         );
 
         $this->assertEquals($expected, $check->check());

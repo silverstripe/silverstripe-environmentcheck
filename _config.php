@@ -1,5 +1,7 @@
 <?php
 
+// use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
+
 // // These power dev/health, which can be used by load balancers and other such systems
 // EnvironmentCheckSuite::register('health', 'DatabaseCheck');
 

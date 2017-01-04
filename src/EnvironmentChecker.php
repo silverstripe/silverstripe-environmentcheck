@@ -1,7 +1,26 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck;
+
+use Psr\Log\LogLevel;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Control\HTTPResponse_Exception;
+use SilverStripe\Control\RequestHandler;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\Deprecation;
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
+use SilverStripe\Security\BasicAuth;
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
+
 /**
  * Provides an interface for checking the given EnvironmentCheckSuite.
+ *
+ * @package environmentcheck
  */
 class EnvironmentChecker extends RequestHandler
 {
@@ -43,24 +62,24 @@ class EnvironmentChecker extends RequestHandler
     private static $email_results = false;
 
     /**
-     * @var bool Log results via {@link SS_Log}
+     * @var bool Log results via {@link \Psr\Log\LoggerInterface}
      */
     private static $log_results_warning = false;
 
     /**
-     * @var int Maps to {@link Zend_Log} levels. Defaults to Zend_Log::WARN
+     * @var string Maps to {@link \Psr\Log\LogLevel} levels. Defaults to LogLevel::WARNING
      */
-    private static $log_results_warning_level = 4;
+    private static $log_results_warning_level = LogLevel::WARNING;
 
     /**
-     * @var bool Log results via {@link SS_Log}
+     * @var bool Log results via a {@link \Psr\Log\LoggerInterface}
      */
     private static $log_results_error = false;
 
     /**
-     * @var int Maps to {@link Zend_Log} levels. Defaults to Zend_Log::ALERT
+     * @var int Maps to {@link \Psr\Log\LogLevel} levels. Defaults to LogLevel::ALERT
      */
-    private static $log_results_error_level = 1;
+    private static $log_results_error_level = LogLevel::ALERT;
 
     /**
      * @param string $checkSuiteName
@@ -69,7 +88,7 @@ class EnvironmentChecker extends RequestHandler
     public function __construct($checkSuiteName, $title)
     {
         parent::__construct();
-        
+
         $this->checkSuiteName = $checkSuiteName;
         $this->title = $title;
     }
@@ -77,7 +96,7 @@ class EnvironmentChecker extends RequestHandler
     /**
      * @param string $permission
      *
-     * @throws SS_HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function init($permission = 'ADMIN')
     {
@@ -85,24 +104,23 @@ class EnvironmentChecker extends RequestHandler
         if (defined('ENVCHECK_BASICAUTH_USERNAME') && defined('ENVCHECK_BASICAUTH_PASSWORD')) {
             if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
                 // authenticate the input user/pass with the configured credentials
-                if (
-                    !(
+                if (!(
                         $_SERVER['PHP_AUTH_USER'] == ENVCHECK_BASICAUTH_USERNAME
                         && $_SERVER['PHP_AUTH_PW'] == ENVCHECK_BASICAUTH_PASSWORD
                     )
                 ) {
-                    $response = new SS_HTTPResponse(null, 401);
+                    $response = new HTTPResponse(null, 401);
                     $response->addHeader('WWW-Authenticate', "Basic realm=\"Environment check\"");
                     // Exception is caught by RequestHandler->handleRequest() and will halt further execution
-                    $e = new SS_HTTPResponse_Exception(null, 401);
+                    $e = new HTTPResponse_Exception(null, 401);
                     $e->setResponse($response);
                     throw $e;
                 }
             } else {
-                $response = new SS_HTTPResponse(null, 401);
+                $response = new HTTPResponse(null, 401);
                 $response->addHeader('WWW-Authenticate', "Basic realm=\"Environment check\"");
                 // Exception is caught by RequestHandler->handleRequest() and will halt further execution
-                $e = new SS_HTTPResponse_Exception(null, 401);
+                $e = new HTTPResponse_Exception(null, 401);
                 $e->setResponse($response);
                 throw $e;
             }
@@ -119,9 +137,9 @@ class EnvironmentChecker extends RequestHandler
      *
      * @return bool
      *
-     * @throws SS_HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
-    public function canAccess($member = null, $permission = "ADMIN")
+    public function canAccess($member = null, $permission = 'ADMIN')
     {
         if (!$member) {
             $member = Member::currentUser();
@@ -133,8 +151,7 @@ class EnvironmentChecker extends RequestHandler
 
         // We allow access to this controller regardless of live-status or ADMIN permission only
         // if on CLI.  Access to this controller is always allowed in "dev-mode", or of the user is ADMIN.
-        if (
-            Director::isDev()
+        if (Director::isDev()
             || Director::is_cli()
             || empty($permission)
             || Permission::checkMember($member, $permission)
@@ -149,20 +166,19 @@ class EnvironmentChecker extends RequestHandler
         if ($results && is_array($results)) {
             if (!min($results)) {
                 return false;
-            } else {
-                return true;
             }
+            return true;
         }
 
         return false;
     }
 
     /**
-     * @return SS_HTTPResponse
+     * @return HTTPResponse
      */
     public function index()
     {
-        $response = new SS_HTTPResponse;
+        $response = new HTTPResponse;
         $result = EnvironmentCheckSuite::inst($this->checkSuiteName)->run();
 
         if (!$result->ShouldPass()) {
@@ -170,14 +186,19 @@ class EnvironmentChecker extends RequestHandler
         }
 
         $resultText = $result->customise(array(
-            "URL" => Director::absoluteBaseURL(),
-            "Title" => $this->title,
-            "Name" => $this->checkSuiteName,
-            "ErrorCode" => $this->errorCode,
-        ))->renderWith("EnvironmentChecker");
+            'URL' => Director::absoluteBaseURL(),
+            'Title' => $this->title,
+            'Name' => $this->checkSuiteName,
+            'ErrorCode' => $this->errorCode,
+        ))->renderWith(__CLASS__);
 
         if ($this->config()->email_results && !$result->ShouldPass()) {
-            $email = new Email($this->config()->from_email_address, $this->config()->to_email_address, $this->title, $resultText);
+            $email = new Email(
+                $this->config()->from_email_address,
+                $this->config()->to_email_address,
+                $this->title,
+                $resultText
+            );
             $email->send();
         }
 
@@ -197,8 +218,7 @@ class EnvironmentChecker extends RequestHandler
         }
 
         // output the result as JSON if requested
-        if (
-            $this->getRequest()->getExtension() == 'json'
+        if ($this->getRequest()->getExtension() == 'json'
             || strpos($this->getRequest()->getHeader('Accept'), 'application/json') !== false
         ) {
             $response->setBody($result->toJSON());
@@ -207,17 +227,19 @@ class EnvironmentChecker extends RequestHandler
         }
 
         $response->setBody($resultText);
-        
+
         return $response;
     }
 
     /**
+     * Sends a log entry to the configured PSR-3 LoggerInterface
+     *
      * @param string $message
      * @param int $level
      */
     public function log($message, $level)
     {
-        SS_Log::log($message, $level);
+        Injector::inst()->get('Logger')->log($level, $message);
     }
 
     /**
@@ -237,7 +259,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_from_email_address($from)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::inst()->update('EnvironmentChecker', 'from_email_address', $from);
+        Config::inst()->update(__CLASS__, 'from_email_address', $from);
     }
 
     /**
@@ -247,7 +269,7 @@ class EnvironmentChecker extends RequestHandler
     public static function get_from_email_address()
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        return Config::inst()->get('EnvironmentChecker', 'from_email_address');
+        return Config::inst()->get(__CLASS__, 'from_email_address');
     }
 
     /**
@@ -257,7 +279,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_to_email_address($to)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::inst()->update('EnvironmentChecker', 'to_email_address',  $to);
+        Config::inst()->update(__CLASS__, 'to_email_address',  $to);
     }
 
     /**
@@ -267,7 +289,7 @@ class EnvironmentChecker extends RequestHandler
     public static function get_to_email_address()
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        return Config::inst()->get('EnvironmentChecker', 'to_email_address');
+        return Config::inst()->get(__CLASS__, 'to_email_address');
     }
 
     /**
@@ -277,7 +299,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_email_results($results)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::inst()->update('EnvironmentChecker', 'email_results', $results);
+        Config::inst()->update(__CLASS__, 'email_results', $results);
     }
 
     /**
@@ -287,6 +309,6 @@ class EnvironmentChecker extends RequestHandler
     public static function get_email_results()
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        return Config::inst()->get('EnvironmentChecker', 'email_results');
+        return Config::inst()->get(__CLASS__, 'email_results');
     }
 }

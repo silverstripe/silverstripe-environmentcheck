@@ -1,8 +1,15 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\ORM\DB;
+
 /**
  * Check that the connection to the database is working, by ensuring that the table exists and that
  * the table contains some records.
+ *
+ * @package environmentcheck
  */
 class DatabaseCheck implements EnvironmentCheck
 {
@@ -13,28 +20,28 @@ class DatabaseCheck implements EnvironmentCheck
      *
      * @param string $checkTable
      */
-    public function __construct($checkTable = "Member")
+    public function __construct($checkTable = 'Member')
     {
         $this->checkTable = $checkTable;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
     public function check()
     {
-        if (!DB::getConn()->hasTable($this->checkTable)) {
+        if (!DB::get_schema()->hasTable($this->checkTable)) {
             return array(EnvironmentCheck::ERROR, "$this->checkTable not present in the database");
         }
 
         $count = DB::query("SELECT COUNT(*) FROM \"$this->checkTable\"")->value();
-        
+
         if ($count > 0) {
-            return array(EnvironmentCheck::OK, "");
-        } else {
-            return array(EnvironmentCheck::WARNING, "$this->checkTable queried ok but has no records");
+            return array(EnvironmentCheck::OK, '');
         }
+
+        return array(EnvironmentCheck::WARNING, "$this->checkTable queried ok but has no records");
     }
 }

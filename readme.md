@@ -1,6 +1,6 @@
 # SilverStripe Environment Checker Module
 
-[![Build Status](http://img.shields.io/travis/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://travis-ci.org/silverstripe-labs/silverstripe-environmentcheck)
+[![Build Status](http://img.shields.io/travis/silverstripe/silverstripe-environmentcheck.svg?style=flat-square)](https://travis-ci.org/silverstripe/silverstripe-environmentcheck)
 [![Code Quality](http://img.shields.io/scrutinizer/g/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentcheck)
 [![Code Coverage](http://img.shields.io/scrutinizer/coverage/g/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentcheck)
 [![Version](http://img.shields.io/packagist/v/silverstripe/environmentcheck.svg?style=flat-square)](https://packagist.org/packages/silverstripe/environmentcheck)
@@ -11,6 +11,13 @@ This module adds an API for running environment checks to your API.
  * `health/check` - A public URL that performs a quick check that this environment is functioning.  This could be tied to a load balancer, for example.
  * `dev/check` - An admin-only URL that performs a more comprehensive set of checks.  This could be tied to a deployment system, for example.
  * `dev/check/<suite>` - Check a specific suite (admin only)
+
+## Requirements
+
+* SilverStripe 4.x
+* PHP 5.5+
+
+For SilverStripe 3.x support, please use a `1.x` tagged release.
 
 ## Aren't these just unit tests?
 
@@ -29,11 +36,13 @@ You'll also need to run `/dev/build`.
 
 ### Activating Directly
 
-Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults.
+Register checks in your own `_config.php` - see the `_config.php` in this module for some defaults. Don't forget to
+either use a fully-qualified (namespaced) class name for `EnvironmentCheckSuite`, or `use` (import) the namespaced class
+first.
 
 ```php
-EnvironmentCheckSuite::register('health', 'DatabaseCheck', "Can we connect to the database?");
-EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage accessible?");
+EnvironmentCheckSuite::register('health', 'DatabaseCheck', 'Can we connect to the database?');
+EnvironmentCheckSuite::register('check', 'URLCheck("")', 'Is the homepage accessible?');
 ```
 
 ### Activating Via Config
@@ -41,7 +50,7 @@ EnvironmentCheckSuite::register('check', 'URLCheck("")', "Is the homepage access
 Register your checks on the `EnvironmentCheckSuite`. The same named check may be used multiple times.
 
 ```yaml
-EnvironmentCheckSuite:
+SilverStripe\EnvironmentCheck\EnvironmentCheckSuite:
   registered_checks:
     db:
       definition: 'DatabaseCheck("Page")'
@@ -61,7 +70,7 @@ You can also disable checks configured this way. This is handy if you want to ov
 by some other module. Just set the "state" property of the check to "disabled" like this:
 
 ```yaml
-EnvironmentCheckSuite:
+SilverStripe\EnvironmentCheck\EnvironmentCheckSuite:
   registered_checks:
     db:
       state: disabled
@@ -77,7 +86,7 @@ EnvironmentCheckSuite:
     This can be used to check that PHP modules or features are installed.
  * `FileWriteableCheck`: Check that the given file is writeable.
  * `FileAgeCheck`: Checks for the maximum age of one or more files or folders.
-    Useful for files which should be frequently auto-generated, 
+    Useful for files which should be frequently auto-generated,
     like static caches, as well as for backup files and folders.
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
@@ -86,23 +95,23 @@ EnvironmentCheckSuite:
 ## Monitoring Checks
 
 Checks will return an appropriate HTTP status code, so are easy to hook into common uptime montoring
-solutions like pingdom.com. 
+solutions like pingdom.com.
 
 You can also have the environment checker email results with the following configuration:
 
 ```yml
-EnvironmentChecker:
+SilverStripe\EnvironmentCheck\EnvironmentChecker:
   email_results: true
   to_email_address: support@test.com
   from_email_address: admin@test.com
 ```
 
-Errors can be logged via the standard SilverStripe logging. Each check will cause an individual log entry.
-You can choose to enable logging separately for warnings and errors,
-identified through the result of `EnvironmentCheck->check()`.
+Errors can be logged via the standard SilverStripe PSR-3 compatible logging. Each check will cause an individual log
+entry. You can choose to enable logging separately for warnings and errors, identified through the
+result of `EnvironmentCheck->check()`.
 
 ```yml
-EnvironmentChecker:
+SilverStripe\EnvironmentCheck\EnvironmentChecker:
   log_results_warning: true
   log_results_error: true
 ```
@@ -116,71 +125,88 @@ an administrator on the site.
 You may wish to have an automated service check `dev/check` periodically, but not want to open it up for public access.
 You can enable basic authentication by defining the following in your environment:
 
-	define('ENVCHECK_BASICAUTH_USERNAME', 'test');
-	define('ENVCHECK_BASICAUTH_PASSWORD', 'password');
+```php
+define('ENVCHECK_BASICAUTH_USERNAME', 'test');
+define('ENVCHECK_BASICAUTH_PASSWORD', 'password');
+```
 
 Now if you access `dev/check` in a browser it will pop up a basic auth popup, and if the submitted username and password
 match the ones defined the username and password defined in the environment, access will be granted to the page.
 
 ## Adding more checks
 
-To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.  See the `_config.php` file of this module for examples.
+To add more checks, you should put additional `EnvironmentCheckSuite::register` calls into your `_config.php`.
+See the `_config.php` file of this module for examples.
 
-	:::php
-	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
-	EnvironmentCheckSuite::register('check', 'HasFunctionCheck("imagecreatetruecolor")', "Does PHP have GD2 support?");
-	
+```php
+EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");
+EnvironmentCheckSuite::register('check', 'HasFunctionCheck("imagecreatetruecolor")', "Does PHP have GD2 support?");
+```
+
 The first argument is the name of the check suite.  There are two built-in check suites, "health", and "check", corresponding to the `health/check` and `dev/check` URLs.  If you wish, you can create your own check suites and execute them on other URLs. You can also add a check to more than one suite by passing the first argument as an array.
 
-The module comes bundled with a few checks in `DefaultHealthChecks.php`.  However, to test your own application, you probably want to write custom checks.
+To test your own application, you probably want to write custom checks:
 
- * Implement the `EnvironmentCheck` interface
+ * Implement the `SilverStripe\EnvironmentCheck\EnvironmentCheck` interface
  * Define the `check()` function, which returns a 2 element array:
    * The first element is one of `EnvironmentCheck::OK`, `EnvironmentCheck::WARNING`, `EnvironmentCheck::ERROR`, depending on the status of the check
    * The second element is a string describing the response.
 
 Here is a simple example of how you might create a check to test your own code.  In this example, we are checking that an instance of the `MyGateway` class will return "foo" when `call()` is called on it.  Testing interfaces with 3rd party systems is a common use case for custom environment checks.
 
-	:::php
-	class MyGatewayCheck implements EnvironmentCheck {
-		protected $checkTable;
+```php
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 
-		function check() {
-			$g = new MyGateway;
-			
-			$response = $g->call();
-			$expectedResponse = "foo";
-			
-			if($response == null) {
-				return array(EnvironmentCheck::ERROR, "MyGateway didn't return a response");
-			} else if($response != $expectedResponse) {
-				return array(EnvironmentCheck::WARNING, "MyGateway returned unexpected response $response");
-			} else {
-				return array(EnvironmentCheck::OK, "");
-			}
-		}
-	}
-	
+class MyGatewayCheck implements EnvironmentCheck
+{
+    protected $checkTable;
+
+    function check()
+    {
+        $g = new \MyGateway;
+
+        $response = $g->call();
+        $expectedResponse = 'foo';
+
+        if($response == null) {
+            return array(EnvironmentCheck::ERROR, "MyGateway didn't return a response");
+        } else if($response != $expectedResponse) {
+            return array(EnvironmentCheck::WARNING, "MyGateway returned unexpected response $response");
+        }
+        return array(EnvironmentCheck::OK, '');
+    }
+}
+```
+
 Once you have created your custom check class, don't forget to register it in a check suite
-	
-	:::php
-	EnvironmentCheckSuite::register('check', 'MyGatewayCheck', "Can I connect to the gateway?");
+
+```php
+EnvironmentCheckSuite::register('check', 'MyGatewayCheck', 'Can I connect to the gateway?');
+```
 
 ### Using other environment check suites
 
-If you want to use the same UI as `health/check` and dev/check, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
+If you want to use the same UI as `health/check` and `dev/check`, you can create an `EnvironmentChecker` object.  This class is a `RequestHandler` and so can be returned from an action handler.  The first argument to the `EnvironmentChecker` constructor is the suite name.  For example:
 
-	class DevHealth extends Controller {
-		function index() {
-			$e = new EnvironmentChecker('health', 'Site health');
-			return $e;
-		}
-	}
-	
-If you wish to embed an environment check suite in another, you can use the following call.
+```php
+use SilverStripe\Control\Controller;
 
-	$result = EnvironmentCheckSuite::inst("health")->run();
-	
+class DevHealth extends Controller
+{
+    function index()
+    {
+        $e = new EnvironmentChecker('health', 'Site health');
+        return $e;
+    }
+}
+```
+
+If you wish to embed an environment check suite in another, you can use the following call:
+
+```php
+$result = EnvironmentCheckSuite::inst('health')->run();
+```
+
 `$result` will contain a `EnvironmentCheckSuiteResult` object
 
  * `$result->ShouldPass()`: Return a boolean of whether or not the tests passed.
@@ -197,4 +223,4 @@ All methods, with `public` visibility, are part of the public API. All other met
 
 ## Reporting Issues
 
-Please [create an issue](http://github.com/silverstripe-labs/silverstripe-environmentcheck/issues) for any bugs you've found, or features you're missing.
+Please [create an issue](http://github.com/silverstripe/silverstripe-environmentcheck/issues) for any bugs you've found, or features you're missing.

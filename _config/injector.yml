@@ -1,0 +1,24 @@
+---
+Name: environmentcheckinjector
+---
+SilverStripe\Core\Injector\Injector:
+  DatabaseCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\DatabaseCheck
+  ExternalURLCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\ExternalURLCheck
+  FileAccessibilityAndValidationCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\FileAccessibilityAndValidationCheck
+  FileAgeCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\FileAgeCheck
+  FileWriteableCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\FileWriteableCheck
+  HasClassCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\HasClassCheck
+  HasFunctionCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\HasFunctionCheck
+  SMTPConnectCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\SMTPConnectCheck
+  SolrIndexCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\SolrIndexCheck
+  URLCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\URLCheck

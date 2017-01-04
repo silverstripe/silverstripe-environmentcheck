@@ -1,9 +1,15 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 /**
  * Checks if the SMTP connection configured through PHP.ini works as expected.
  *
  * Only checks socket connection with HELO command, not actually sending the email.
+ *
+ * @package environmentcheck
  */
 class SMTPConnectCheck implements EnvironmentCheck
 {
@@ -35,7 +41,7 @@ class SMTPConnectCheck implements EnvironmentCheck
         if (!$this->host) {
             $this->host = 'localhost';
         }
-        
+
         $this->port = ($port) ? $port : ini_get('smtp_port');
         if (!$this->port) {
             $this->port = 25;
@@ -45,7 +51,7 @@ class SMTPConnectCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
@@ -64,7 +70,7 @@ class SMTPConnectCheck implements EnvironmentCheck
         if (substr($response, 0, 3) != '220') {
             return array(
                 EnvironmentCheck::ERROR,
-                sprintf("Invalid mail server response: %s", $response)
+                sprintf('Invalid mail server response: %s', $response)
             );
         }
 

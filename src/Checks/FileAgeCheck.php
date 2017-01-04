@@ -1,23 +1,30 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\ORM\FieldType\DBDatetime;
+
 /**
  * Checks for the maximum age of one or more files or folders.
- * Useful for files which should be frequently auto-generated, 
+ * Useful for files which should be frequently auto-generated,
  * like static caches, as well as for backup files and folders.
  * Does NOT check for existence of a file (will silently fail).
  *
  * Examples:
  * // Checks that Requirements::combine_files() has regenerated files in the last 24h
  * EnvironmentCheckSuite::register(
- * 	'check', 
- * 	'FileAgeCheck("' . ASSETS_PATH . '/_combined_files/*.js' . '", "-1 day", '>', " . FileAgeCheck::CHECK_ALL) . "'
+ *  'check',
+ *  'FileAgeCheck("' . ASSETS_PATH . '/_combined_files/*.js' . '", "-1 day", '>', " . FileAgeCheck::CHECK_ALL) . "'
  * );
- * 
+ *
  * // Checks that at least one backup folder has been created in the last 24h
  * EnvironmentCheckSuite::register(
- * 	'check', 
- * 	'FileAgeCheck("' . BASE_PATH . '/../backups/*' . '", "-1 day", '>', " . FileAgeCheck::CHECK_SINGLE) . "'
+ *  'check',
+ *  'FileAgeCheck("' . BASE_PATH . '/../backups/*' . '", "-1 day", '>', " . FileAgeCheck::CHECK_SINGLE) . "'
  * );
+ *
+ * @package environmentcheck
  */
 class FileAgeCheck implements EnvironmentCheck
 {
@@ -30,7 +37,7 @@ class FileAgeCheck implements EnvironmentCheck
      * @var int
      */
     const CHECK_ALL = 2;
-    
+
     /**
      * Absolute path to a file or folder, compatible with glob().
      *
@@ -83,13 +90,13 @@ class FileAgeCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
     public function check()
     {
-        $cutoffTime =  strtotime($this->relativeAge, SS_Datetime::now()->Format('U'));
+        $cutoffTime =  strtotime($this->relativeAge, DBDatetime::now()->Format('U'));
         $files = $this->getFiles();
         $invalidFiles = array();
         $validFiles = array();
@@ -105,12 +112,15 @@ class FileAgeCheck implements EnvironmentCheck
                     $invalidFiles[] = $file;
                     if ($this->checkType == self::CHECK_ALL) {
                         return array(
-                        EnvironmentCheck::ERROR,
-                        sprintf(
-                            'File "%s" doesn\'t match age check (compare %s: %s, actual: %s)',
-                            $file, $this->compareOperand, date('c', $cutoffTime), date('c', $fileTime)
-                        )
-                    );
+                            EnvironmentCheck::ERROR,
+                            sprintf(
+                                'File "%s" doesn\'t match age check (compare %s: %s, actual: %s)',
+                                $file,
+                                $this->compareOperand,
+                                date('c', $cutoffTime),
+                                date('c', $fileTime)
+                            )
+                        );
                     }
                 }
             }
@@ -119,16 +129,14 @@ class FileAgeCheck implements EnvironmentCheck
         // If at least one file was valid, count as passed
         if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
             return array(EnvironmentCheck::OK, '');
-        } else {
-            if (count($invalidFiles) == 0) {
-                return array(EnvironmentCheck::OK, '');
-            } else {
-                return array(
-                EnvironmentCheck::ERROR,
-                sprintf('No files matched criteria (%s %s)', $this->compareOperand, date('c', $cutoffTime))
-            );
-            }
         }
+        if (count($invalidFiles) == 0) {
+            return array(EnvironmentCheck::OK, '');
+        }
+        return array(
+            EnvironmentCheck::ERROR,
+            sprintf('No files matched criteria (%s %s)', $this->compareOperand, date('c', $cutoffTime))
+        );
     }
 
     /**

@@ -1,9 +1,11 @@
 ---
 Name: environmentcheckroutes
-After: 'framework/*','cms/*'
+After:
+  - 'framework/*'
+  - 'cms/*'
 ---
-Director:
+SilverStripe\Control\Director:
   rules:
-    'health/check': 'DevHealthController'
-    'dev/check/$Suite': 'DevCheckController'
+    'health/check': 'Silverstripe\EnvironmentCheck\Controllers\DevHealthController'
+    'dev/check/$Suite': 'Silverstripe\EnvironmentCheck\Controllers\DevCheckController'
 

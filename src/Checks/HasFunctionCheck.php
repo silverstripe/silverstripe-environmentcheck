@@ -1,7 +1,13 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Checks;
+
+use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+
 /**
  * Check that the given function exists.
+ *
+ * @package environmentcheck
  */
 class HasFunctionCheck implements EnvironmentCheck
 {
@@ -19,16 +25,15 @@ class HasFunctionCheck implements EnvironmentCheck
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      *
      * @return array
      */
     public function check()
     {
         if (function_exists($this->functionName)) {
-            return array(EnvironmentCheck::OK, $this->functionName.'() exists');
-        } else {
-            return array(EnvironmentCheck::ERROR, $this->functionName.'() doesn\'t exist');
+            return array(EnvironmentCheck::OK, $this->functionName . '() exists');
         }
+        return array(EnvironmentCheck::ERROR, $this->functionName . '() doesn\'t exist');
     }
 }

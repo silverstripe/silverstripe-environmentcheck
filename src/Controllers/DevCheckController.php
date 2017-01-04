@@ -1,5 +1,15 @@
 <?php
 
+namespace SilverStripe\EnvironmentCheck\Controllers;
+
+use SilverStripe\Control\Controller;
+use SilverStripe\EnvironmentCheck\EnvironmentChecker;
+
+/**
+ * Class DevCheckController
+ *
+ * @package environmentcheck
+ */
 class DevCheckController extends Controller
 {
     /**
@@ -17,11 +27,11 @@ class DevCheckController extends Controller
     private static $permission = 'ADMIN';
 
     /**
-     * @param SS_HTTPRequest $request
+     * @param HTTPRequest $request
      *
      * @return EnvironmentChecker
      *
-     * @throws SS_HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function index($request)
     {
