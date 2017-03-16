@@ -1,8 +1,5 @@
 ---
 Name: environmentcheckroutes
-After:
-  - 'framework/*'
-  - 'cms/*'
 ---
 SilverStripe\Control\Director:
   rules:
