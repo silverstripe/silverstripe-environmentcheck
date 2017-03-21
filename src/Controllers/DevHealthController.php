@@ -15,9 +15,9 @@ class DevHealthController extends Controller
     /**
      * @var array
      */
-    public static $allowed_actions = array(
+    public static $allowed_actions = [
         'index'
-    );
+    ];
 
     /**
      * @return EnvironmentChecker

@@ -24,7 +24,7 @@ class URLCheck implements EnvironmentCheck
      */
     protected $testString;
 
-    /*
+    /**
      * @param string $url The URL to check, relative to the site (homepage is '').
      * @param string $testString An optional piece of text to search for on the homepage.
      */
@@ -45,19 +45,19 @@ class URLCheck implements EnvironmentCheck
         $response = Director::test($this->url);
 
         if ($response->getStatusCode() != 200) {
-            return array(
+            return [
                 EnvironmentCheck::ERROR,
                 sprintf('Error retrieving "%s" (Code: %d)', $this->url, $response->getStatusCode())
-            );
+            ];
         } elseif ($this->testString && (strpos($response->getBody(), $this->testString) === false)) {
-            return array(
+            return [
                 EnvironmentCheck::WARNING,
                 sprintf('Success retrieving "%s", but string "%s" not found', $this->url, $this->testString)
-            );
+            ];
         }
-        return array(
+        return [
             EnvironmentCheck::OK,
             sprintf('Success retrieving "%s"', $this->url)
-        );
+        ];
     }
 }

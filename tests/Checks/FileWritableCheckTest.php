@@ -19,10 +19,10 @@ class FileWritableCheckTest extends SapphireTest
     {
         $check = new FileWriteableCheck(TEMP_FOLDER);
 
-        $expected = array(
+        $expected = [
             EnvironmentCheck::OK,
             ''
-        );
+        ];
 
         $this->assertEquals($expected, $check->check());
     }

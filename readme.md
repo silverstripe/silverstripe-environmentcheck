@@ -15,7 +15,7 @@ This module adds an API for running environment checks to your API.
 ## Requirements
 
 * SilverStripe 4.x
-* PHP 5.5+
+* PHP 5.6+
 
 For SilverStripe 3.x support, please use a `1.x` tagged release.
 
@@ -99,7 +99,7 @@ solutions like pingdom.com.
 
 You can also have the environment checker email results with the following configuration:
 
-```yml
+```yaml
 SilverStripe\EnvironmentCheck\EnvironmentChecker:
   email_results: true
   to_email_address: support@test.com
@@ -110,7 +110,7 @@ Errors can be logged via the standard SilverStripe PSR-3 compatible logging. Eac
 entry. You can choose to enable logging separately for warnings and errors, identified through the
 result of `EnvironmentCheck->check()`.
 
-```yml
+```yaml
 SilverStripe\EnvironmentCheck\EnvironmentChecker:
   log_results_warning: true
   log_results_error: true
@@ -123,11 +123,11 @@ trying to access it on a live or test environment, it will respond with a 403 HT
 an administrator on the site.
 
 You may wish to have an automated service check `dev/check` periodically, but not want to open it up for public access.
-You can enable basic authentication by defining the following in your environment:
+You can enable basic authentication by defining the following in your environment (`.env` file):
 
-```php
-define('ENVCHECK_BASICAUTH_USERNAME', 'test');
-define('ENVCHECK_BASICAUTH_PASSWORD', 'password');
+```
+ENVCHECK_BASICAUTH_USERNAME="test"
+ENVCHECK_BASICAUTH_PASSWORD="password"
 ```
 
 Now if you access `dev/check` in a browser it will pop up a basic auth popup, and if the submitted username and password

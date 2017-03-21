@@ -98,8 +98,8 @@ class FileAgeCheck implements EnvironmentCheck
     {
         $cutoffTime =  strtotime($this->relativeAge, DBDatetime::now()->Format('U'));
         $files = $this->getFiles();
-        $invalidFiles = array();
-        $validFiles = array();
+        $invalidFiles = [];
+        $validFiles = [];
         $checkFn = $this->checkFn;
         $allValid = true;
         if ($files) {
@@ -111,7 +111,7 @@ class FileAgeCheck implements EnvironmentCheck
                 } else {
                     $invalidFiles[] = $file;
                     if ($this->checkType == self::CHECK_ALL) {
-                        return array(
+                        return [
                             EnvironmentCheck::ERROR,
                             sprintf(
                                 'File "%s" doesn\'t match age check (compare %s: %s, actual: %s)',
@@ -120,7 +120,7 @@ class FileAgeCheck implements EnvironmentCheck
                                 date('c', $cutoffTime),
                                 date('c', $fileTime)
                             )
-                        );
+                        ];
                     }
                 }
             }
@@ -128,15 +128,15 @@ class FileAgeCheck implements EnvironmentCheck
 
         // If at least one file was valid, count as passed
         if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
-            return array(EnvironmentCheck::OK, '');
+            return [EnvironmentCheck::OK, ''];
         }
         if (count($invalidFiles) == 0) {
-            return array(EnvironmentCheck::OK, '');
+            return [EnvironmentCheck::OK, ''];
         }
-        return array(
+        return [
             EnvironmentCheck::ERROR,
             sprintf('No files matched criteria (%s %s)', $this->compareOperand, date('c', $cutoffTime))
-        );
+        ];
     }
 
     /**

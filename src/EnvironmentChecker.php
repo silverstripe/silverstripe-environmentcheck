@@ -3,6 +3,7 @@
 namespace SilverStripe\EnvironmentCheck;
 
 use Psr\Log\LogLevel;
+use Psr\Log\LoggerInterface;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTPResponse;
@@ -27,9 +28,9 @@ class EnvironmentChecker extends RequestHandler
     /**
      * @var array
      */
-    private static $url_handlers = array(
+    private static $url_handlers = [
         '' => 'index',
-    );
+    ];
 
     /**
      * @var string
@@ -101,12 +102,12 @@ class EnvironmentChecker extends RequestHandler
     public function init($permission = 'ADMIN')
     {
         // if the environment supports it, provide a basic auth challenge and see if it matches configured credentials
-        if (defined('ENVCHECK_BASICAUTH_USERNAME') && defined('ENVCHECK_BASICAUTH_PASSWORD')) {
+        if (getenv('ENVCHECK_BASICAUTH_USERNAME') && getenv('ENVCHECK_BASICAUTH_PASSWORD')) {
             if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
                 // authenticate the input user/pass with the configured credentials
                 if (!(
-                        $_SERVER['PHP_AUTH_USER'] == ENVCHECK_BASICAUTH_USERNAME
-                        && $_SERVER['PHP_AUTH_PW'] == ENVCHECK_BASICAUTH_PASSWORD
+                        $_SERVER['PHP_AUTH_USER'] == getenv('ENVCHECK_BASICAUTH_USERNAME')
+                        && $_SERVER['PHP_AUTH_PW'] == getenv('ENVCHECK_BASICAUTH_PASSWORD')
                     )
                 ) {
                     $response = new HTTPResponse(null, 401);
@@ -185,12 +186,12 @@ class EnvironmentChecker extends RequestHandler
             $response->setStatusCode($this->errorCode);
         }
 
-        $resultText = $result->customise(array(
+        $resultText = $result->customise([
             'URL' => Director::absoluteBaseURL(),
             'Title' => $this->title,
             'Name' => $this->checkSuiteName,
             'ErrorCode' => $this->errorCode,
-        ))->renderWith(__CLASS__);
+        ])->renderWith(__CLASS__);
 
         if ($this->config()->email_results && !$result->ShouldPass()) {
             $email = new Email(
@@ -239,7 +240,7 @@ class EnvironmentChecker extends RequestHandler
      */
     public function log($message, $level)
     {
-        Injector::inst()->get('Logger')->log($level, $message);
+        Injector::inst()->get(LoggerInterface::class)->log($level, $message);
     }
 
     /**
@@ -259,7 +260,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_from_email_address($from)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::inst()->update(__CLASS__, 'from_email_address', $from);
+        Config::modify()->set(__CLASS__, 'from_email_address', $from);
     }
 
     /**
@@ -279,7 +280,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_to_email_address($to)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::inst()->update(__CLASS__, 'to_email_address',  $to);
+        Config::modify()->set(__CLASS__, 'to_email_address',  $to);
     }
 
     /**
@@ -299,7 +300,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_email_results($results)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::inst()->update(__CLASS__, 'email_results', $results);
+        Config::modify()->set(__CLASS__, 'email_results', $results);
     }
 
     /**

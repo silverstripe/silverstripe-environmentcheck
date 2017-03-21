@@ -30,10 +30,10 @@ class DatabaseCheckTest extends SapphireTest
 
         $check = new DatabaseCheck();
 
-        $expected = array(
+        $expected = [
             EnvironmentCheck::OK,
             ''
-        );
+        ];
 
         $this->assertEquals($expected, $check->check());
     }

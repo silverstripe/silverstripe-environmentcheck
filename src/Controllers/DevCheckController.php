@@ -15,9 +15,9 @@ class DevCheckController extends Controller
     /**
      * @var array
      */
-    public static $allowed_actions = array(
+    public static $allowed_actions = [
         'index'
-    );
+    ];
 
     /**
      * Permission code to check for access to this controller.

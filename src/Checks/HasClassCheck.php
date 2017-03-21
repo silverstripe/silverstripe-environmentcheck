@@ -32,8 +32,8 @@ class HasClassCheck implements EnvironmentCheck
     public function check()
     {
         if (class_exists($this->className)) {
-            return array(EnvironmentCheck::OK, 'Class ' . $this->className.' exists');
+            return [EnvironmentCheck::OK, 'Class ' . $this->className.' exists'];
         }
-        return array(EnvironmentCheck::ERROR, 'Class ' . $this->className.' doesn\'t exist');
+        return [EnvironmentCheck::ERROR, 'Class ' . $this->className.' doesn\'t exist'];
     }
 }

@@ -19,10 +19,10 @@ class URLCheckTest extends SapphireTest
     {
         $check = new URLCheck('foo', 'bar');
 
-        $expected = array(
+        $expected = [
             EnvironmentCheck::ERROR,
             'Error retrieving "foo" (Code: 404)'
-        );
+        ];
 
         $this->assertEquals($expected, $check->check());
     }
