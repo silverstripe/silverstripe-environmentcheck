@@ -43,7 +43,7 @@ class EnvironmentCheckSuite extends Object
     /**
      * @var array
      */
-    protected $checks = array();
+    protected $checks = [];
 
     /**
      * Associative array of named checks registered via the config system. Each check should specify:
@@ -53,7 +53,7 @@ class EnvironmentCheckSuite extends Object
      *
      * @var array
      */
-    private static $registered_checks = array();
+    private static $registered_checks = [];
 
     /**
      * Associative array of named suites registered via the config system. Each suite should enumerate
@@ -61,7 +61,7 @@ class EnvironmentCheckSuite extends Object
      *
      * @var array
      */
-    private static $registered_suites = array();
+    private static $registered_suites = [];
 
     /**
      * Load checks for this suite from the configuration system. This is an alternative to the
@@ -130,20 +130,20 @@ class EnvironmentCheckSuite extends Object
      */
     protected function checkInstances()
     {
-        $output = array();
+        $output = [];
         foreach ($this->checks as $check) {
             list($checkClass, $checkTitle) = $check;
             if (is_string($checkClass)) {
                 $checkInst = Object::create_from_string($checkClass);
                 if ($checkInst instanceof EnvironmentCheck) {
-                    $output[] = array($checkInst, $checkTitle);
+                    $output[] = [$checkInst, $checkTitle];
                 } else {
                     throw new InvalidArgumentException(
                         "Bad EnvironmentCheck: '$checkClass' - the named class doesn't implement EnvironmentCheck"
                     );
                 }
             } elseif ($checkClass instanceof EnvironmentCheck) {
-                $output[] = array($checkClass, $checkTitle);
+                $output[] = [$checkClass, $checkTitle];
             } else {
                 throw new InvalidArgumentException("Bad EnvironmentCheck: " . var_export($check, true));
             }
@@ -162,7 +162,7 @@ class EnvironmentCheckSuite extends Object
         if (!$title) {
             $title = is_string($check) ? $check : get_class($check);
         }
-        $this->checks[] = array($check, $title);
+        $this->checks[] = [$check, $title];
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ class EnvironmentCheckSuite extends Object
     /**
      * @var array
      */
-    protected static $instances = array();
+    protected static $instances = [];
 
     /**
      * Return a named instance of EnvironmentCheckSuite.
@@ -197,7 +197,7 @@ class EnvironmentCheckSuite extends Object
     public static function register($names, $check, $title = null)
     {
         if (!is_array($names)) {
-            $names = array($names);
+            $names = [$names];
         }
 
         foreach ($names as $name) {
@@ -210,6 +210,6 @@ class EnvironmentCheckSuite extends Object
      */
     public static function reset()
     {
-        self::$instances = array();
+        self::$instances = [];
     }
 }

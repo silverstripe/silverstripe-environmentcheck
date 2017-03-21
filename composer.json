@@ -27,7 +27,11 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripe\\EnvironmentCheck\\": "src/",
+            "SilverStripe\\EnvironmentCheck\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "SilverStripe\\EnvironmentCheck\\Tests\\": "tests/"
         }
     }

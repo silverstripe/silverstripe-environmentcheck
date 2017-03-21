@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
  * Minimum versions required:
   * SilverStripe 4.x
-  * PHP 5.5+
+  * PHP 5.6+
  * PHP 7 supported
 
 ## [1.2.0]

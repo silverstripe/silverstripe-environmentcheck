@@ -32,8 +32,8 @@ class HasFunctionCheck implements EnvironmentCheck
     public function check()
     {
         if (function_exists($this->functionName)) {
-            return array(EnvironmentCheck::OK, $this->functionName . '() exists');
+            return [EnvironmentCheck::OK, $this->functionName . '() exists'];
         }
-        return array(EnvironmentCheck::ERROR, $this->functionName . '() doesn\'t exist');
+        return [EnvironmentCheck::ERROR, $this->functionName . '() doesn\'t exist'];
     }
 }

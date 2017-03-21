@@ -19,7 +19,7 @@ class ExternalURLCheck implements EnvironmentCheck
     /**
      * @var array
      */
-    protected $urls = array();
+    protected $urls = [];
 
     /**
      * @var Int Timeout in seconds.
@@ -47,7 +47,7 @@ class ExternalURLCheck implements EnvironmentCheck
     {
         $urls = $this->getURLs();
 
-        $chs = array();
+        $chs = [];
         foreach ($urls as $url) {
             $ch = curl_init();
             $chs[] = $ch;
@@ -75,7 +75,7 @@ class ExternalURLCheck implements EnvironmentCheck
         }
 
         $hasError = false;
-        $msgs = array();
+        $msgs = [];
         foreach ($chs as $ch) {
             $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -103,10 +103,10 @@ class ExternalURLCheck implements EnvironmentCheck
         curl_multi_close($mh);
 
         if ($hasError) {
-            return array(EnvironmentCheck::ERROR, implode(', ', $msgs));
+            return [EnvironmentCheck::ERROR, implode(', ', $msgs)];
         }
 
-        return array(EnvironmentCheck::OK, implode(', ', $msgs));
+        return [EnvironmentCheck::OK, implode(', ', $msgs)];
     }
 
     /**
@@ -114,13 +114,13 @@ class ExternalURLCheck implements EnvironmentCheck
      */
     protected function getCurlOpts($url)
     {
-        return array(
+        return [
             CURLOPT_URL => $url,
             CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FAILONERROR => 1,
             CURLOPT_TIMEOUT => $this->timeout,
-        );
+        ];
     }
 
     /**

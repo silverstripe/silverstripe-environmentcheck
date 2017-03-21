@@ -19,10 +19,10 @@ class HasFunctionCheckTest extends SapphireTest
     {
         $check = new HasFunctionCheck('foo');
 
-        $expected = array(
+        $expected = [
             EnvironmentCheck::ERROR,
             'foo() doesn\'t exist'
-        );
+        ];
 
         $this->assertEquals($expected, $check->check());
     }
@@ -31,10 +31,10 @@ class HasFunctionCheckTest extends SapphireTest
     {
         $check = new HasFunctionCheck('class_exists');
 
-        $expected = array(
+        $expected = [
             EnvironmentCheck::OK,
             'class_exists() exists'
-        );
+        ];
 
         $this->assertEquals($expected, $check->check());
     }

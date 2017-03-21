@@ -58,7 +58,7 @@ class FileWriteableCheck implements EnvironmentCheck
                     $message .= 'We recommend that you make the file writeable.';
                 } else {
                     $groups = posix_getgroups();
-                    $groupList = array();
+                    $groupList = [];
                     foreach ($groups as $group) {
                         $groupInfo = posix_getgrgid($group);
                         if (in_array($currentOwner['name'], $groupInfo['members'])) {
@@ -79,9 +79,9 @@ class FileWriteableCheck implements EnvironmentCheck
                 $message = "The webserver user needs to be able to write to this file:\n$filename";
             }
 
-            return array(EnvironmentCheck::ERROR, $message);
+            return [EnvironmentCheck::ERROR, $message];
         }
 
-        return array(EnvironmentCheck::OK, '');
+        return [EnvironmentCheck::OK, ''];
     }
 }

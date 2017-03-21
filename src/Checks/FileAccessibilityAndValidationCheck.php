@@ -79,14 +79,14 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
     public function check()
     {
         $origStage = Versioned::get_reading_mode();
-        Versioned::set_reading_mode('Live');
+        Versioned::set_reading_mode(Versioned::LIVE);
 
         $files = $this->getFiles();
         if ($files) {
             $fileTypeValidateFunc = $this->fileTypeValidateFunc;
             if (method_exists($this, $fileTypeValidateFunc)) {
-                $invalidFiles = array();
-                $validFiles = array();
+                $invalidFiles = [];
+                $validFiles = [];
 
                 foreach ($files as $file) {
                     if ($this->$fileTypeValidateFunc($file)) {
@@ -103,23 +103,23 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
                         $validFileList .= $vf . PHP_EOL;
                     }
                     if ($fileTypeValidateFunc == 'noVidation') {
-                        $checkReturn = array(
+                        $checkReturn = [
                             EnvironmentCheck::OK,
                             sprintf('At least these file(s) accessible: %s', $validFileList)
-                        );
+                        ];
                     } else {
-                        $checkReturn = array(
+                        $checkReturn = [
                             EnvironmentCheck::OK,
                             sprintf(
                                 'At least these file(s) passed file type validate function "%s": %s',
                                 $fileTypeValidateFunc,
                                 $validFileList
                             )
-                        );
+                        ];
                     }
                 } else {
                     if (count($invalidFiles) == 0) {
-                        $checkReturn = array(EnvironmentCheck::OK, 'All files valideted');
+                        $checkReturn = [EnvironmentCheck::OK, 'All files valideted'];
                     } else {
                         $invalidFileList = PHP_EOL;
                         foreach ($invalidFiles as $vf) {
@@ -127,19 +127,19 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
                         }
 
                         if ($fileTypeValidateFunc == 'noVidation') {
-                            $checkReturn = array(
+                            $checkReturn = [
                                 EnvironmentCheck::ERROR,
                                 sprintf('File(s) not accessible: %s', $invalidFileList)
-                            );
+                            ];
                         } else {
-                            $checkReturn = array(
+                            $checkReturn = [
                                 EnvironmentCheck::ERROR,
                                 sprintf(
                                     'File(s) not passing the file type validate function "%s": %s',
                                     $fileTypeValidateFunc,
                                     $invalidFileList
                                 )
-                            );
+                            ];
                         }
                     }
                 }

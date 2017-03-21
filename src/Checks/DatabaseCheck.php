@@ -13,6 +13,9 @@ use SilverStripe\ORM\DB;
  */
 class DatabaseCheck implements EnvironmentCheck
 {
+    /**
+     * @var string
+     */
     protected $checkTable;
 
     /**
@@ -33,15 +36,15 @@ class DatabaseCheck implements EnvironmentCheck
     public function check()
     {
         if (!DB::get_schema()->hasTable($this->checkTable)) {
-            return array(EnvironmentCheck::ERROR, "$this->checkTable not present in the database");
+            return [EnvironmentCheck::ERROR, "$this->checkTable not present in the database"];
         }
 
         $count = DB::query("SELECT COUNT(*) FROM \"$this->checkTable\"")->value();
 
         if ($count > 0) {
-            return array(EnvironmentCheck::OK, '');
+            return [EnvironmentCheck::OK, ''];
         }
 
-        return array(EnvironmentCheck::WARNING, "$this->checkTable queried ok but has no records");
+        return [EnvironmentCheck::WARNING, "$this->checkTable queried ok but has no records"];
     }
 }

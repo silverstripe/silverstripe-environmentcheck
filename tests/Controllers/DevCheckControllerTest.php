@@ -5,6 +5,7 @@ namespace SilverStripe\EnvironmentCheck\Tests\Controllers;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\EnvironmentCheck\Controllers\DevCheckController;
+use SilverStripe\EnvironmentCheck\EnvironmentChecker;
 
 /**
  * Class DevCheckControllerTest
@@ -27,6 +28,6 @@ class DevCheckControllerTest extends SapphireTest
 
         $request = new HTTPRequest('GET', 'example.com');
 
-        $this->assertInstanceOf('SilverStripe\\EnvironmentCheck\\EnvironmentChecker', $controller->index($request));
+        $this->assertInstanceOf(EnvironmentChecker::class, $controller->index($request));
     }
 }

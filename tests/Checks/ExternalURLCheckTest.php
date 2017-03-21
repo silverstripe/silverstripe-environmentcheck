@@ -21,10 +21,10 @@ class ExternalURLCheckTest extends SapphireTest
 
         $check = new ExternalURLCheck('http://missing-site/');
 
-        $expected = array(
+        $expected = [
             EnvironmentCheck::ERROR,
             'Success retrieving "http://missing-site/" (Code: 404)'
-        );
+        ];
 
         $this->assertEquals($expected, $check->check());
     }

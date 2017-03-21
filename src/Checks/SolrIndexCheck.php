@@ -33,16 +33,16 @@ class SolrIndexCheck implements EnvironmentCheck
      */
     public function check()
     {
-        $brokenCores = array();
+        $brokenCores = [];
 
         /**
          * @todo Revisit this when silverstripe/fulltextsearch has 4.x compat
          */
         if (!class_exists('\\Solr')) {
-            return array(
+            return [
                 EnvironmentCheck::ERROR,
                 'Class `Solr` not found. Is the fulltextsearch module installed?'
-            );
+            ];
         }
 
         $service = \Solr::service();
@@ -54,12 +54,12 @@ class SolrIndexCheck implements EnvironmentCheck
         }
 
         if (!empty($brokenCores)) {
-            return array(
+            return [
                 EnvironmentCheck::ERROR,
                 'The following indexes are unavailable: ' . implode($brokenCores, ', ')
-            );
+            ];
         }
 
-        return array(EnvironmentCheck::OK, 'Expected indexes are available.');
+        return [EnvironmentCheck::OK, 'Expected indexes are available.'];
     }
 }

@@ -37,12 +37,12 @@ class EnvironmentCheckSuiteResult extends ViewableData
      */
     public function addResult($status, $message, $checkIdentifier)
     {
-        $this->details->push(new ArrayData(array(
+        $this->details->push(new ArrayData([
             'Check' => $checkIdentifier,
             'Status' => $this->statusText($status),
             'StatusCode' => $status,
             'Message' => $message,
-        )));
+        ]));
 
         $this->worst = max($this->worst, $status);
     }
@@ -84,11 +84,11 @@ class EnvironmentCheckSuiteResult extends ViewableData
      */
     public function toJSON()
     {
-        $result = array(
+        $result = [
             'Status' => $this->Status(),
             'ShouldPass' => $this->ShouldPass(),
-            'Checks' => array()
-        );
+            'Checks' => []
+        ];
         foreach ($this->details as $detail) {
             $result['Checks'][] = $detail->toMap();
         }
