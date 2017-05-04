@@ -28,9 +28,10 @@ class EnvironmentCheckerTest extends SapphireTest
     /**
      * {@inheritDoc}
      */
-    public function setUpOnce()
+    public static function setUpBeforeClass()
     {
-        parent::setUpOnce();
+        parent::setUpBeforeClass();
+
         Phockito::include_hamcrest();
 
         $logger = Injector::inst()->get(LoggerInterface::class);
@@ -70,7 +71,7 @@ class EnvironmentCheckerTest extends SapphireTest
         );
 
         $response = $checker->index();
-        Phockito::verify($checker, 0)->log(anything(), anything());
+        Phockito::verify($checker, 0)->log(\anything(), \anything());
         EnvironmentCheckSuite::reset();
     }
 
@@ -87,8 +88,8 @@ class EnvironmentCheckerTest extends SapphireTest
         );
 
         $response = $checker->index();
-        Phockito::verify($checker, 1)->log(containsString('warning'), anything());
-        Phockito::verify($checker, 0)->log(containsString('error'), anything());
+        Phockito::verify($checker, 1)->log(containsString('warning'), \anything());
+        Phockito::verify($checker, 0)->log(containsString('error'), \anything());
         EnvironmentCheckSuite::reset();
     }
 
@@ -105,8 +106,8 @@ class EnvironmentCheckerTest extends SapphireTest
         );
 
         $response = $checker->index();
-        Phockito::verify($checker, 0)->log(containsString('warning'), anything());
-        Phockito::verify($checker, 1)->log(containsString('error'), anything());
+        Phockito::verify($checker, 0)->log(containsString('warning'), \anything());
+        Phockito::verify($checker, 1)->log(containsString('error'), \anything());
         EnvironmentCheckSuite::reset();
     }
 }
