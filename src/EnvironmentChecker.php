@@ -3,6 +3,7 @@
 namespace SilverStripe\EnvironmentCheck;
 
 use Psr\Log\LogLevel;
+use Psr\Log\LoggerInterface;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTPResponse;
@@ -239,7 +240,7 @@ class EnvironmentChecker extends RequestHandler
      */
     public function log($message, $level)
     {
-        Injector::inst()->get('Logger')->log($level, $message);
+        Injector::inst()->get(LoggerInterface::class)->log($level, $message);
     }
 
     /**

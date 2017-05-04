@@ -9,6 +9,7 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class EnvironmentCheckerTest
@@ -26,13 +27,13 @@ class EnvironmentCheckerTest extends SapphireTest
     /**
      * {@inheritDoc}
      */
-    public function setUpOnce()
+    public static function setUpBeforeClass()
     {
-        parent::setUpOnce();
+        parent::setUpBeforeClass();
 
         Phockito::include_hamcrest();
 
-        $logger = Injector::inst()->get('Logger');
+        $logger = Injector::inst()->get(LoggerInterface::class);
         if ($logger instanceof \Monolog\Logger) {
             // It logs to stderr by default - disable
             $logger->pushHandler(new \Monolog\Handler\NullHandler);
@@ -71,7 +72,7 @@ class EnvironmentCheckerTest extends SapphireTest
         );
 
         $response = $checker->index();
-        Phockito::verify($checker, 0)->log(anything(), anything());
+        Phockito::verify($checker, 0)->log(\anything(), \anything());
         EnvironmentCheckSuite::reset();
     }
 
@@ -88,8 +89,8 @@ class EnvironmentCheckerTest extends SapphireTest
         );
 
         $response = $checker->index();
-        Phockito::verify($checker, 1)->log(containsString('warning'), anything());
-        Phockito::verify($checker, 0)->log(containsString('error'), anything());
+        Phockito::verify($checker, 1)->log(containsString('warning'), \anything());
+        Phockito::verify($checker, 0)->log(containsString('error'), \anything());
         EnvironmentCheckSuite::reset();
     }
 
@@ -106,8 +107,8 @@ class EnvironmentCheckerTest extends SapphireTest
         );
 
         $response = $checker->index();
-        Phockito::verify($checker, 0)->log(containsString('warning'), anything());
-        Phockito::verify($checker, 1)->log(containsString('error'), anything());
+        Phockito::verify($checker, 0)->log(containsString('warning'), \anything());
+        Phockito::verify($checker, 1)->log(containsString('error'), \anything());
         EnvironmentCheckSuite::reset();
     }
 }
