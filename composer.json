@@ -18,7 +18,8 @@
         "silverstripe/framework": "^4.0@dev"
     },
     "require-dev": {
-        "hafriedlander/phockito": "dev-master"
+        "hafriedlander/phockito": "dev-master",
+        "silverstripe/versioned": "^1.0@dev"
     },
     "extra": {
         "branch-alias": {
