@@ -4,9 +4,10 @@ namespace SilverStripe\EnvironmentCheck;
 
 use Exception;
 use InvalidArgumentException;
-use SilverStripe\Core\Object;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
 
@@ -31,7 +32,7 @@ use SilverStripe\View\ViewableData;
  *
  * @package environmentcheck
  */
-class EnvironmentCheckSuite extends Object
+class EnvironmentCheckSuite extends DataObject
 {
     /**
      * Name of this suite.
@@ -134,7 +135,7 @@ class EnvironmentCheckSuite extends Object
         foreach ($this->checks as $check) {
             list($checkClass, $checkTitle) = $check;
             if (is_string($checkClass)) {
-                $checkInst = Object::create_from_string($checkClass);
+                $checkInst = Injector::inst()->create($checkClass);
                 if ($checkInst instanceof EnvironmentCheck) {
                     $output[] = [$checkInst, $checkTitle];
                 } else {
