@@ -4,10 +4,12 @@ namespace SilverStripe\EnvironmentCheck;
 
 use Exception;
 use InvalidArgumentException;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
 
@@ -32,8 +34,11 @@ use SilverStripe\View\ViewableData;
  *
  * @package environmentcheck
  */
-class EnvironmentCheckSuite extends DataObject
+class EnvironmentCheckSuite
 {
+    use Configurable;
+    use Injectable;
+    use Extensible;
     /**
      * Name of this suite.
      *
@@ -72,8 +77,7 @@ class EnvironmentCheckSuite extends DataObject
      */
     public function __construct($suiteName)
     {
-        parent::__construct();
-
+        $this->constructExtensions();
         if (empty($this->config()->registered_suites[$suiteName])) {
             // Not registered via config system, but it still may be configured later via self::register.
             return;
