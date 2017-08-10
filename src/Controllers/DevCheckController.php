@@ -15,7 +15,7 @@ class DevCheckController extends Controller
     /**
      * @var array
      */
-    public static $allowed_actions = [
+    private static $allowed_actions = [
         'index'
     ];
 
