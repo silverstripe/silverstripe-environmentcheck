@@ -18,7 +18,6 @@
         "silverstripe/framework": "^4.0@dev"
     },
     "require-dev": {
-        "hafriedlander/phockito": "dev-master",
         "silverstripe/versioned": "^1.0@dev"
     },
     "extra": {
@@ -28,11 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripe\\EnvironmentCheck\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
+            "SilverStripe\\EnvironmentCheck\\": "src/",
             "SilverStripe\\EnvironmentCheck\\Tests\\": "tests/"
         }
     }
