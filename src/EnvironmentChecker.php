@@ -280,7 +280,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_to_email_address($to)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        static::config()->set('to_email_address',  $to);
+        static::config()->set('to_email_address', $to);
     }
 
     /**
