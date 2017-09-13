@@ -1,8 +1,8 @@
 # SilverStripe Environment Checker Module
 
-[![Build Status](http://img.shields.io/travis/silverstripe/silverstripe-environmentcheck.svg?style=flat-square)](https://travis-ci.org/silverstripe/silverstripe-environmentcheck)
-[![Code Quality](http://img.shields.io/scrutinizer/g/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentcheck)
-[![Code Coverage](http://img.shields.io/scrutinizer/coverage/g/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentcheck)
+[![Build Status](https://travis-ci.org/silverstripe/silverstripe-environmentcheck.svg?branch=master)](https://travis-ci.org/silverstripe/silverstripe-environmentcheck)
+[![Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/?branch=master)
+[![Code Coverage](https://codecov.io/gh/silverstripe/silverstripe-environmentcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-environmentcheck)
 [![Version](http://img.shields.io/packagist/v/silverstripe/environmentcheck.svg?style=flat-square)](https://packagist.org/packages/silverstripe/environmentcheck)
 [![License](http://img.shields.io/packagist/l/silverstripe/environmentcheck.svg?style=flat-square)](LICENSE.md)
 

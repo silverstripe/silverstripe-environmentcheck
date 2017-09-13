@@ -193,10 +193,10 @@ class EnvironmentChecker extends RequestHandler
             'ErrorCode' => $this->errorCode,
         ])->renderWith(__CLASS__);
 
-        if ($this->config()->email_results && !$result->ShouldPass()) {
+        if ($this->config()->get('email_results') && !$result->ShouldPass()) {
             $email = new Email(
-                $this->config()->from_email_address,
-                $this->config()->to_email_address,
+                $this->config()->get('from_email_address'),
+                $this->config()->get('to_email_address'),
                 $this->title,
                 $resultText
             );
@@ -205,15 +205,15 @@ class EnvironmentChecker extends RequestHandler
 
         // Optionally log errors and warnings individually
         foreach ($result->Details() as $detail) {
-            if ($this->config()->log_results_warning && $detail->StatusCode == EnvironmentCheck::WARNING) {
+            if ($this->config()->get('log_results_warning') && $detail->StatusCode == EnvironmentCheck::WARNING) {
                 $this->log(
                     sprintf('EnvironmentChecker warning at "%s" check. Message: %s', $detail->Check, $detail->Message),
-                    $this->config()->log_results_warning_level
+                    $this->config()->get('log_results_warning_level')
                 );
-            } elseif ($this->config()->log_results_error && $detail->StatusCode == EnvironmentCheck::ERROR) {
+            } elseif ($this->config()->get('log_results_error') && $detail->StatusCode == EnvironmentCheck::ERROR) {
                 $this->log(
                     sprintf('EnvironmentChecker error at "%s" check. Message: %s', $detail->Check, $detail->Message),
-                    $this->config()->log_results_error_level
+                    $this->config()->get('log_results_error_level')
                 );
             }
         }
@@ -260,7 +260,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_from_email_address($from)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::modify()->set(__CLASS__, 'from_email_address', $from);
+        static::config()->set('from_email_address', $from);
     }
 
     /**
@@ -270,7 +270,7 @@ class EnvironmentChecker extends RequestHandler
     public static function get_from_email_address()
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        return Config::inst()->get(__CLASS__, 'from_email_address');
+        return static::config()->get('from_email_address');
     }
 
     /**
@@ -280,7 +280,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_to_email_address($to)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::modify()->set(__CLASS__, 'to_email_address',  $to);
+        static::config()->set('to_email_address', $to);
     }
 
     /**
@@ -290,7 +290,7 @@ class EnvironmentChecker extends RequestHandler
     public static function get_to_email_address()
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        return Config::inst()->get(__CLASS__, 'to_email_address');
+        return static::config()->get('to_email_address');
     }
 
     /**
@@ -300,7 +300,7 @@ class EnvironmentChecker extends RequestHandler
     public static function set_email_results($results)
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        Config::modify()->set(__CLASS__, 'email_results', $results);
+        static::config()->set('email_results', $results);
     }
 
     /**
@@ -310,6 +310,6 @@ class EnvironmentChecker extends RequestHandler
     public static function get_email_results()
     {
         Deprecation::notice('2.0', 'Use config API instead');
-        return Config::inst()->get(__CLASS__, 'email_results');
+        return static::config()->get('email_results');
     }
 }

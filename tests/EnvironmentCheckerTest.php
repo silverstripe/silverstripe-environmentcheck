@@ -2,13 +2,12 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests;
 
-use Phockito;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Dev\TestOnly;
-use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\EnvironmentCheck\EnvironmentChecker;
 use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
 
@@ -19,43 +18,11 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
  */
 class EnvironmentCheckerTest extends SapphireTest
 {
-    /**
-     * {@inheritDoc}
-     * @var bool
-     */
     protected $usesDatabase = true;
 
-    /**
-     * {@inheritDoc}
-     */
-    public static function setUpBeforeClass()
+    protected function tearDown()
     {
-        parent::setUpBeforeClass();
-
-        Phockito::include_hamcrest();
-
-        $logger = Injector::inst()->get(LoggerInterface::class);
-        if ($logger instanceof \Monolog\Logger) {
-            // It logs to stderr by default - disable
-            $logger->pushHandler(new \Monolog\Handler\NullHandler);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setUp()
-    {
-        parent::setUp();
-        Config::nest();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function tearDown()
-    {
-        Config::unnest();
+        EnvironmentCheckSuite::reset();
         parent::tearDown();
     }
 
@@ -63,75 +30,68 @@ class EnvironmentCheckerTest extends SapphireTest
     {
         Config::modify()->set(EnvironmentChecker::class, 'log_results_warning', true);
         Config::modify()->set(EnvironmentChecker::class, 'log_results_error', true);
-        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckNoErrors());
-        $checker = Phockito::spy(
-            EnvironmentChecker::class,
-            'test suite',
-            'test'
-        );
 
-        $response = $checker->index();
-        Phockito::verify($checker, 0)->log(\anything(), \anything());
-        EnvironmentCheckSuite::reset();
+        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest\CheckNoErrors());
+
+        $logger = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['log'])
+            ->getMock();
+
+        $logger->expects($this->never())->method('log');
+
+        Injector::inst()->registerService($logger, LoggerInterface::class);
+
+        (new EnvironmentChecker('test suite', 'test'))->index();
     }
 
     public function testLogsWithWarnings()
     {
         Config::modify()->set(EnvironmentChecker::class, 'log_results_warning', true);
         Config::modify()->set(EnvironmentChecker::class, 'log_results_error', false);
-        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckWarnings());
-        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckErrors());
-        $checker = Phockito::spy(
-            EnvironmentChecker::class,
-            'test suite',
-            'test'
-        );
 
-        $response = $checker->index();
-        Phockito::verify($checker, 1)->log(containsString('warning'), \anything());
-        Phockito::verify($checker, 0)->log(containsString('error'), \anything());
-        EnvironmentCheckSuite::reset();
+        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest\CheckWarnings());
+        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest\CheckErrors());
+
+        $logger = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['log'])
+            ->getMock();
+
+        $logger->expects($this->once())
+            ->method('log')
+            ->withConsecutive(
+                $this->equalTo(LogLevel::WARNING),
+                $this->anything()
+            );
+
+        Injector::inst()->registerService($logger, LoggerInterface::class);
+
+        (new EnvironmentChecker('test suite', 'test'))->index();
     }
 
     public function testLogsWithErrors()
     {
         Config::modify()->set(EnvironmentChecker::class, 'log_results_error', false);
         Config::modify()->set(EnvironmentChecker::class, 'log_results_error', true);
-        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckWarnings());
-        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest_CheckErrors());
-        $checker = Phockito::spy(
-            EnvironmentChecker::class,
-            'test suite',
-            'test'
-        );
 
-        $response = $checker->index();
-        Phockito::verify($checker, 0)->log(containsString('warning'), \anything());
-        Phockito::verify($checker, 1)->log(containsString('error'), \anything());
-        EnvironmentCheckSuite::reset();
-    }
-}
+        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest\CheckWarnings());
+        EnvironmentCheckSuite::register('test suite', new EnvironmentCheckerTest\CheckErrors());
 
-class EnvironmentCheckerTest_CheckNoErrors implements EnvironmentCheck, TestOnly
-{
-    public function check()
-    {
-        return [EnvironmentCheck::OK, ''];
-    }
-}
+        $logger = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['log'])
+            ->getMock();
 
-class EnvironmentCheckerTest_CheckWarnings implements EnvironmentCheck, TestOnly
-{
-    public function check()
-    {
-        return [EnvironmentCheck::WARNING, 'test warning'];
-    }
-}
+        $logger->expects($this->once())
+            ->method('log')
+            ->withConsecutive(
+                [$this->equalTo(LogLevel::ALERT), $this->anything()],
+                [$this->equalTo(LogLevel::WARNING), $this->anything()]
+            );
 
-class EnvironmentCheckerTest_CheckErrors implements EnvironmentCheck, TestOnly
-{
-    public function check()
-    {
-        return [EnvironmentCheck::ERROR, 'test error'];
+        Injector::inst()->registerService($logger, LoggerInterface::class);
+
+        (new EnvironmentChecker('test suite', 'test'))->index();
     }
 }
