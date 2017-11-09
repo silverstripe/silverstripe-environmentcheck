@@ -2,7 +2,7 @@
     "name": "silverstripe/environmentcheck",
     "description": "Provides an API for building environment tests",
     "license": "BSD-3-Clause",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "keywords": ["silverstripe", "testing", "environment", "check"],
     "authors": [
         {
@@ -15,10 +15,10 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4.0@dev"
+        "silverstripe/framework": "^4.0"
     },
     "require-dev": {
-        "silverstripe/versioned": "^1.0@dev",
+        "silverstripe/versioned": "^1.0",
         "phpunit/phpunit": "^5.7",
         "squizlabs/php_codesniffer": "^3.0"
     },
