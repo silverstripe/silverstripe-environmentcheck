@@ -9,14 +9,13 @@ use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Control\RequestHandler;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\Deprecation;
-use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-use SilverStripe\EnvironmentCheck\EnvironmentCheckSuite;
 use SilverStripe\Security\BasicAuth;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 
 /**
  * Provides an interface for checking the given EnvironmentCheckSuite.
@@ -102,12 +101,14 @@ class EnvironmentChecker extends RequestHandler
     public function init($permission = 'ADMIN')
     {
         // if the environment supports it, provide a basic auth challenge and see if it matches configured credentials
-        if (getenv('ENVCHECK_BASICAUTH_USERNAME') && getenv('ENVCHECK_BASICAUTH_PASSWORD')) {
+        if (Environment::getEnv('ENVCHECK_BASICAUTH_USERNAME')
+            && Environment::getEnv('ENVCHECK_BASICAUTH_PASSWORD')
+        ) {
             if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
                 // authenticate the input user/pass with the configured credentials
                 if (!(
-                        $_SERVER['PHP_AUTH_USER'] == getenv('ENVCHECK_BASICAUTH_USERNAME')
-                        && $_SERVER['PHP_AUTH_PW'] == getenv('ENVCHECK_BASICAUTH_PASSWORD')
+                        $_SERVER['PHP_AUTH_USER'] == Environment::getEnv('ENVCHECK_BASICAUTH_USERNAME')
+                        && $_SERVER['PHP_AUTH_PW'] == Environment::getEnv('ENVCHECK_BASICAUTH_PASSWORD')
                     )
                 ) {
                     $response = new HTTPResponse(null, 401);
@@ -143,11 +144,11 @@ class EnvironmentChecker extends RequestHandler
     public function canAccess($member = null, $permission = 'ADMIN')
     {
         if (!$member) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
 
         if (!$member) {
-            $member = BasicAuth::requireLogin('Environment Checker', $permission, false);
+            $member = BasicAuth::requireLogin($this->getRequest(), 'Environment Checker', $permission, false);
         }
 
         // We allow access to this controller regardless of live-status or ADMIN permission only

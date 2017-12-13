@@ -3,6 +3,8 @@
 namespace SilverStripe\EnvironmentCheck\Controllers;
 
 use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\EnvironmentCheck\EnvironmentChecker;
 
 /**
