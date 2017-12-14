@@ -3,28 +3,40 @@
 namespace SilverStripe\EnvironmentCheck\Checks;
 
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\Versioned\Versioned;
 
 /**
  * Checks for the accessibility and file type validation of one or more files or folders.
  *
  * Examples:
  * // Checks /assets/calculator_files has .json files and all files are valid json files.
- * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/*.json",
- *  "jsonValidate", '.FileAccessibilityAndValidationCheck::CHECK_ALL.')', 'Check a json file exist and are all valid json files'
+ * EnvironmentCheckSuite::register(
+ *     'check',
+ *     'FileAccessibilityAndValidationCheck(
+ *         "' . BASE_PATH . '/assets/calculator_files/*.json",
+ *         "jsonValidate",
+ *         '.FileAccessibilityAndValidationCheck::CHECK_ALL.'
+ *     )',
+ *     'Check a json file exist and are all valid json files'
  * );
  *
  * // Checks /assets/calculator_files/calculator.json exists and is valid json file.
- * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json",
- *  "jsonValidate", '.FileAccessibilityAndValidationCheck::CHECK_SINGLE.')', 'Check a calculator.json exists and is valid json file'
+ * EnvironmentCheckSuite::register(
+ *     'check',
+ *     'FileAccessibilityAndValidationCheck(
+ *         "' . BASE_PATH . '/assets/calculator_files/calculator.json",
+ *         "jsonValidate",
+ *         '.FileAccessibilityAndValidationCheck::CHECK_SINGLE.'
+ *     )',
+ *     'Check a calculator.json exists and is valid json file'
  * );
  *
  * // Check only existence
- * EnvironmentCheckSuite::register('check', 'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json")',
- * 'Check a calculator.json exists only'
+ * EnvironmentCheckSuite::register(
+ *     'check',
+ *     'FileAccessibilityAndValidationCheck("' . BASE_PATH . '/assets/calculator_files/calculator.json")',
+ *     'Check a calculator.json exists only'
  * );
- *
- * @package environmentcheck
  */
 class FileAccessibilityAndValidationCheck implements EnvironmentCheck
 {

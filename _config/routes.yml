@@ -6,3 +6,9 @@ SilverStripe\Control\Director:
     'health/check': 'Silverstripe\EnvironmentCheck\Controllers\DevHealthController'
     'dev/check/$Suite': 'Silverstripe\EnvironmentCheck\Controllers\DevCheckController'
 
+SilverStripe\Dev\DevelopmentAdmin:
+  registered_controllers:
+    check:
+      controller: Silverstripe\EnvironmentCheck\Controllers\DevCheckController
+      links:
+        check: 'Run registered environment checks and display their status'

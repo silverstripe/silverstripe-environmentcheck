@@ -8,10 +8,6 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\EnvironmentCheck\EnvironmentCheck;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\View\ArrayData;
-use SilverStripe\View\ViewableData;
 
 /**
  * Represents a suite of environment checks.
@@ -77,7 +73,6 @@ class EnvironmentCheckSuite
      */
     public function __construct($suiteName)
     {
-        $this->constructExtensions();
         if (empty($this->config()->registered_suites[$suiteName])) {
             // Not registered via config system, but it still may be configured later via self::register.
             return;

@@ -10,9 +10,13 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
  * it can still fail if the URL in question is requested by the client, e.g. through an iframe.
  *
  * Requires curl to present, so ensure to check it before with the following:
- * <code>EnvironmentCheckSuite::register('check', 'HasFunctionCheck("curl_init")', "Does PHP have CURL support?");</code>
- *
- * @package environmentcheck
+ * <code>
+ * EnvironmentCheckSuite::register(
+ *     'check',
+ *     'HasFunctionCheck("curl_init")',
+ *     "Does PHP have CURL support?"
+ * );
+ * </code>
  */
 class ExternalURLCheck implements EnvironmentCheck
 {
