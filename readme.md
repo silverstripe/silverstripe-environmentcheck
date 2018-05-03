@@ -1,10 +1,10 @@
 # SilverStripe Environment Checker Module
 
-[![Build Status](http://img.shields.io/travis/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://travis-ci.org/silverstripe-labs/silverstripe-environmentcheck)
-[![Code Quality](http://img.shields.io/scrutinizer/g/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentcheck)
-[![Code Coverage](http://img.shields.io/scrutinizer/coverage/g/silverstripe-labs/silverstripe-environmentcheck.svg?style=flat-square)](https://scrutinizer-ci.com/g/silverstripe-labs/silverstripe-environmentcheck)
-[![Version](http://img.shields.io/packagist/v/silverstripe/environmentcheck.svg?style=flat-square)](https://packagist.org/packages/silverstripe/environmentcheck)
-[![License](http://img.shields.io/packagist/l/silverstripe/environmentcheck.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://travis-ci.org/silverstripe/silverstripe-environmentcheck.svg?branch=master)](https://travis-ci.org/silverstripe/silverstripe-environmentcheck)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/?branch=master)
+[![codecov](https://codecov.io/gh/silverstripe/comment-notifications/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/comment-notifications)
+[![Packagist](https://img.shields.io/packagist/v/silverstripe/environmentcheck.svg)](https://packagist.org/packages/silverstripe/environmentalcheck)
+[![License](http://img.shields.io/packagist/l/silverstripe/environmentcheck.svg)](LICENSE.md)
 
 This module adds an API for running environment checks to your API.
 
