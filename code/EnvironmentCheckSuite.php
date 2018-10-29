@@ -19,7 +19,7 @@
  *
  * $result = EnvironmentCheckSuite::inst('health')->run();
  */
-class EnvironmentCheckSuite extends Object
+class EnvironmentCheckSuite extends SS_Object
 {
     /**
      * Name of this suite.
@@ -121,7 +121,7 @@ class EnvironmentCheckSuite extends Object
         foreach ($this->checks as $check) {
             list($checkClass, $checkTitle) = $check;
             if (is_string($checkClass)) {
-                $checkInst = Object::create_from_string($checkClass);
+                $checkInst = SS_Object::create_from_string($checkClass);
                 if ($checkInst instanceof EnvironmentCheck) {
                     $output[] = array($checkInst, $checkTitle);
                 } else {
