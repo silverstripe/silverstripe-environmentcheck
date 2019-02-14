@@ -18,7 +18,7 @@ class EnvTypeCheck implements EnvironmentCheck
      *
      * @return array
      */
-    public function check() : array
+    public function check()
     {
         $envSetting = Director::get_environment_type();
         switch ($envSetting) {
