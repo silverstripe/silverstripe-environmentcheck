@@ -15,7 +15,7 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
  * also must be excluded from Cache-Control headers in response. Also checks for
  * existence of ETag.
  *
- * @example SilverStripe\EnvironmentCheck\Checks\CacheHeadersCheck("/", ["must-revalidate", "max-age=120"], ["no-store"])
+ * @example SilverStripe\EnvironmentCheck\Checks\CacheHeadersCheck("/",["must-revalidate", "max-age=120"],["no-store"])
  * @package environmentcheck
  */
 class CacheHeadersCheck implements EnvironmentCheck
