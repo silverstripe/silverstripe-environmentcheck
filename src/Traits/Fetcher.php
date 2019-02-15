@@ -37,7 +37,7 @@ trait Fetcher
      * @param array|null $extraConfig Extra configuration
      * @return ResponseInterface
      */
-    public function fetchResponse(string $url, ? array $extraConfig = [])
+    public function fetchResponse(string $url, array $extraConfig = [])
     {
         $config = $this->getClientConfig($extraConfig);
         $client = new Client($config);
