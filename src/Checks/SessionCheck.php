@@ -47,7 +47,7 @@ class SessionCheck implements EnvironmentCheck
      *
      * @return array
      */
-    public function check(): array
+    public function check()
     {
         $response = $this->fetchResponse($this->url);
         $cookie = $this->getCookie($response);
@@ -71,7 +71,7 @@ class SessionCheck implements EnvironmentCheck
      * @param ResponseInterface $response
      * @return string|null Cookie contents or null if it doesn't exist
      */
-    public function getCookie(ResponseInterface $response): ?string
+    public function getCookie(ResponseInterface $response)
     {
         $result = null;
         $cookies = $response->getHeader('Set-Cookie');

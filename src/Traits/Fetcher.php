@@ -25,7 +25,7 @@ trait Fetcher
      * @param array $extraConfig
      * @return array
      */
-    private function getClientConfig(array $extraConfig = []) : array
+    private function getClientConfig(array $extraConfig = [])
     {
         return array_merge($this->clientConfig, $extraConfig);
     }
@@ -37,7 +37,7 @@ trait Fetcher
      * @param array|null $extraConfig Extra configuration
      * @return ResponseInterface
      */
-    public function fetchResponse(string $url, ? array $extraConfig = []) : ? ResponseInterface
+    public function fetchResponse(string $url, ? array $extraConfig = [])
     {
         $config = $this->getClientConfig($extraConfig);
         $client = new Client($config);

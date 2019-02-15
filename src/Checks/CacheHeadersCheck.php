@@ -116,7 +116,7 @@ class CacheHeadersCheck implements EnvironmentCheck
      *
      * @return string
      */
-    private function getMessage(): string
+    private function getMessage()
     {
         $ret = '';
         // Filter good messages
@@ -159,7 +159,7 @@ class CacheHeadersCheck implements EnvironmentCheck
      * @param ResponseInterface $response
      * @return void
      */
-    private function checkEtag(ResponseInterface $response): void
+    private function checkEtag(ResponseInterface $response)
     {
         $eTag = $response->getHeaderLine('ETag');
         $fullURL = Controller::join_links(Director::absoluteBaseURL(), $this->url);
@@ -183,7 +183,7 @@ class CacheHeadersCheck implements EnvironmentCheck
      * @param ResponseInterface $response
      * @return void
      */
-    private function checkCacheControl(ResponseInterface $response): void
+    private function checkCacheControl(ResponseInterface $response)
     {
         $cacheControl = $response->getHeaderLine('Cache-Control');
         $vals = array_map('trim', explode(',', $cacheControl));
