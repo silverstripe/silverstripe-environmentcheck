@@ -92,6 +92,7 @@ SilverStripe\EnvironmentCheck\EnvironmentCheckSuite:
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
  * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
+ * `EnvTypeCheck`: Checks environment type, dev and test should not be used on production environments.
 
 ## Monitoring Checks
 
