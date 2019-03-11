@@ -3,11 +3,11 @@
 namespace SilverStripe\EnvironmentCheck\Tests\Checks;
 
 use SilverStripe\Core\Kernel;
-use App\Checks\EnvSettingCheck;
 use SilverStripe\Control\Director;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\EnvironmentCheck\Checks\EnvTypeCheck;
 
 /**
  * Test the env setting check.
@@ -27,7 +27,7 @@ class EnvTypeCheckTest extends SapphireTest
 
         $this->assertTrue(Director::isLive());
 
-        $checker = Injector::inst()->get(EnvSettingCheck::class);
+        $checker = Injector::inst()->get(EnvTypeCheck::class);
         $result = $checker->check();
 
         $this->assertSame($result[0], EnvironmentCheck::OK);
@@ -46,7 +46,7 @@ class EnvTypeCheckTest extends SapphireTest
 
         $this->assertTrue(Director::isTest());
 
-        $checker = Injector::inst()->get(EnvSettingCheck::class);
+        $checker = Injector::inst()->get(EnvTypeCheck::class);
         $result = $checker->check();
 
         $this->assertSame($result[0], EnvironmentCheck::ERROR);
@@ -65,7 +65,7 @@ class EnvTypeCheckTest extends SapphireTest
 
         $this->assertTrue(Director::isDev());
 
-        $checker = Injector::inst()->get(EnvSettingCheck::class);
+        $checker = Injector::inst()->get(EnvTypeCheck::class);
         $result = $checker->check();
 
         $this->assertSame($result[0], EnvironmentCheck::ERROR);
