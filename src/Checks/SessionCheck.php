@@ -2,10 +2,7 @@
 
 namespace SilverStripe\EnvironmentCheck\Checks;
 
-use SilverStripe\Control\Director;
-use SilverStripe\Control\Controller;
 use Psr\Http\Message\ResponseInterface;
-use SilverStripe\Core\Config\Configurable;
 use SilverStripe\EnvironmentCheck\Traits\Fetcher;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 
@@ -17,15 +14,7 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
  */
 class SessionCheck implements EnvironmentCheck
 {
-    use Configurable;
     use Fetcher;
-
-    /**
-     * URL to check
-     *
-     * @var string
-     */
-    protected $url;
 
     /**
      * Set up check with URL
@@ -35,11 +24,7 @@ class SessionCheck implements EnvironmentCheck
      */
     public function __construct($url = '')
     {
-        $this->url = $url;
-        $this->clientConfig = [
-            'base_uri' => Director::absoluteBaseURL(),
-            'timeout' => 10.0,
-        ];
+        $this->setURL($url);
     }
 
     /**
@@ -49,9 +34,9 @@ class SessionCheck implements EnvironmentCheck
      */
     public function check()
     {
-        $response = $this->fetchResponse($this->url);
+        $response = $this->client->get($this->getURL());
         $cookie = $this->getCookie($response);
-        $fullURL = Controller::join_links(Director::absoluteBaseURL(), $this->url);
+        $fullURL = $this->getURL();
 
         if ($cookie) {
             return [

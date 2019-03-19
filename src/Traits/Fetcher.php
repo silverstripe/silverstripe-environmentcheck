@@ -2,45 +2,50 @@
 
 namespace SilverStripe\EnvironmentCheck\Traits;
 
-use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
+use SilverStripe\Control\Director;
 
 /**
- * Simple helper for fetching responses using Guzzle client.
+ * Simple helper for env checks which require HTTP clients.
  *
  * @package environmentcheck
  */
 trait Fetcher
 {
     /**
-     * Configuration for the Guzzle client
+     * Client for making requests, set vi Injector.
      *
-     * @var array
+     * @see SilverStripe\EnvironmentCheck\Services
+     *
+     * @var GuzzleHttp\Client
      */
-    protected $clientConfig = [];
+    public $client = null;
 
     /**
-     * Merges configuration arrays and returns the result
+     * Absolute URL for requests.
      *
-     * @param array $extraConfig
-     * @return array
+     * @var string
      */
-    private function getClientConfig(array $extraConfig = [])
+    protected $url;
+
+    /**
+     * Set URL for requests.
+     *
+     * @param string $url Relative URL
+     * @return self
+     */
+    public function setURL($url)
     {
-        return array_merge($this->clientConfig, $extraConfig);
+        $this->url = Director::absoluteURL($url);
+        return $this;
     }
 
     /**
-     * Fetch a response for a URL using Guzzle client.
+     * Getter for URL
      *
-     * @param string $url
-     * @param array|null $extraConfig Extra configuration
-     * @return ResponseInterface
+     * @return string
      */
-    public function fetchResponse(string $url, array $extraConfig = [])
+    public function getURL()
     {
-        $config = $this->getClientConfig($extraConfig);
-        $client = new Client($config);
-        return $client->get($url);
+        return $this->url;
     }
 }

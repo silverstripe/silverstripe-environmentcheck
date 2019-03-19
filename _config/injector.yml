@@ -22,3 +22,11 @@ SilverStripe\Core\Injector\Injector:
     class: SilverStripe\EnvironmentCheck\Checks\SolrIndexCheck
   URLCheck:
     class: SilverStripe\EnvironmentCheck\Checks\URLCheck
+  EnvCheckClient:
+    factory: 'SilverStripe\EnvironmentCheck\Services\ClientFactory'
+    constructor:
+      timeout: 10.0
+
+SilverStripe\EnvironmentCheck\Checks\SessionCheck:
+    dependencies:
+      client: '%$EnvCheckClient'
