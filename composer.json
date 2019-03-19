@@ -16,7 +16,8 @@
     ],
     "require": {
         "silverstripe/framework": "^4.0",
-        "silverstripe/versioned": "^1.0"
+        "silverstripe/versioned": "^1.0",
+        "guzzlehttp/guzzle": "^6.3.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",

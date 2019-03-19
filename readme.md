@@ -92,6 +92,9 @@ SilverStripe\EnvironmentCheck\EnvironmentCheckSuite:
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
  * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
+ * `SessionCheck`: Checks that a given URL does not generate a session.
+ * `CacheHeadersCheck`: Check cache headers in response for directives that must either be included or excluded as well
+    checking for existence of ETag.
  * `EnvTypeCheck`: Checks environment type, dev and test should not be used on production environments.
 
 ## Monitoring Checks
