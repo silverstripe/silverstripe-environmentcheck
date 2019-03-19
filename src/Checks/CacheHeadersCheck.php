@@ -20,15 +20,7 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
  */
 class CacheHeadersCheck implements EnvironmentCheck
 {
-    use Configurable;
     use Fetcher;
-
-    /**
-     * URL to check
-     *
-     * @var string
-     */
-    protected $url;
 
     /**
      * Settings that must be included in the Cache-Control header
@@ -61,17 +53,9 @@ class CacheHeadersCheck implements EnvironmentCheck
      */
     public function __construct($url = '', $mustInclude = [], $mustExclude = [])
     {
-        $this->url = $url;
+        $this->setURL($url);
         $this->mustInclude = $mustInclude;
         $this->mustExclude = $mustExclude;
-
-        $this->clientConfig = [
-            'base_uri' => Director::absoluteBaseURL(),
-            'timeout' => 10.0,
-        ];
-
-        // Using a validation result to capture messages
-        $this->result = new ValidationResult();
     }
 
     /**
@@ -81,8 +65,11 @@ class CacheHeadersCheck implements EnvironmentCheck
      */
     public function check()
     {
-        $response = $this->fetchResponse($this->url);
-        $fullURL = Controller::join_links(Director::absoluteBaseURL(), $this->url);
+        // Using a validation result to capture messages
+        $this->result = new ValidationResult();
+
+        $response = $this->client->get($this->getURL());
+        $fullURL = $this->getURL();
         if ($response === null) {
             return [
                 EnvironmentCheck::ERROR,

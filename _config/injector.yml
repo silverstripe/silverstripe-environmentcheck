@@ -30,3 +30,6 @@ SilverStripe\Core\Injector\Injector:
 SilverStripe\EnvironmentCheck\Checks\SessionCheck:
     dependencies:
       client: '%$EnvCheckClient'
+SilverStripe\EnvironmentCheck\Checks\CacheHeadersCheck:
+    dependencies:
+      client: '%$EnvCheckClient'
