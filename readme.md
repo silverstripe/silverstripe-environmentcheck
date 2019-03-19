@@ -1,6 +1,7 @@
 # SilverStripe Environment Checker Module
 
 [![Build Status](https://travis-ci.org/silverstripe/silverstripe-environmentcheck.svg?branch=master)](https://travis-ci.org/silverstripe/silverstripe-environmentcheck)
+[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 [![Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/?branch=master)
 [![Code Coverage](https://codecov.io/gh/silverstripe/silverstripe-environmentcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-environmentcheck)
 [![Version](http://img.shields.io/packagist/v/silverstripe/environmentcheck.svg?style=flat-square)](https://packagist.org/packages/silverstripe/environmentcheck)
@@ -94,6 +95,7 @@ SilverStripe\EnvironmentCheck\EnvironmentCheckSuite:
  * `SessionCheck`: Checks that a given URL does not generate a session.
  * `CacheHeadersCheck`: Check cache headers in response for directives that must either be included or excluded as well
     checking for existence of ETag.
+ * `EnvTypeCheck`: Checks environment type, dev and test should not be used on production environments.
 
 ## Monitoring Checks
 
