@@ -115,7 +115,10 @@ class EnvironmentChecker extends RequestHandler
             }
         } elseif (!$this->canAccess(null, $permission)) {
             // Fail check with silverstripe login challenge
-            $result = Security::permissionFailure($this, "You must have the {$permission} permission to access this check");
+            $result = Security::permissionFailure(
+                $this,
+                "You must have the {$permission} permission to access this check"
+            );
             throw new HTTPResponse_Exception($result);
         }
     }
