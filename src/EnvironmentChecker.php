@@ -2,8 +2,8 @@
 
 namespace SilverStripe\EnvironmentCheck;
 
-use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTPResponse;
@@ -12,7 +12,6 @@ use SilverStripe\Control\RequestHandler;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\Deprecation;
-use SilverStripe\Security\BasicAuth;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
@@ -104,51 +103,34 @@ class EnvironmentChecker extends RequestHandler
         if (Environment::getEnv('ENVCHECK_BASICAUTH_USERNAME')
             && Environment::getEnv('ENVCHECK_BASICAUTH_PASSWORD')
         ) {
-            if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-                // authenticate the input user/pass with the configured credentials
-                if (!(
-                        $_SERVER['PHP_AUTH_USER'] == Environment::getEnv('ENVCHECK_BASICAUTH_USERNAME')
-                        && $_SERVER['PHP_AUTH_PW'] == Environment::getEnv('ENVCHECK_BASICAUTH_PASSWORD')
-                    )
-                ) {
-                    $response = new HTTPResponse(null, 401);
-                    $response->addHeader('WWW-Authenticate', "Basic realm=\"Environment check\"");
-                    // Exception is caught by RequestHandler->handleRequest() and will halt further execution
-                    $e = new HTTPResponse_Exception(null, 401);
-                    $e->setResponse($response);
-                    throw $e;
-                }
-            } else {
+            // Check that details are both provided, and match
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])
+                || $_SERVER['PHP_AUTH_USER'] != Environment::getEnv('ENVCHECK_BASICAUTH_USERNAME')
+                || $_SERVER['PHP_AUTH_PW'] != Environment::getEnv('ENVCHECK_BASICAUTH_PASSWORD')
+            ) {
+                // Fail check with basic auth challenge
                 $response = new HTTPResponse(null, 401);
                 $response->addHeader('WWW-Authenticate', "Basic realm=\"Environment check\"");
-                // Exception is caught by RequestHandler->handleRequest() and will halt further execution
-                $e = new HTTPResponse_Exception(null, 401);
-                $e->setResponse($response);
-                throw $e;
+                throw new HTTPResponse_Exception($response);
             }
-        } else {
-            if (!$this->canAccess(null, $permission)) {
-                return $this->httpError(403);
-            }
+        } elseif (!$this->canAccess(null, $permission)) {
+            // Fail check with silverstripe login challenge
+            $result = Security::permissionFailure($this, "You must have the {$permission} permission to access this check");
+            throw new HTTPResponse_Exception($result);
         }
     }
 
     /**
+     * Determine if the current member can access the environment checker
+     *
      * @param null|int|Member $member
-     * @param string $permission
-     *
+     * @param string          $permission
      * @return bool
-     *
-     * @throws HTTPResponse_Exception
      */
     public function canAccess($member = null, $permission = 'ADMIN')
     {
         if (!$member) {
             $member = Security::getCurrentUser();
-        }
-
-        if (!$member) {
-            $member = BasicAuth::requireLogin($this->getRequest(), 'Environment Checker', $permission, false);
         }
 
         // We allow access to this controller regardless of live-status or ADMIN permission only
@@ -188,9 +170,9 @@ class EnvironmentChecker extends RequestHandler
         }
 
         $resultText = $result->customise([
-            'URL' => Director::absoluteBaseURL(),
-            'Title' => $this->title,
-            'Name' => $this->checkSuiteName,
+            'URL'       => Director::absoluteBaseURL(),
+            'Title'     => $this->title,
+            'Name'      => $this->checkSuiteName,
             'ErrorCode' => $this->errorCode,
         ])->renderWith(__CLASS__);
 
@@ -237,7 +219,7 @@ class EnvironmentChecker extends RequestHandler
      * Sends a log entry to the configured PSR-3 LoggerInterface
      *
      * @param string $message
-     * @param int $level
+     * @param int    $level
      */
     public function log($message, $level)
     {

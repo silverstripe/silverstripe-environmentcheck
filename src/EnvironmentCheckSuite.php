@@ -101,7 +101,7 @@ class EnvironmentCheckSuite
     /**
      * Run this test suite and return the result code of the worst result.
      *
-     * @return int
+     * @return EnvironmentCheckSuiteResult
      */
     public function run()
     {
@@ -125,7 +125,7 @@ class EnvironmentCheckSuite
     /**
      * Get instances of all the environment checks.
      *
-     * @return array
+     * @return EnvironmentChecker[]
      * @throws InvalidArgumentException
      */
     protected function checkInstances()

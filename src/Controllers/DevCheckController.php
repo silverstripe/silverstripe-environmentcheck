@@ -44,6 +44,7 @@ class DevCheckController extends Controller
         }
 
         $checker = new EnvironmentChecker($suite, 'Environment status');
+        $checker->setRequest($request);
         $checker->init($this->config()->permission);
 
         return $checker;
