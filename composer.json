@@ -20,6 +20,7 @@
 	},
 	"require-dev": 
 	{
+		"phpunit/phpunit": "^5.7",
 		"hafriedlander/phockito": "dev-master"
 	},
 	"extra": []
