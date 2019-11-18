@@ -1,5 +1,11 @@
 language: php
 
+dist: xenial
+
+services:
+  - mysql
+  - postgresql
+
 env:
   global:
     - COMPOSER_ROOT_VERSION="2.0.x-dev"
