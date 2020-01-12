@@ -2,8 +2,12 @@
 Name: environmentcheckinjector
 ---
 SilverStripe\Core\Injector\Injector:
+  CacheHeadersCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\CacheHeadersCheck
   DatabaseCheck:
     class: SilverStripe\EnvironmentCheck\Checks\DatabaseCheck
+  EnvTypeCheck:
+    class: SilverStripe\EnvironmentCheck\Checks\EnvTypeCheck
   ExternalURLCheck:
     class: SilverStripe\EnvironmentCheck\Checks\ExternalURLCheck
   FileAccessibilityAndValidationCheck:
