@@ -10,8 +10,6 @@ use SilverStripe\EnvironmentCheck\EnvironmentChecker;
 /**
  * Class DevHealthControllerTest
  *
- * @mixin PHPUnit_Framework_TestCase
- *
  * @package environmentcheck
  */
 class DevHealthControllerTest extends SapphireTest

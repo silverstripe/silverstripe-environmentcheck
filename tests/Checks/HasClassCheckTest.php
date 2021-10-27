@@ -9,8 +9,6 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 /**
  * Class HasClassCheckTest
  *
- * @mixin PHPUnit_Framework_TestCase
- *
  * @package environmentcheck
  */
 class HasClassCheckTest extends SapphireTest

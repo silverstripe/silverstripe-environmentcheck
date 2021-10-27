@@ -9,8 +9,6 @@ use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 /**
  * Class ExternalURLCheckTest
  *
- * @mixin PHPUnit_Framework_TestCase
- *
  * @package environmentcheck
  */
 class ExternalURLCheckTest extends SapphireTest
