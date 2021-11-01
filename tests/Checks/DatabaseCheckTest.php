@@ -10,8 +10,6 @@ use SilverStripe\Security\Member;
 /**
  * Class DatabaseCheckTest
  *
- * @mixin PHPUnit_Framework_TestCase
- *
  * @package environmentcheck
  */
 class DatabaseCheckTest extends SapphireTest

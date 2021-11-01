@@ -20,7 +20,7 @@ class EnvironmentCheckerTest extends SapphireTest
 {
     protected $usesDatabase = true;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         EnvironmentCheckSuite::reset();
         parent::tearDown();
@@ -61,8 +61,8 @@ class EnvironmentCheckerTest extends SapphireTest
         $logger->expects($this->once())
             ->method('log')
             ->withConsecutive(
-                $this->equalTo(LogLevel::WARNING),
-                $this->anything()
+                [$this->equalTo(LogLevel::WARNING)],
+                [$this->anything()]
             );
 
         Injector::inst()->registerService($logger, LoggerInterface::class);

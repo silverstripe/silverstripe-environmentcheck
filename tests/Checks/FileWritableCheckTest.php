@@ -9,8 +9,6 @@ use SilverStripe\Dev\SapphireTest;
 /**
  * Class FileWritableCheckTest
  *
- * @mixin PHPUnit_Framework_TestCase
- *
  * @package environmentcheck
  */
 class FileWritableCheckTest extends SapphireTest

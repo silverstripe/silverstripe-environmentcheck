@@ -9,8 +9,6 @@ use SilverStripe\Dev\SapphireTest;
 /**
  * Class HasFunctionCheckTest
  *
- * @mixin PHPUnit_Framework_TestCase
- *
  * @package environmentcheck
  */
 class HasFunctionCheckTest extends SapphireTest
