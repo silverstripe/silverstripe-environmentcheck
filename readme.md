@@ -16,7 +16,7 @@ This module adds an API for running environment checks to your API.
 ## Requirements
 
 * SilverStripe 4.x
-* PHP 5.6+
+* PHP 7.3
 
 For SilverStripe 3.x support, please use a `1.x` tagged release.
 
