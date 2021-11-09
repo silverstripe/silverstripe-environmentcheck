@@ -55,7 +55,7 @@ class CacheHeadersCheckTest extends SapphireTest
             new Response(200, ['Cache-Control' => 'must-revalidate', 'ETag' => '123']),
             new Response(200, ['Cache-Control' =>'no-cache', 'ETag' => '123']),
             new Response(200, ['ETag' => '123']),
-            new Response(200, ['Cache-Control' =>'private, no-store', ' ETag' => '123']),
+            new Response(200, ['Cache-Control' =>'private, no-store', 'ETag' => '123']),
         ]);
 
         $handler = HandlerStack::create($mock);
