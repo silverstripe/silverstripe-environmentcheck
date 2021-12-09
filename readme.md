@@ -131,8 +131,8 @@ You may wish to have an automated service check `dev/check` periodically, but no
 You can enable basic authentication by defining the following in your environment (`.env` file):
 
 ```
-ENVCHECK_BASICAUTH_USERNAME="test"
-ENVCHECK_BASICAUTH_PASSWORD="password"
+ENVCHECK_BASICAUTH_USERNAME=test
+ENVCHECK_BASICAUTH_PASSWORD=password
 ```
 
 Now if you access `dev/check` in a browser it will pop up a basic auth popup, and if the submitted username and password
