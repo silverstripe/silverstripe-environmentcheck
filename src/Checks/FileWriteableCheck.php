@@ -34,22 +34,22 @@ class FileWriteableCheck implements EnvironmentCheck
         if ($this->path[0] == '/') {
             $filename = $this->path;
         } else {
-            $filename = BASE_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->path);
+            $filename = BASE_PATH . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $this->path ?? '');
         }
 
-        if (file_exists($filename)) {
-            $isWriteable = is_writeable($filename);
+        if (file_exists($filename ?? '')) {
+            $isWriteable = is_writeable($filename ?? '');
         } else {
-            $isWriteable = is_writeable(dirname($filename));
+            $isWriteable = is_writeable(dirname($filename ?? ''));
         }
 
         if (!$isWriteable) {
             if (function_exists('posix_getgroups')) {
                 $userID = posix_geteuid();
-                $user = posix_getpwuid($userID);
+                $user = posix_getpwuid($userID ?? 0);
 
-                $currentOwnerID = fileowner(file_exists($filename) ? $filename : dirname($filename));
-                $currentOwner = posix_getpwuid($currentOwnerID);
+                $currentOwnerID = fileowner(file_exists($filename ?? '') ? $filename : dirname($filename ?? ''));
+                $currentOwner = posix_getpwuid($currentOwnerID ?? 0);
 
                 $message = "User '$user[name]' needs to be able to write to this file:\n$filename\n\nThe file is "
                     . "currently owned by '$currentOwner[name]'.  ";
@@ -60,8 +60,8 @@ class FileWriteableCheck implements EnvironmentCheck
                     $groups = posix_getgroups();
                     $groupList = [];
                     foreach ($groups as $group) {
-                        $groupInfo = posix_getgrgid($group);
-                        if (in_array($currentOwner['name'], $groupInfo['members'])) {
+                        $groupInfo = posix_getgrgid($group ?? 0);
+                        if (in_array($currentOwner['name'], $groupInfo['members'] ?? [])) {
                             $groupList[] = $groupInfo['name'];
                         }
                     }

@@ -37,7 +37,7 @@ class ExternalURLCheck implements EnvironmentCheck
     public function __construct($urls, $timeout = 15)
     {
         if ($urls) {
-            $this->urls = explode(' ', $urls);
+            $this->urls = explode(' ', $urls ?? '');
         }
         $this->timeout = $timeout;
     }
@@ -55,7 +55,7 @@ class ExternalURLCheck implements EnvironmentCheck
         foreach ($urls as $url) {
             $ch = curl_init();
             $chs[] = $ch;
-            curl_setopt_array($ch, $this->getCurlOpts($url));
+            curl_setopt_array($ch, $this->getCurlOpts($url) ?? []);
         }
         // Parallel execution for faster performance
         $mh = curl_multi_init();

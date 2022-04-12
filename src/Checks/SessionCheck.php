@@ -62,7 +62,7 @@ class SessionCheck implements EnvironmentCheck
         $cookies = $response->getHeader('Set-Cookie');
 
         foreach ($cookies as $cookie) {
-            if (strpos($cookie, 'SESSID') !== false) {
+            if (strpos($cookie ?? '', 'SESSID') !== false) {
                 $result = $cookie;
             }
         }

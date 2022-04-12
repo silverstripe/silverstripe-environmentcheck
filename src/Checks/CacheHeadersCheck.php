@@ -109,9 +109,9 @@ class CacheHeadersCheck implements EnvironmentCheck
         // Filter good messages
         $goodTypes = [ValidationResult::TYPE_GOOD, ValidationResult::TYPE_INFO];
         $good = array_filter(
-            $this->result->getMessages(),
+            $this->result->getMessages() ?? [],
             function ($val, $key) use ($goodTypes) {
-                if (in_array($val['messageType'], $goodTypes)) {
+                if (in_array($val['messageType'], $goodTypes ?? [])) {
                     return true;
                 }
                 return false;
@@ -119,15 +119,15 @@ class CacheHeadersCheck implements EnvironmentCheck
             ARRAY_FILTER_USE_BOTH
         );
         if (!empty($good)) {
-            $ret .= "GOOD: " . implode('; ', array_column($good, 'message')) . " ";
+            $ret .= "GOOD: " . implode('; ', array_column($good ?? [], 'message')) . " ";
         }
 
         // Filter bad messages
         $badTypes = [ValidationResult::TYPE_ERROR, ValidationResult::TYPE_WARNING];
         $bad = array_filter(
-            $this->result->getMessages(),
+            $this->result->getMessages() ?? [],
             function ($val, $key) use ($badTypes) {
-                if (in_array($val['messageType'], $badTypes)) {
+                if (in_array($val['messageType'], $badTypes ?? [])) {
                     return true;
                 }
                 return false;
@@ -135,7 +135,7 @@ class CacheHeadersCheck implements EnvironmentCheck
             ARRAY_FILTER_USE_BOTH
         );
         if (!empty($bad)) {
-            $ret .= "BAD: " . implode('; ', array_column($bad, 'message'));
+            $ret .= "BAD: " . implode('; ', array_column($bad ?? [], 'message'));
         }
         return $ret;
     }
@@ -173,32 +173,32 @@ class CacheHeadersCheck implements EnvironmentCheck
     private function checkCacheControl(ResponseInterface $response)
     {
         $cacheControl = $response->getHeaderLine('Cache-Control');
-        $vals = array_map('trim', explode(',', $cacheControl));
+        $vals = array_map('trim', explode(',', $cacheControl ?? ''));
         $fullURL = Controller::join_links(Director::absoluteBaseURL(), $this->url);
 
         // All entries from must contain should be present
-        if ($this->mustInclude == array_intersect($this->mustInclude, $vals)) {
+        if ($this->mustInclude == array_intersect($this->mustInclude ?? [], $vals)) {
             $matched = implode(",", $this->mustInclude);
             $this->result->addMessage(
                 "$fullURL includes all settings: {$matched}",
                 ValidationResult::TYPE_GOOD
             );
         } else {
-            $missing = implode(",", array_diff($this->mustInclude, $vals));
+            $missing = implode(",", array_diff($this->mustInclude ?? [], $vals));
             $this->result->addError(
                 "$fullURL is excluding some settings: {$missing}"
             );
         }
 
         // All entries from must exclude should not be present
-        if (empty(array_intersect($this->mustExclude, $vals))) {
+        if (empty(array_intersect($this->mustExclude ?? [], $vals))) {
             $missing = implode(",", $this->mustExclude);
             $this->result->addMessage(
                 "$fullURL excludes all settings: {$missing}",
                 ValidationResult::TYPE_GOOD
             );
         } else {
-            $matched = implode(",", array_intersect($this->mustExclude, $vals));
+            $matched = implode(",", array_intersect($this->mustExclude ?? [], $vals));
             $this->result->addError(
                 "$fullURL is including some settings: {$matched}"
             );
