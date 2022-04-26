@@ -96,7 +96,7 @@ class FileAgeCheck implements EnvironmentCheck
      */
     public function check()
     {
-        $cutoffTime =  strtotime($this->relativeAge, DBDatetime::now()->Format('U'));
+        $cutoffTime =  strtotime($this->relativeAge ?? '', DBDatetime::now()->Format('U'));
         $files = $this->getFiles();
         $invalidFiles = [];
         $validFiles = [];
@@ -127,10 +127,10 @@ class FileAgeCheck implements EnvironmentCheck
         }
 
         // If at least one file was valid, count as passed
-        if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
+        if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles ?? []) < count($files ?? [])) {
             return [EnvironmentCheck::OK, ''];
         }
-        if (count($invalidFiles) == 0) {
+        if (count($invalidFiles ?? []) == 0) {
             return [EnvironmentCheck::OK, ''];
         }
         return [
@@ -146,6 +146,6 @@ class FileAgeCheck implements EnvironmentCheck
      */
     protected function getFiles()
     {
-        return glob($this->path);
+        return glob($this->path ?? '');
     }
 }

@@ -57,7 +57,7 @@ class SMTPConnectCheck implements EnvironmentCheck
      */
     public function check()
     {
-        $f = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);
+        $f = @fsockopen($this->host ?? '', $this->port ?? 0, $errno, $errstr, $this->timeout);
         if (!$f) {
             return [
                 EnvironmentCheck::ERROR,
@@ -67,7 +67,7 @@ class SMTPConnectCheck implements EnvironmentCheck
 
         fwrite($f, "HELO its_me\r\n");
         $response = fread($f, 26);
-        if (substr($response, 0, 3) != '220') {
+        if (substr($response ?? '', 0, 3) != '220') {
             return [
                 EnvironmentCheck::ERROR,
                 sprintf('Invalid mail server response: %s', $response)

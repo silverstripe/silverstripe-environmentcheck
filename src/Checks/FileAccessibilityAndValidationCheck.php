@@ -96,7 +96,7 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
         $files = $this->getFiles();
         if ($files) {
             $fileTypeValidateFunc = $this->fileTypeValidateFunc;
-            if (method_exists($this, $fileTypeValidateFunc)) {
+            if (method_exists($this, $fileTypeValidateFunc ?? '')) {
                 $invalidFiles = [];
                 $validFiles = [];
 
@@ -109,7 +109,7 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
                 }
 
                 // If at least one file was valid, count as passed
-                if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles) < count($files)) {
+                if ($this->checkType == self::CHECK_SINGLE && count($invalidFiles ?? []) < count($files ?? [])) {
                     $validFileList = PHP_EOL;
                     foreach ($validFiles as $vf) {
                         $validFileList .= $vf . PHP_EOL;
@@ -130,7 +130,7 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
                         ];
                     }
                 } else {
-                    if (count($invalidFiles) == 0) {
+                    if (count($invalidFiles ?? []) == 0) {
                         $checkReturn = [EnvironmentCheck::OK, 'All files valideted'];
                     } else {
                         $invalidFileList = PHP_EOL;
@@ -180,7 +180,7 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
      */
     private function jsonValidate($file)
     {
-        $json = json_decode(file_get_contents($file));
+        $json = json_decode(file_get_contents($file ?? '') ?? '');
         if (!$json) {
             return false;
         }
@@ -204,6 +204,6 @@ class FileAccessibilityAndValidationCheck implements EnvironmentCheck
      */
     protected function getFiles()
     {
-        return glob($this->path);
+        return glob($this->path ?? '');
     }
 }

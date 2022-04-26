@@ -49,7 +49,7 @@ class URLCheck implements EnvironmentCheck
                 EnvironmentCheck::ERROR,
                 sprintf('Error retrieving "%s" (Code: %d)', $this->url, $response->getStatusCode())
             ];
-        } elseif ($this->testString && (strpos($response->getBody(), $this->testString) === false)) {
+        } elseif ($this->testString && (strpos($response->getBody() ?? '', $this->testString ?? '') === false)) {
             return [
                 EnvironmentCheck::WARNING,
                 sprintf('Success retrieving "%s", but string "%s" not found', $this->url, $this->testString)

@@ -206,7 +206,7 @@ class EnvironmentChecker extends RequestHandler
 
         // output the result as JSON if requested
         if ($this->getRequest()->getExtension() == 'json'
-            || strpos($this->getRequest()->getHeader('Accept'), 'application/json') !== false
+            || strpos($this->getRequest()->getHeader('Accept') ?? '', 'application/json') !== false
         ) {
             $response->setBody($result->toJSON());
             $response->addHeader('Content-Type', 'application/json');
