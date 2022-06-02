@@ -35,12 +35,13 @@ class EnvironmentCheckSuiteResult extends ViewableData
      * @param string $message
      * @param string $checkIdentifier
      */
-    public function addResult($status, $message, $checkIdentifier)
+    public function addResult($status, $message, $checkIdentifier, $responseTime)
     {
         $this->details->push(new ArrayData([
             'Check' => $checkIdentifier,
             'Status' => $this->statusText($status),
             'StatusCode' => $status,
+            'ResponseTime' => $responseTime,
             'Message' => $message,
         ]));
 

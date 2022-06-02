@@ -99,7 +99,7 @@ class EnvironmentCheckSuite
     }
 
     /**
-     * Run this test suite and return the result code of the worst result.
+     * Run this test suite and return the result code of the worst result and the time it took.
      *
      * @return EnvironmentCheckSuiteResult
      */
@@ -110,13 +110,15 @@ class EnvironmentCheckSuite
         foreach ($this->checkInstances() as $check) {
             list($checkClass, $checkTitle) = $check;
             try {
+                $startTime = microtime(true);
                 list($status, $message) = $checkClass->check();
+                $responseTime = number_format((microtime(true) - $startTime), 4, '.', '') . 's';
             // If the check fails, register that as an error
             } catch (Exception $e) {
                 $status = EnvironmentCheck::ERROR;
                 $message = $e->getMessage();
             }
-            $result->addResult($status, $message, $checkTitle);
+            $result->addResult($status, $message, $checkTitle, $responseTime);
         }
 
         return $result;
