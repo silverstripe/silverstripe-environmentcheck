@@ -28,7 +28,6 @@ class DevHealthController extends Controller
     public function index()
     {
         // health check does not require permission to run
-
         $checker = new EnvironmentChecker('health', 'Site health');
         $checker->setErrorCode(500);
 

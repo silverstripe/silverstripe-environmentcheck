@@ -28,4 +28,14 @@ class DevCheckControllerTest extends SapphireTest
 
         $this->assertInstanceOf(EnvironmentChecker::class, $controller->index($request));
     }
+
+    public function testCheckIncludesDetails()
+    {
+        $controller = new DevCheckController();
+        $request = new HTTPRequest('GET', 'example.com');
+
+        $response = $controller->index($request)->index();
+
+        $this->assertStringContainsString('<table>', $response->getBody());
+    }
 }

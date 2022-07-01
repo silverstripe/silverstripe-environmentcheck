@@ -64,16 +64,18 @@
         <h1 class="$Status">$Title: $Status</h1>
         <h2 class="website">Site: $URL</h2>
 
+        <% if $IncludeDetails %>
         <table>
             <tr><th>Check</th> <th>Status</th> <th>Message</th></tr>
             <% loop $Details %>
             <tr><td>$Check</td> <td class="$Status">$Status</td> <td>$Message.XML</td></tr>
             <% end_loop %>
         </table>
+        <% end_if %>
 
         <% if $ShouldPass %>
-        <p>Site is available</p>
-        <p class="subtext">(you may check for the presence of the text 'Site is available' rather than an HTTP $ErrorCode error on this page, if you prefer.)</p>
+            <p>Site is available</p>
+            <p class="subtext">(you may check for the presence of the text 'Site is available' rather than an HTTP $ErrorCode error on this page, if you prefer.<% if not $IncludeDetails %> Full details are available for logged in users at <a href="{$AbsoluteBaseURL}dev/check/">dev/check</a><% end_if %>)</p>
         <% else %>
             <% if $Name == "check" %>
                 <p><b>A subsystem of the site is unavailable, but the site remains operational</b></p>
