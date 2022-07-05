@@ -37,4 +37,15 @@ class DevHealthControllerTest extends SapphireTest
 
         $this->assertInstanceOf(EnvironmentChecker::class, $controller->index($request));
     }
+
+
+    public function testHealthDoesNotIncludeDetails()
+    {
+        $controller = new DevHealthController();
+        $request = new HTTPRequest('GET', 'example.com');
+
+        $response = $controller->index($request)->index();
+
+        $this->assertFalse(strpos($response->getBody(), '<table>'));
+    }
 }

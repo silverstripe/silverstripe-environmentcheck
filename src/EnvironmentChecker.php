@@ -41,6 +41,11 @@ class EnvironmentChecker extends RequestHandler
     protected $title;
 
     /**
+     * @var bool
+     */
+    protected $includeDetails = false;
+
+    /**
      * @var int
      */
     protected $errorCode = 500;
@@ -172,19 +177,31 @@ class EnvironmentChecker extends RequestHandler
             $response->setStatusCode($this->errorCode);
         }
 
-        $resultText = $result->customise([
+        $data = [
             'URL'       => Director::absoluteBaseURL(),
             'Title'     => $this->title,
             'Name'      => $this->checkSuiteName,
-            'ErrorCode' => $this->errorCode,
-        ])->renderWith(__CLASS__);
+            'ErrorCode' => $this->errorCode
+        ];
+
+        $emailContent = $result->customise(array_merge($data, [
+            'IncludeDetails' => true
+        ]))->renderWith(__CLASS__);
+
+        if (!$this->includeDetails) {
+            $webContent = $result->customise(array_merge($data, [
+                'IncludeDetails' => false
+            ]))->renderWith(__CLASS__);
+        } else {
+            $webContent = $emailContent;
+        }
 
         if ($this->config()->get('email_results') && !$result->ShouldPass()) {
             $email = new Email(
                 $this->config()->get('from_email_address'),
                 $this->config()->get('to_email_address'),
                 $this->title,
-                $resultText
+                $emailContent
             );
             $email->send();
         }
@@ -213,7 +230,7 @@ class EnvironmentChecker extends RequestHandler
             return $response;
         }
 
-        $response->setBody($resultText);
+        $response->setBody($webContent);
 
         return $response;
     }
@@ -229,15 +246,35 @@ class EnvironmentChecker extends RequestHandler
         Injector::inst()->get(LoggerInterface::class)->log($level, $message);
     }
 
+
     /**
      * Set the HTTP status code that should be returned when there's an error.
      *
      * @param int $errorCode
+     *
+     * @return $this
      */
     public function setErrorCode($errorCode)
     {
         $this->errorCode = $errorCode;
+
+        return $this;
     }
+
+    /**
+     * Set whether to include the full breakdown of services
+     *
+     * @param bool $includeDetails
+     *
+     * @return $this
+     */
+    public function setIncludeDetails($includeDetails)
+    {
+        $this->includeDetails = $includeDetails;
+
+        return $this;
+    }
+
 
     /**
      * @deprecated
