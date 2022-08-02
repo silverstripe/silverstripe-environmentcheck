@@ -1,11 +1,7 @@
-# SilverStripe Environment Checker Module
+# Silverstripe Environment Checker Module
 
 [![CI](https://github.com/silverstripe/silverstripe-environmentcheck/actions/workflows/ci.yml/badge.svg)](https://github.com/silverstripe/silverstripe-environmentcheck/actions/workflows/ci.yml)
-[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
-[![Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-environmentcheck/?branch=master)
-[![Code Coverage](https://codecov.io/gh/silverstripe/silverstripe-environmentcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-environmentcheck)
-[![Version](http://img.shields.io/packagist/v/silverstripe/environmentcheck.svg?style=flat-square)](https://packagist.org/packages/silverstripe/environmentcheck)
-[![License](http://img.shields.io/packagist/l/silverstripe/environmentcheck.svg?style=flat-square)](LICENSE.md)
+[![Silverstripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 This module adds an API for running environment checks to your API.
 
@@ -15,10 +11,10 @@ This module adds an API for running environment checks to your API.
 
 ## Requirements
 
-* SilverStripe 4.x
+* Silverstripe 4.x
 * PHP 7.3
 
-For SilverStripe 3.x support, please use a `1.x` tagged release.
+For Silverstripe 3.x support, please use a `1.x` tagged release.
 
 ## Aren't these just unit tests?
 
@@ -111,7 +107,7 @@ SilverStripe\EnvironmentCheck\EnvironmentChecker:
   from_email_address: admin@test.com
 ```
 
-Errors can be logged via the standard SilverStripe PSR-3 compatible logging. Each check will cause an individual log
+Errors can be logged via the standard Silverstripe PSR-3 compatible logging. Each check will cause an individual log
 entry. You can choose to enable logging separately for warnings and errors, identified through the
 result of `EnvironmentCheck->check()`.
 
