@@ -109,6 +109,7 @@ class EnvironmentCheckSuite
 
         foreach ($this->checkInstances() as $check) {
             list($checkClass, $checkTitle) = $check;
+            $responseTime = 'Not Found';
             try {
                 $startTime = microtime(true);
                 list($status, $message) = $checkClass->check();
