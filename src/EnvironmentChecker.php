@@ -275,64 +275,63 @@ class EnvironmentChecker extends RequestHandler
         return $this;
     }
 
-
     /**
-     * @deprecated
+     * @deprecated 2.0.0 Use config API instead
      * @param string $from
      */
     public static function set_from_email_address($from)
     {
-        Deprecation::notice('2.0', 'Use config API instead');
+        Deprecation::notice('2.0.0', 'Use config API instead');
         static::config()->set('from_email_address', $from);
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.0 Use config API instead
      * @return null|string
      */
     public static function get_from_email_address()
     {
-        Deprecation::notice('2.0', 'Use config API instead');
+        Deprecation::notice('2.0.0', 'Use config API instead');
         return static::config()->get('from_email_address');
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.0 Use config API instead
      * @param string $to
      */
     public static function set_to_email_address($to)
     {
-        Deprecation::notice('2.0', 'Use config API instead');
+        Deprecation::notice('2.0.0', 'Use config API instead');
         static::config()->set('to_email_address', $to);
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.0 Use config API instead
      * @return null|string
      */
     public static function get_to_email_address()
     {
-        Deprecation::notice('2.0', 'Use config API instead');
+        Deprecation::notice('2.0.0', 'Use config API instead');
         return static::config()->get('to_email_address');
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.0 Use config API instead
      * @param bool $results
      */
     public static function set_email_results($results)
     {
-        Deprecation::notice('2.0', 'Use config API instead');
+        Deprecation::notice('2.0.0', 'Use config API instead');
         static::config()->set('email_results', $results);
     }
 
     /**
-     * @deprecated
+     * @deprecated 2.0.0 Use config API instead
      * @return bool
      */
     public static function get_email_results()
     {
-        Deprecation::notice('2.0', 'Use config API instead');
+        Deprecation::notice('2.0.0', 'Use config API instead');
         return static::config()->get('email_results');
     }
 }
