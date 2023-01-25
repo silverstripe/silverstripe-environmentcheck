@@ -11,7 +11,6 @@ use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Control\RequestHandler;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
@@ -273,65 +272,5 @@ class EnvironmentChecker extends RequestHandler
         $this->includeDetails = $includeDetails;
 
         return $this;
-    }
-
-    /**
-     * @deprecated 2.0.0 Use config API instead
-     * @param string $from
-     */
-    public static function set_from_email_address($from)
-    {
-        Deprecation::notice('2.0.0', 'Use config API instead');
-        static::config()->set('from_email_address', $from);
-    }
-
-    /**
-     * @deprecated 2.0.0 Use config API instead
-     * @return null|string
-     */
-    public static function get_from_email_address()
-    {
-        Deprecation::notice('2.0.0', 'Use config API instead');
-        return static::config()->get('from_email_address');
-    }
-
-    /**
-     * @deprecated 2.0.0 Use config API instead
-     * @param string $to
-     */
-    public static function set_to_email_address($to)
-    {
-        Deprecation::notice('2.0.0', 'Use config API instead');
-        static::config()->set('to_email_address', $to);
-    }
-
-    /**
-     * @deprecated 2.0.0 Use config API instead
-     * @return null|string
-     */
-    public static function get_to_email_address()
-    {
-        Deprecation::notice('2.0.0', 'Use config API instead');
-        return static::config()->get('to_email_address');
-    }
-
-    /**
-     * @deprecated 2.0.0 Use config API instead
-     * @param bool $results
-     */
-    public static function set_email_results($results)
-    {
-        Deprecation::notice('2.0.0', 'Use config API instead');
-        static::config()->set('email_results', $results);
-    }
-
-    /**
-     * @deprecated 2.0.0 Use config API instead
-     * @return bool
-     */
-    public static function get_email_results()
-    {
-        Deprecation::notice('2.0.0', 'Use config API instead');
-        return static::config()->get('email_results');
     }
 }
