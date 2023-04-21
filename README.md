@@ -9,13 +9,6 @@ This module adds an API for running environment checks to your API.
  * `dev/check` - An admin-only URL that performs a more comprehensive set of checks.  This could be tied to a deployment system, for example.
  * `dev/check/<suite>` - Check a specific suite (admin only)
 
-## Requirements
-
-* Silverstripe 4.x
-* PHP 7.3
-
-For Silverstripe 3.x support, please use a `1.x` tagged release.
-
 ## Aren't these just unit tests?
 
 Almost, but not really. Environment checks differ from unit tests in two important ways:
@@ -26,10 +19,8 @@ Almost, but not really. Environment checks differ from unit tests in two importa
 ## Installation
 
 ```sh
-$ composer require silverstripe/environmentcheck
+composer require silverstripe/environmentcheck
 ```
-
-You'll also need to run `/dev/build`.
 
 ### Activating Directly
 
