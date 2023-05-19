@@ -43,7 +43,7 @@ class SolrIndexCheck implements EnvironmentCheck
         if (!empty($brokenCores)) {
             return [
                 EnvironmentCheck::ERROR,
-                'The following indexes are unavailable: ' . implode($brokenCores ?? '', ', ')
+                'The following indexes are unavailable: ' . implode(', ', $brokenCores)
             ];
         }
 
