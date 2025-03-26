@@ -5,6 +5,7 @@ namespace SilverStripe\EnvironmentCheck\Checks;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 use SilverStripe\FullTextSearch\Solr\Solr;
 use SilverStripe\FullTextSearch\Solr\SolrIndex;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Check the availability of all Solr indexes
@@ -12,9 +13,15 @@ use SilverStripe\FullTextSearch\Solr\SolrIndex;
  * If there are no indexes of given class found, the returned status will still be "OK".
  *
  * @package environmentcheck
+ * @deprecated 3.1.0 Will be removed without equivalent functionality to replace it.
  */
 class SolrIndexCheck implements EnvironmentCheck
 {
+    public function __construct()
+    {
+        Deprecation::noticeWithNoReplacment('3.1.0', scope: Deprecation::SCOPE_CLASS);
+    }
+
     /**
      * {@inheritDoc}
      *
