@@ -15,7 +15,7 @@ class FileWritableCheckTest extends SapphireTest
 {
     public function testCheckReportsWritablePaths()
     {
-        $check = new FileWriteableCheck(TEMP_FOLDER);
+        $check = new FileWriteableCheck(TEMP_PATH);
 
         $expected = [
             EnvironmentCheck::OK,

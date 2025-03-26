@@ -1,6 +1,7 @@
 # Silverstripe Environment Checker Module
 
 [![CI](https://github.com/silverstripe/silverstripe-environmentcheck/actions/workflows/ci.yml/badge.svg)](https://github.com/silverstripe/silverstripe-environmentcheck/actions/workflows/ci.yml)
+[![Silverstripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 This module adds an API for running environment checks to your API.
 
@@ -78,7 +79,6 @@ SilverStripe\EnvironmentCheck\EnvironmentCheckSuite:
     like static caches, as well as for backup files and folders.
  * `ExternalURLCheck`: Checks that one or more URLs are reachable via HTTP.
  * `SMTPConnectCheck`: Checks if the SMTP connection configured through PHP.ini works as expected.
- * `SolrIndexCheck`: Checks if the Solr cores of given class are available.
  * `SessionCheck`: Checks that a given URL does not generate a session.
  * `CacheHeadersCheck`: Check cache headers in response for directives that must either be included or excluded as well
     checking for existence of ETag.
