@@ -25,9 +25,17 @@ class EnvironmentCheckerTest extends SapphireTest
 {
     protected $usesDatabase = true;
 
+    protected function setUp(): void
+    {
+        parent::setup();
+        // Avoid a logged warning in SSViewer by ensurung there's an HTTPRequest available
+        Injector::inst()->registerService(new HTTPRequest('GET', 'anything'), HTTPRequest::class);
+    }
+
     protected function tearDown(): void
     {
         EnvironmentCheckSuite::reset();
+        Injector::inst()->unregisterNamedObject(HTTPRequest::class);
         parent::tearDown();
     }
 
