@@ -2,10 +2,10 @@
 
 namespace SilverStripe\EnvironmentCheck\Tests;
 
-use ReflectionProperty;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use ReflectionClass;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
@@ -15,6 +15,7 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Core\Kernel;
 use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Control\HTTPRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class EnvironmentCheckerTest
@@ -155,9 +156,7 @@ class EnvironmentCheckerTest extends SapphireTest
         ];
     }
 
-    /**
-     * @dataProvider provideBasicAuthAdminBypass
-     */
+    #[DataProvider('provideBasicAuthAdminBypass')]
     public function testBasicAuthAdminBypass(
         string $user,
         ?bool $validCreds,
@@ -247,9 +246,7 @@ class EnvironmentCheckerTest extends SapphireTest
         ];
     }
 
-    /**
-     * @dataProvider provideBasicAuthEnvVariables
-     */
+    #[DataProvider('provideBasicAuthEnvVariables')]
     public function testBasicAuthEnvVariables(
         bool $loggedIn,
         bool $setUsernameEnvVar,
@@ -286,14 +283,18 @@ class EnvironmentCheckerTest extends SapphireTest
     private function setupBasicAuthEnv(bool $setUsernameEnvVar, bool $setPwEnvVar): void
     {
         // Pretend we're not using CLI which will bypass basic auth
-        $reflectionCli = new ReflectionProperty(Environment::class, 'isCliOverride');
-        $reflectionCli->setAccessible(true);
-        $reflectionCli->setValue(false);
-        // Change from dev to test mode as dev mode will bypass basic auth
-        $kernel = Injector::inst()->get(Kernel::class);
-        $kernel->setEnvironment('test');
-        // Set the basic auth env vars
-        Environment::setEnv('ENVCHECK_BASICAUTH_USERNAME', $setUsernameEnvVar ? 'test' : null);
-        Environment::setEnv('ENVCHECK_BASICAUTH_PASSWORD', $setPwEnvVar ? 'password' : null);
+        $reflectionEnvironment = new ReflectionClass(Environment::class);
+        $origIsCli = $reflectionEnvironment->getStaticPropertyValue('isCliOverride');
+        $reflectionEnvironment->setStaticPropertyValue('isCliOverride', true);
+        try {
+            // Change from dev to test mode as dev mode will bypass basic auth
+            $kernel = Injector::inst()->get(Kernel::class);
+            $kernel->setEnvironment('test');
+            // Set the basic auth env vars
+            Environment::setEnv('ENVCHECK_BASICAUTH_USERNAME', $setUsernameEnvVar ? 'test' : null);
+            Environment::setEnv('ENVCHECK_BASICAUTH_PASSWORD', $setPwEnvVar ? 'password' : null);
+        } finally {
+            $reflectionEnvironment->setStaticPropertyValue('isCliOverride', $origIsCli);
+        }
     }
 }
