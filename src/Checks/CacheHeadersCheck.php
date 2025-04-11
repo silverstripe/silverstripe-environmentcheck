@@ -6,7 +6,6 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Validation\ValidationResult;
 use Psr\Http\Message\ResponseInterface;
-use SilverStripe\Core\Config\Configurable;
 use SilverStripe\EnvironmentCheck\Traits\Fetcher;
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
 
