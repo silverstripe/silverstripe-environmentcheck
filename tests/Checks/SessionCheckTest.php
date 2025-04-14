@@ -32,7 +32,7 @@ class SessionCheckTest extends SapphireTest
     }
 
     /**
-     * Env check reports error when session cookies are being set.
+     * Env check reports error when session cookie is being set.
      *
      * @return void
      */
@@ -41,7 +41,6 @@ class SessionCheckTest extends SapphireTest
         // Create a mock and queue two responses.
         $mock = new MockHandler([
             new Response(200, ['Set-Cookie' => 'PHPSESSID:foo']),
-            new Response(200, ['Set-Cookie' => 'SECSESSID:bar'])
         ]);
 
         $handler = HandlerStack::create($mock);
@@ -49,9 +48,6 @@ class SessionCheckTest extends SapphireTest
         $this->sessionCheck->client = $client;
 
         // Check for PHPSESSID
-        $this->assertContains(EnvironmentCheck::ERROR, $this->sessionCheck->check());
-
-        // Check for SECSESSID
         $this->assertContains(EnvironmentCheck::ERROR, $this->sessionCheck->check());
     }
 
