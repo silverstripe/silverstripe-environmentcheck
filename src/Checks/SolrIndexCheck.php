@@ -13,7 +13,7 @@ use SilverStripe\Dev\Deprecation;
  * If there are no indexes of given class found, the returned status will still be "OK".
  *
  * @package environmentcheck
- * @deprecated 3.1.0 Will be removed without equivalent functionality to replace it.
+ * @deprecated 3.1.0 Will be removed without equivalent functionality to replace it in a future major release.
  */
 class SolrIndexCheck implements EnvironmentCheck
 {
