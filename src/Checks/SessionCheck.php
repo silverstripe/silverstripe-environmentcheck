@@ -51,7 +51,7 @@ class SessionCheck implements EnvironmentCheck
     }
 
     /**
-     * Get PHPSESSID or SECSESSID cookie set from the response if it exists.
+     * Get PHPSESSID cookie set from the response if it exists.
      *
      * @param ResponseInterface $response
      * @return string|null Cookie contents or null if it doesn't exist
@@ -62,7 +62,7 @@ class SessionCheck implements EnvironmentCheck
         $cookies = $response->getHeader('Set-Cookie');
 
         foreach ($cookies as $cookie) {
-            if (strpos($cookie ?? '', 'SESSID') !== false) {
+            if (strpos($cookie ?? '', 'PHPSESSID') !== false) {
                 $result = $cookie;
             }
         }
