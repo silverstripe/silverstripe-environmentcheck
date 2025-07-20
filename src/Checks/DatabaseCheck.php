@@ -3,6 +3,7 @@
 namespace SilverStripe\EnvironmentCheck\Checks;
 
 use SilverStripe\EnvironmentCheck\EnvironmentCheck;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
 
 /**
@@ -37,6 +38,11 @@ class DatabaseCheck implements EnvironmentCheck
     {
         if (!DB::get_schema()->hasTable($this->checkTable)) {
             return [EnvironmentCheck::ERROR, "$this->checkTable not present in the database"];
+        }
+
+        $dataObjectClass = DataObject::getSchema()->tableClass($this->checkTable);
+        if ($dataObjectClass && !DataObject::getSchema()->tablesAreReadyForClass($dataObjectClass)) {
+            return [EnvironmentCheck::ERROR, "$this->checkTable missing columns or has other schema problems"];
         }
 
         $count = DB::query("SELECT COUNT(*) FROM \"$this->checkTable\"")->value();
