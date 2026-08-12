@@ -160,7 +160,7 @@ class EnvironmentChecker extends RequestHandler
         // We allow access to this controller regardless of live-status or ADMIN permission only
         // if on CLI.  Access to this controller is always allowed in "dev-mode", or of the user is ADMIN.
         if (Director::isDev()
-            || Director::is_cli()
+            || Environment::isCli()
             || empty($permission)
             || Permission::checkMember($member, $permission)
         ) {
