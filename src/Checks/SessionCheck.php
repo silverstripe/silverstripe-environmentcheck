@@ -17,6 +17,11 @@ class SessionCheck implements EnvironmentCheck
     use Fetcher;
 
     /**
+     * Services injected into this check, e.g. the HTTP client used to fetch the URL
+     */
+    private static array $dependencies = [];
+
+    /**
      * Set up check with URL
      *
      * @param string $url The route, excluding the domain

@@ -22,6 +22,11 @@ class CacheHeadersCheck implements EnvironmentCheck
     use Fetcher;
 
     /**
+     * Services injected into this check, e.g. the HTTP client used to fetch the URL
+     */
+    private static array $dependencies = [];
+
+    /**
      * Settings that must be included in the Cache-Control header
      *
      * @var array
