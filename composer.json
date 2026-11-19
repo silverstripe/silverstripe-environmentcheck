@@ -20,8 +20,8 @@
     ],
     "require": {
         "php": "^8.3",
-        "silverstripe/framework": "^6.1",
-        "silverstripe/versioned": "^3",
+        "silverstripe/framework": "^7",
+        "silverstripe/versioned": "^4",
         "guzzlehttp/guzzle": "^7.9"
     },
     "require-dev": {
